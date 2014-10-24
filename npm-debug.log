@@ -1,0 +1,60 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', 'coffee-script' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.32
+4 verbose cache add [ 'coffee-script', null ]
+5 verbose cache add name=undefined spec="coffee-script" args=["coffee-script",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: 'coffee-script',
+6 verbose parsed url   path: 'coffee-script',
+6 verbose parsed url   href: 'coffee-script' }
+7 silly lockFile ab358269-coffee-script coffee-script
+8 verbose lock coffee-script /Users/clewis/.npm/ab358269-coffee-script.lock
+9 silly lockFile ab358269-coffee-script coffee-script
+10 silly lockFile ab358269-coffee-script coffee-script
+11 verbose addNamed [ 'coffee-script', '' ]
+12 verbose addNamed [ null, '*' ]
+13 silly lockFile 53951495-coffee-script coffee-script@
+14 verbose lock coffee-script@ /Users/clewis/.npm/53951495-coffee-script.lock
+15 silly addNameRange { name: 'coffee-script', range: '*', hasData: false }
+16 verbose request where is /coffee-script
+17 verbose request registry http://sj-npm-01:4783/
+18 verbose request id 2f28a96a85e32e4c
+19 verbose url raw /coffee-script
+20 verbose url resolving [ 'http://sj-npm-01:4783/', './coffee-script' ]
+21 verbose url resolved http://sj-npm-01:4783/coffee-script
+22 verbose request where is http://sj-npm-01:4783/coffee-script
+23 info trying registry request attempt 1 at 22:12:58
+24 http GET http://sj-npm-01:4783/coffee-script
+25 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND
+26 info trying registry request attempt 2 at 22:13:08
+27 http GET http://sj-npm-01:4783/coffee-script
+28 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND
+29 info trying registry request attempt 3 at 22:14:08
+30 http GET http://sj-npm-01:4783/coffee-script
+31 silly lockFile 53951495-coffee-script coffee-script@
+32 silly lockFile 53951495-coffee-script coffee-script@
+33 error network getaddrinfo ENOTFOUND
+33 error network This is most likely not a problem with npm itself
+33 error network and is related to network connectivity.
+33 error network In most cases you are behind a proxy or have bad network settings.
+33 error network
+33 error network If you are behind a proxy, please make sure that the
+33 error network 'proxy' config is set properly.  See: 'npm help config'
+34 error System Darwin 13.4.0
+35 error command "node" "/usr/local/bin/npm" "install" "coffee-script"
+36 error cwd /Users/clewis/Developer/design/personal/key-ano
+37 error node -v v0.10.32
+38 error npm -v 1.4.28
+39 error syscall getaddrinfo
+40 error code ENOTFOUND
+41 error errno ENOTFOUND
+42 verbose exit [ 1, true ]
