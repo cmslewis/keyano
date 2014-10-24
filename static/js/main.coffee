@@ -11,7 +11,7 @@ require [
   $(document).ready ->
 
     keyanoInstrument = new KeyanoInstrument()
-    debugger
+
     keyanoInstrument.activateKeys([
 
       # Left Hand

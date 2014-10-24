@@ -4,7 +4,6 @@
     return $(document).ready(function() {
       var keyanoInstrument;
       keyanoInstrument = new KeyanoInstrument();
-      debugger;
       return keyanoInstrument.activateKeys([
         {
           keyCode: KeyCodes.A,
