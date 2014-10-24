@@ -1,0 +1,54 @@
+//
+// utils.less
+// ==========
+// A set of common utility mixins for use in other LESS files.
+//
+
+.absolute-fill() {
+  position : absolute;
+  top      : 0;
+  right    : 0;
+  bottom   : 0;
+  left     : 0;
+}
+
+.default-font() {
+  font-family : 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.height-with-vertically-centered-text(@height, @padding-top:0, @padding-bottom:0) {
+  height      : @height;
+  line-height : @height - (@padding-top + @padding-bottom);
+}
+
+.user-select(@value) {
+  -webkit-touch-callout : @value;
+  -webkit-user-select   : @value;
+  -khtml-user-select    : @value;
+  -moz-user-select      : @value;
+  -ms-user-select       : @value;
+  user-select           : @value;
+}
+
+.placeholder-text(@color, @font-weight:normal) {
+
+  &::-webkit-input-placeholder {
+    color       : @color;
+    font-weight : @font-weight;
+  }
+
+  &:-moz-placeholder {
+    color       : @color;
+    font-weight : @font-weight;
+  }
+
+  &::-moz-placeholder {
+    color       : @color;
+    font-weight : @font-weight;
+  }
+
+  &:-ms-input-placeholder {
+    color       : @color;
+    font-weight : @font-weight;
+  }
+}

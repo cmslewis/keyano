@@ -2,10 +2,18 @@
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-  define(['static/js/KeyanoKeyValidator'], function(KeyanoKeyValidator) {
+  define(['static/js/KeyanoKeyValidator', 'static/js/Logger', 'static/js/Config'], function(KeyanoKeyValidator, Logger, Config) {
     var KeyanoInstrument;
     KeyanoInstrument = (function() {
-      var _audioContext, _keyMappings, _keyValidator, _pianoKeyRegistry, _pitchNodesForActivePianoKeys;
+      var _audioContext, _keyMappings, _keyValidator, _nodesForActivePianoKeys, _pianoKeyRegistry;
+
+      KeyanoInstrument.prototype.DURATION_WITHOUT_PEDAL = 100;
+
+      KeyanoInstrument.prototype.DURATION_WITH_PEDAL = 3000;
+
+      KeyanoInstrument.prototype.TIMEOUT = 50;
+
+      KeyanoInstrument.prototype.PEDAL_KEY_CODE = Config.PEDAL_KEY_CODE;
 
       _audioContext = null;
 
@@ -15,15 +23,17 @@
 
       _pianoKeyRegistry = null;
 
-      _pitchNodesForActivePianoKeys = null;
+      _nodesForActivePianoKeys = null;
 
       function KeyanoInstrument() {
         this._activateKey = __bind(this._activateKey, this);
+        this._activatePedalKey = __bind(this._activatePedalKey, this);
         this._audioContext = new (window.AudioContext || window.webkitAudioContext);
         this._keyMappings = [];
         this._keyValidator = new KeyanoKeyValidator();
         this._pianoKeyRegistry = {};
-        this._pitchNodesForActivePianoKeys = {};
+        this._nodesForActivePianoKeys = {};
+        this._activatePedalKey(this.PEDAL_KEY_CODE);
       }
 
 
@@ -39,11 +49,31 @@
           },
           ...
         ]
+      @events
+        'piano:key:did:start:playing' : emitted on $(document) once a piano key's pitch has started playing
+        'piano:key:did:stop:playing'  : emitted on $(document) once a piano key's pitch has stopped playing
        */
 
       KeyanoInstrument.prototype.activateKeys = function(keyMappings) {
         this._keyMappings = _.flatten([this._keyMappings, keyMappings]);
         _.forEach(keyMappings, this._activateKey);
+      };
+
+      KeyanoInstrument.prototype._activatePedalKey = function(pedalKeyCode) {
+        $(document).on('keydown', (function(_this) {
+          return function(ev) {
+            if (ev.keyCode === pedalKeyCode) {
+              return _this._isPedalPressed = true;
+            }
+          };
+        })(this));
+        return $(document).on('keyup', (function(_this) {
+          return function(ev) {
+            if (ev.keyCode === pedalKeyCode) {
+              return _this._isPedalPressed = false;
+            }
+          };
+        })(this));
       };
 
       KeyanoInstrument.prototype._activateKey = function(keyMapping) {
@@ -67,36 +97,80 @@
       };
 
       KeyanoInstrument.prototype._startPlayingPianoKeyIfNecessary = function(pianoKey) {
-        var pitchNode;
+        var gainNode, pitchNode;
         if (this._isPianoKeyPlaying(pianoKey)) {
-          console.log('  ', pianoKey.id, ' is already playing, so not playing it');
+          Logger.debug('  ', pianoKey.id, ' is already playing, so not playing it');
           return;
         }
-        console.log('user pressed the key:', pianoKey.id);
+        Logger.debug('user pressed the key:', pianoKey.id);
         pitchNode = this._createPitchNodeForPianoKey(pianoKey);
-        this._saveActivePianoKeyInstance(pianoKey, pitchNode);
-        return pitchNode.start();
+        gainNode = this._createVolumeNode();
+        pitchNode.connect(gainNode);
+        gainNode.connect(this._audioContext.destination);
+        pitchNode.start();
+        this._saveActivePianoKeyInstance(pianoKey, {
+          pitchNode: pitchNode,
+          gainNode: gainNode
+        });
+        return $(document).trigger('piano:key:did:start:playing', pianoKey.id);
       };
 
-      KeyanoInstrument.prototype._stopPlayingPianoKeyIfNecessary = function(pianoKey) {
-        var pitchNode;
+      KeyanoInstrument.prototype._stopPlayingPianoKeyIfNecessary = function(pianoKey, isPedalPressed) {
+        var gainNode, pitchNode, _ref;
+        if (isPedalPressed == null) {
+          isPedalPressed = true;
+        }
         if (!this._isPianoKeyPlaying(pianoKey)) {
-          console.log('  ', pianoKey.id, ' is not playing, so not stopping it');
+          Logger.debug('  ', pianoKey.id, ' is not playing, so not stopping it');
           return;
         }
-        console.log('user released the key:', pianoKey.id);
-        pitchNode = this._getActivePianoKey(pianoKey);
-        pitchNode.stop();
+        Logger.debug('user released the key:', pianoKey.id);
+        _ref = this._getActivePianoKey(pianoKey), pitchNode = _ref.pitchNode, gainNode = _ref.gainNode;
+        if (this._isPedalPressed) {
+          this._stopPitchNodeWithPedal(pitchNode, gainNode);
+        } else {
+          this._stopPitchNodeWithoutPedal(pitchNode, gainNode);
+        }
+        $(document).trigger('piano:key:did:stop:playing', pianoKey.id);
         this._deleteActivePianoKeyInstance(pianoKey);
       };
 
       KeyanoInstrument.prototype._createPitchNodeForPianoKey = function(pianoKey) {
         var oscillatorNode;
         oscillatorNode = this._audioContext.createOscillator();
-        oscillatorNode.connect(this._audioContext.destination);
-        oscillatorNode.type = 'square';
+        oscillatorNode.type = Config.PITCH_TYPE;
         oscillatorNode.frequency.value = pianoKey.frequency;
         return oscillatorNode;
+      };
+
+      KeyanoInstrument.prototype._createVolumeNode = function() {
+        return this._audioContext.createGain();
+      };
+
+      KeyanoInstrument.prototype._stopPitchNodeWithoutPedal = function(pitchNode, gainNode) {
+        return this._stopPitchNodeOverTime(pitchNode, gainNode, this.DURATION_WITHOUT_PEDAL);
+      };
+
+      KeyanoInstrument.prototype._stopPitchNodeWithPedal = function(pitchNode, gainNode) {
+        return this._stopPitchNodeOverTime(pitchNode, gainNode, this.DURATION_WITH_PEDAL);
+      };
+
+      KeyanoInstrument.prototype._stopPitchNodeOverTime = function(pitchNode, gainNode, duration) {
+        var pedalInterval, reductionPerInterval;
+        reductionPerInterval = this.TIMEOUT / duration;
+        return pedalInterval = setInterval((function(_this) {
+          return function() {
+            if (!_this._isPedalPressed) {
+              clearInterval(pedalInterval);
+              _this._stopPitchNodeWithoutPedal(pitchNode, gainNode);
+            }
+            gainNode.gain.value -= reductionPerInterval;
+            if (gainNode.gain.value <= 0) {
+              clearInterval(pedalInterval);
+              return pitchNode.stop();
+            }
+          };
+        })(this), this.TIMEOUT);
       };
 
       KeyanoInstrument.prototype._isPianoKeyPlaying = function(pianoKey) {
@@ -105,16 +179,21 @@
         return !!pitchNode;
       };
 
-      KeyanoInstrument.prototype._saveActivePianoKeyInstance = function(pianoKey, pitchNode) {
-        this._pitchNodesForActivePianoKeys[pianoKey.id] = pitchNode;
+      KeyanoInstrument.prototype._saveActivePianoKeyInstance = function(pianoKey, _arg) {
+        var gainNode, pitchNode;
+        pitchNode = _arg.pitchNode, gainNode = _arg.gainNode;
+        this._nodesForActivePianoKeys[pianoKey.id] = {
+          pitchNode: pitchNode,
+          gainNode: gainNode
+        };
       };
 
       KeyanoInstrument.prototype._deleteActivePianoKeyInstance = function(pianoKey) {
-        this._pitchNodesForActivePianoKeys[pianoKey.id] = void 0;
+        this._nodesForActivePianoKeys[pianoKey.id] = void 0;
       };
 
       KeyanoInstrument.prototype._getActivePianoKey = function(pianoKey) {
-        return this._pitchNodesForActivePianoKeys[pianoKey.id];
+        return this._nodesForActivePianoKeys[pianoKey.id];
       };
 
       return KeyanoInstrument;

@@ -1,0 +1,140 @@
+//
+// base.less
+// =========
+// A set of styles that give the page its detailed visual style.
+//
+
+@import '../vendor/lesshat';
+@import 'utils';
+@import 'variables';
+
+
+// Variables
+// =========
+
+@brand-green : #45AF66;
+@brand-brown : #504438;
+@brand-tan   : #B6B0AB;
+
+@default-text-color : @brand-brown;
+@muted-text-color   : @brand-tan;
+
+@brand-font-size-1 : 28px;
+@brand-font-size-2 : 24px;
+@brand-font-size-3 : 20px;
+@brand-font-size-4 : 16px;
+@brand-font-size-5 : 14px;
+
+@component-lr-padding : 20px;
+
+
+// Styles
+// ======
+
+body {
+  .default-font();
+}
+
+.header {
+
+  &.primary {
+    background-color : @brand-green;
+    color            : white;
+    font-size        : @brand-font-size-1;
+    font-weight      : 600;
+    letter-spacing   : 1px;
+    padding          : 14px @component-lr-padding 0;
+
+    .title {
+      font-size   : @brand-font-size-2;
+      font-weight : 300;
+      line-height : 1.2;
+      opacity     : 0.85;
+
+      span {
+        border-bottom : 1px dashed fade(white, 75%);
+        cursor        : pointer;
+
+        &:hover {
+          border-bottom-style : solid;
+        }
+      }
+    }
+  }
+
+  &.secondary {
+    .box-shadow(0 1px 3px fade(black, 25%));
+    background-color : white;
+    border-bottom    : 1px solid fade(black, 35%);
+    color            : @default-text-color;
+    font-size        : @brand-font-size-3;
+  }
+}
+
+.footer {
+  .box-shadow(0 -1px 3px fade(black, 25%));
+  background  : white;
+  color       : @default-text-color;
+  font-size   : @brand-font-size-5;
+  padding     : 0 @component-lr-padding;
+
+  .bottom-text {
+
+    .dot-separator {
+      color       : @muted-text-color;
+      font-weight : 300;
+      margin      : 0 3px;
+    }
+
+    .author-link {
+      color           : @muted-text-color;
+      font-weight     : 300;
+      text-decoration : none;
+
+      &:hover {
+        text-decoration : underline;
+      }
+    }
+  }
+}
+
+
+// Facebook 'Like' Button
+// ======================
+
+.fb-like.fb_iframe_widget {
+  margin-right : 5px;
+
+  span {
+    // Ugh, Facebook programmatically resets this to bottom, so we have to fight fire with fire (hence the !important).
+    vertical-align : middle !important;
+  }
+}
+
+
+// Twitter 'Share' Button
+// ======================
+
+.twitter-share-button {
+  vertical-align : middle;
+  width          : 96px !important; // Need to override inline styling.
+}
+
+
+// Device-Dependent Styles
+// =======================
+
+@media(max-width : 768px) {
+
+  .header {
+
+    &.primary {
+      font-size   : 20px;
+      padding-top : 10px;
+
+      .title {
+        font-size : 18px;
+      }
+    }
+  }
+}
