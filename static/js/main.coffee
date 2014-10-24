@@ -1,19 +1,17 @@
 require [
   'static/js/KeyCodes'
   'static/js/PianoKeys'
-  'static/js/KeyanoKeyValidator'
-  'static/js/KeyanoKeyInstrument'
+  'static/js/KeyanoInstrument'
 ], (
   KeyCodes
   PianoKeys
-  KeyanoKeyValidator
-  KeyanoKeyInstrument
+  KeyanoInstrument
 ) ->
 
   $(document).ready ->
 
     keyanoInstrument = new KeyanoInstrument()
-
+    debugger
     keyanoInstrument.activateKeys([
 
       # Left Hand

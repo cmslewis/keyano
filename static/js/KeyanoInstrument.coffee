@@ -1,4 +1,8 @@
-define [], () ->
+define [
+  'static/js/KeyanoKeyValidator'
+], (
+  KeyanoKeyValidator
+) ->
 
   #
   # KeyanoInstrument
@@ -116,4 +120,4 @@ define [], () ->
     _getActivePianoKey : (pianoKey) ->
       return @_pitchNodesForActivePianoKeys[pianoKey.id]
 
-  return KeyanoKeyInstrument
+  return KeyanoInstrument
