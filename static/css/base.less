@@ -83,8 +83,13 @@ body {
   padding : 50px;
 }
 
-.key-group {
-  height : 100%;
+.octave {
+  height   : 100%;
+  position : relative;
+}
+
+.keyano-white-keys, .keyano-black-keys {
+  .absolute-fill();
 }
 
 .keyano-key-box-shadows(@depth:50px, @l-box-shadow-dist:3px, @l-box-shadow-blur:2px, @l-box-shadow-color:white, @l-box-shadow-opacity:1, @r-box-shadow-dist:3px, @r-box-shadow-blur:2px, @r-box-shadow-color:white, @r-box-shadow-opacity:1) {
@@ -188,6 +193,50 @@ body {
   position    : absolute;
   right       : 0;
 }
+
+
+// Keyano Keys
+// ===========
+
+.keyano-key.keyano-black-key {
+  background   : #222;
+  border-color : black;
+  color        : white;
+  height       : 60%;
+  margin-left  : -7.5% / 2;
+  position     : absolute;
+  top          : 0;
+  width        : 7.5%;
+  z-index      : 5;
+
+  &.depressed {
+    background-color : red;
+  }
+}
+
+.keyano-key-Db {
+  left : 12.5%;
+}
+
+.keyano-key-Eb {
+  left : 25%;
+}
+
+.keyano-key-Gb {
+  left : 50%;
+}
+
+.keyano-key-Ab {
+  left : 62.5%;
+}
+
+.keyano-key-Bb {
+  left : 75%;
+}
+
+
+// Footer
+// ======
 
 .footer {
   .absolute-fill();
