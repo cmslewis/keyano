@@ -30,3 +30,5 @@
   });
 
 }).call(this);
+
+//# sourceMappingURL=Logger.js.map

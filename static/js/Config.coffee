@@ -5,7 +5,7 @@ define [
 ) ->
 
   Config = {
-    DEBUG_MODE     : true               # (true|false)
+    DEBUG_MODE     : false              # (true|false)
     PITCH_TYPE     : 'square'           # (sine|square)
     PEDAL_KEY_CODE : KeyCodes.SPACE_BAR
   }

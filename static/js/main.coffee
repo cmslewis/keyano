@@ -1,19 +1,32 @@
 require [
+  # General
   'static/js/KeyCodes'
   'static/js/PianoKeys'
   'static/js/KeyanoInstrument'
+  # Listeners
+  'static/js/listeners/KeyanoDomElementHighlighter'
+  'static/js/listeners/KeyanoChordTypeReporter'
 ], (
+  # General
   KeyCodes
   PianoKeys
   KeyanoInstrument
+  # Listeners
+  KeyanoDomElementHighlighter
+  KeyanoChordTypeReporter
 ) ->
 
-  PIANO_KEY_SELECTOR             = '.keyano-key'
+  KEYANO_KEY_SELECTOR             = '.keyano-key'
   CACHED_KEYANO_KEY_DOM_ELEMENTS = {}
   KEYANO_KEYS                    = [
 
     # Left Hand
 
+    { keyCode : KeyCodes.Z,        pianoKey : PianoKeys.C3  }
+    { keyCode : KeyCodes.S,        pianoKey : PianoKeys.Db3 }
+    { keyCode : KeyCodes.X,        pianoKey : PianoKeys.D3  }
+    { keyCode : KeyCodes.D,        pianoKey : PianoKeys.Eb3 }
+    { keyCode : KeyCodes.C,        pianoKey : PianoKeys.E3  }
     { keyCode : KeyCodes.Q,        pianoKey : PianoKeys.C4  }
     { keyCode : KeyCodes.KEYPAD_2, pianoKey : PianoKeys.Db4 }
     { keyCode : KeyCodes.W,        pianoKey : PianoKeys.D4  }
@@ -34,24 +47,17 @@ require [
 
   ]
 
-  _fillCacheOfKeyanoKeyDomElements = (keyanoKeys) ->
-    _.chain(keyanoKeys)
-      .pluck('pianoKey')
-      .forEach (pianoKey) ->
-        $elem = $("#{PIANO_KEY_SELECTOR}[data-piano-key-id='#{pianoKey.id}']")
-        CACHED_KEYANO_KEY_DOM_ELEMENTS[pianoKey.id] = $elem
-    return
-
   $(document).ready ->
     keyanoInstrument = new KeyanoInstrument()
     keyanoInstrument.activateKeys(KEYANO_KEYS)
 
-    _fillCacheOfKeyanoKeyDomElements(KEYANO_KEYS)
+    keyanoDomElementHighlighter = new KeyanoDomElementHighlighter({
+      instrument : keyanoInstrument
+    }).activate(KEYANO_KEYS)
 
-    $(document).on 'piano:key:did:start:playing', (ev, pianoKeyId) ->
-      CACHED_KEYANO_KEY_DOM_ELEMENTS[pianoKeyId]?.addClass('depressed')
+    keyanoChordTypeReporter = new KeyanoChordTypeReporter({
+      instrument : keyanoInstrument
+    }).activate(KEYANO_KEYS)
 
-    $(document).on 'piano:key:did:stop:playing', (ev, pianoKeyId) ->
-      CACHED_KEYANO_KEY_DOM_ELEMENTS[pianoKeyId]?.removeClass('depressed')
-
+    return
 

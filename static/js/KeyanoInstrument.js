@@ -5,7 +5,7 @@
   define(['static/js/KeyanoKeyValidator', 'static/js/Logger', 'static/js/Config'], function(KeyanoKeyValidator, Logger, Config) {
     var KeyanoInstrument;
     KeyanoInstrument = (function() {
-      var _audioContext, _keyMappings, _keyValidator, _nodesForActivePianoKeys, _pianoKeyRegistry;
+      var _audioContext, _impressedKeyIds, _keyMappings, _keyValidator, _nodesForActivePianoKeys, _pianoKeyRegistry;
 
       KeyanoInstrument.prototype.DURATION_WITHOUT_PEDAL = 100;
 
@@ -13,9 +13,9 @@
 
       KeyanoInstrument.prototype.TIMEOUT = 50;
 
-      KeyanoInstrument.prototype.PEDAL_KEY_CODE = Config.PEDAL_KEY_CODE;
-
       _audioContext = null;
+
+      _impressedKeyIds = null;
 
       _keyMappings = null;
 
@@ -26,14 +26,16 @@
       _nodesForActivePianoKeys = null;
 
       function KeyanoInstrument() {
+        this._pianoKeyIdComparator = __bind(this._pianoKeyIdComparator, this);
         this._activateKey = __bind(this._activateKey, this);
         this._activatePedalKey = __bind(this._activatePedalKey, this);
         this._audioContext = new (window.AudioContext || window.webkitAudioContext);
+        this._impressedKeyIds = {};
         this._keyMappings = [];
         this._keyValidator = new KeyanoKeyValidator();
         this._pianoKeyRegistry = {};
         this._nodesForActivePianoKeys = {};
-        this._activatePedalKey(this.PEDAL_KEY_CODE);
+        this._activatePedalKey(Config.PEDAL_KEY_CODE);
       }
 
 
@@ -57,6 +59,19 @@
       KeyanoInstrument.prototype.activateKeys = function(keyMappings) {
         this._keyMappings = _.flatten([this._keyMappings, keyMappings]);
         _.forEach(keyMappings, this._activateKey);
+      };
+
+
+      /*
+      @return
+        (list) the sorted list of ids for the currently impressed piano keys
+       */
+
+      KeyanoInstrument.prototype.getImpressedPianoKeyIds = function() {
+        var pianoKeyIds;
+        pianoKeyIds = _.keys(this._impressedKeyIds);
+        pianoKeyIds.sort(this._pianoKeyIdComparator);
+        return pianoKeyIds;
       };
 
       KeyanoInstrument.prototype._activatePedalKey = function(pedalKeyCode) {
@@ -97,17 +112,17 @@
       };
 
       KeyanoInstrument.prototype._startPlayingPianoKeyIfNecessary = function(pianoKey) {
-        var gainNode, pitchNode;
+        var gainNode, pitchNode, _base, _name, _ref;
         if (this._isPianoKeyPlaying(pianoKey)) {
           Logger.debug('  ', pianoKey.id, ' is already playing, so not playing it');
           return;
         }
         Logger.debug('user pressed the key:', pianoKey.id);
-        pitchNode = this._createPitchNodeForPianoKey(pianoKey);
-        gainNode = this._createVolumeNode();
-        pitchNode.connect(gainNode);
-        gainNode.connect(this._audioContext.destination);
-        pitchNode.start();
+        if ((_base = this._impressedKeyIds)[_name = pianoKey.id] == null) {
+          _base[_name] = true;
+        }
+        Logger.debug('impressed keys:', this._impressedKeyIds);
+        _ref = this._startPitchNode(pianoKey), pitchNode = _ref.pitchNode, gainNode = _ref.gainNode;
         this._saveActivePianoKeyInstance(pianoKey, {
           pitchNode: pitchNode,
           gainNode: gainNode
@@ -125,6 +140,7 @@
           return;
         }
         Logger.debug('user released the key:', pianoKey.id);
+        delete this._impressedKeyIds[pianoKey.id];
         _ref = this._getActivePianoKey(pianoKey), pitchNode = _ref.pitchNode, gainNode = _ref.gainNode;
         if (this._isPedalPressed) {
           this._stopPitchNodeWithPedal(pitchNode, gainNode);
@@ -145,6 +161,19 @@
 
       KeyanoInstrument.prototype._createVolumeNode = function() {
         return this._audioContext.createGain();
+      };
+
+      KeyanoInstrument.prototype._startPitchNode = function(pianoKey) {
+        var gainNode, pitchNode;
+        pitchNode = this._createPitchNodeForPianoKey(pianoKey);
+        gainNode = this._createVolumeNode();
+        pitchNode.connect(gainNode);
+        gainNode.connect(this._audioContext.destination);
+        pitchNode.start();
+        return {
+          pitchNode: pitchNode,
+          gainNode: gainNode
+        };
       };
 
       KeyanoInstrument.prototype._stopPitchNodeWithoutPedal = function(pitchNode, gainNode) {
@@ -196,6 +225,53 @@
         return this._nodesForActivePianoKeys[pianoKey.id];
       };
 
+      KeyanoInstrument.prototype.PIANO_KEY_INDICES = {
+        'C': 0,
+        'Db': 1,
+        'D': 2,
+        'Eb': 3,
+        'E': 4,
+        'F': 5,
+        'Gb': 6,
+        'G': 7,
+        'Ab': 8,
+        'A': 9,
+        'Bb': 10,
+        'B': 11
+      };
+
+      KeyanoInstrument.prototype._pianoKeyIdComparator = function(a, b) {
+        var aIndex, aKey, aOctave, bIndex, bKey, bOctave;
+        if (_.isEmpty(a) && _.isEmpty(b)) {
+          return 0;
+        }
+        if (_.isEmpty(b)) {
+          return -1;
+        }
+        if (_.isEmpty(a)) {
+          return 1;
+        }
+        aOctave = parseInt(a[a.length - 1]);
+        bOctave = parseInt(b[b.length - 1]);
+        if (bOctave < aOctave) {
+          return 1;
+        }
+        if (aOctave < bOctave) {
+          return -1;
+        }
+        aKey = a.substring(0, a.length - 1);
+        bKey = b.substring(0, b.length - 1);
+        aIndex = this.PIANO_KEY_INDICES[aKey];
+        bIndex = this.PIANO_KEY_INDICES[bKey];
+        if (bIndex < aIndex) {
+          return 1;
+        }
+        if (aIndex < bIndex) {
+          return -1;
+        }
+        return 0;
+      };
+
       return KeyanoInstrument;
 
     })();
@@ -203,3 +279,5 @@
   });
 
 }).call(this);
+
+//# sourceMappingURL=KeyanoInstrument.js.map

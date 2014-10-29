@@ -3,7 +3,7 @@
   define(['static/js/KeyCodes'], function(KeyCodes) {
     var Config;
     Config = {
-      DEBUG_MODE: true,
+      DEBUG_MODE: false,
       PITCH_TYPE: 'square',
       PEDAL_KEY_CODE: KeyCodes.SPACE_BAR
     };
@@ -11,3 +11,5 @@
   });
 
 }).call(this);
+
+//# sourceMappingURL=Config.js.map
