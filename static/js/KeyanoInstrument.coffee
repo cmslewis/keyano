@@ -2,10 +2,12 @@ define [
   'static/js/KeyanoKeyValidator'
   'static/js/Logger'
   'static/js/Config'
+  'static/js/PianoKeys'
 ], (
   KeyanoKeyValidator
   Logger
   Config
+  PianoKeys
 ) ->
 
 
@@ -78,10 +80,10 @@ define [
     @return
       (list) the sorted list of ids for the currently impressed piano keys
     ###
-    getImpressedPianoKeyIds : ->
+    getImpressedPianoKeys : ->
       pianoKeyIds = _.keys(@_impressedKeyIds)
       pianoKeyIds.sort(@_pianoKeyIdComparator)
-      return pianoKeyIds
+      return _.map pianoKeyIds, (pianoKeyId) -> _.cloneDeep PianoKeys[pianoKeyId]
 
 
     # Private Methods (Setup)

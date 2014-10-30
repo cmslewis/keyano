@@ -2,7 +2,7 @@
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-  define(['static/js/KeyanoKeyValidator', 'static/js/Logger', 'static/js/Config'], function(KeyanoKeyValidator, Logger, Config) {
+  define(['static/js/KeyanoKeyValidator', 'static/js/Logger', 'static/js/Config', 'static/js/PianoKeys'], function(KeyanoKeyValidator, Logger, Config, PianoKeys) {
     var KeyanoInstrument;
     KeyanoInstrument = (function() {
       var _audioContext, _impressedKeyIds, _keyMappings, _keyValidator, _nodesForActivePianoKeys, _pianoKeyRegistry;
@@ -67,11 +67,13 @@
         (list) the sorted list of ids for the currently impressed piano keys
        */
 
-      KeyanoInstrument.prototype.getImpressedPianoKeyIds = function() {
+      KeyanoInstrument.prototype.getImpressedPianoKeys = function() {
         var pianoKeyIds;
         pianoKeyIds = _.keys(this._impressedKeyIds);
         pianoKeyIds.sort(this._pianoKeyIdComparator);
-        return pianoKeyIds;
+        return _.map(pianoKeyIds, function(pianoKeyId) {
+          return _.cloneDeep(PianoKeys[pianoKeyId]);
+        });
       };
 
       KeyanoInstrument.prototype._activatePedalKey = function(pedalKeyCode) {

@@ -28,9 +28,9 @@
       };
 
       KeyanoChordTypeReporter.prototype._printChord = function() {
-        var chord, impressedPianoKeyIds;
-        impressedPianoKeyIds = this.instrument.getImpressedPianoKeyIds();
-        chord = this._identifyChord(impressedPianoKeyIds);
+        var chord, impressedPianoKeys;
+        impressedPianoKeys = this.instrument.getImpressedPianoKeys();
+        chord = this._identifyChord(impressedPianoKeys);
         return console.log(chord);
       };
 
@@ -46,8 +46,8 @@
         (string) the name of the chord (e.g. CM7)
        */
 
-      KeyanoChordTypeReporter.prototype._identifyChord = function(pianoKeyIds) {
-        console.log(pianoKeyIds);
+      KeyanoChordTypeReporter.prototype._identifyChord = function(pianoKeys) {
+        console.log(pianoKeys);
         return 'CM7';
       };
 

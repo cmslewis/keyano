@@ -34,8 +34,8 @@ define [
     # ---------------
 
     _printChord : ->
-      impressedPianoKeyIds = @instrument.getImpressedPianoKeyIds()
-      chord = @_identifyChord(impressedPianoKeyIds)
+      impressedPianoKeys = @instrument.getImpressedPianoKeys()
+      chord = @_identifyChord(impressedPianoKeys)
       console.log chord
 
     ###
@@ -48,8 +48,8 @@ define [
     @return
       (string) the name of the chord (e.g. CM7)
     ###
-    _identifyChord : (pianoKeyIds) ->
-      console.log pianoKeyIds
+    _identifyChord : (pianoKeys) ->
+      console.log pianoKeys
       # sort the piano keys in order on the piano
       return 'CM7'
 
