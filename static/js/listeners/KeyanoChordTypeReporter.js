@@ -3,8 +3,22 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['static/js/listeners/AbstractKeyanoListener'], function(AbstractKeyanoListener) {
-    var KeyanoChordTypeReporter;
+  define(['static/js/listeners/AbstractKeyanoListener', 'static/js/data/ChordData'], function(AbstractKeyanoListener, ChordData) {
+    var IntervalName, KeyanoChordTypeReporter;
+    IntervalName = {
+      1: 'Minor 2nd',
+      2: 'Major 2nd',
+      3: 'Minor 3rd',
+      4: 'Major 3rd',
+      5: 'Perfect 4th',
+      6: 'Tritone',
+      7: 'Perfect 5th',
+      8: 'Minor 6th',
+      9: 'Major 6th',
+      10: 'Minor 7th',
+      11: 'Major 7th',
+      12: 'Octave'
+    };
     KeyanoChordTypeReporter = (function(_super) {
       __extends(KeyanoChordTypeReporter, _super);
 
@@ -28,10 +42,29 @@
       };
 
       KeyanoChordTypeReporter.prototype._printChord = function() {
-        var chord, impressedPianoKeys;
+        var impressedPianoKeys, name;
         impressedPianoKeys = this.instrument.getImpressedPianoKeys();
-        chord = this._identifyChord(impressedPianoKeys);
-        return console.log(chord);
+        if (impressedPianoKeys.length <= 1) {
+          return;
+        } else if (impressedPianoKeys.length === 2) {
+          name = this._identifyInterval(impressedPianoKeys);
+        } else {
+          name = this._identifyChord(impressedPianoKeys);
+        }
+        console.log(name);
+      };
+
+      KeyanoChordTypeReporter.prototype._identifyInterval = function(pianoKeys) {
+        var higherKey, intervalSize, lowerKey;
+        if (_.size(pianoKeys) < 2) {
+          throw new Error('Not enough piano keys provided to _identifyInterval (need exactly 2)');
+        }
+        if (_.size(pianoKeys) > 2) {
+          throw new Error('Too many piano keys provided to _identifyInterval (need exactly 2)');
+        }
+        lowerKey = pianoKeys[0], higherKey = pianoKeys[1];
+        intervalSize = this._getIntervalSize(lowerKey, higherKey);
+        return IntervalName[intervalSize];
       };
 
 
@@ -47,8 +80,52 @@
        */
 
       KeyanoChordTypeReporter.prototype._identifyChord = function(pianoKeys) {
-        console.log(pianoKeys);
-        return 'CM7';
+        var chordData, chordName, rootKeyName, signature;
+        signature = this._getIntervalSizesSignature(pianoKeys);
+        chordData = ChordData[signature];
+        chordName = null;
+        if (chordData != null) {
+          rootKeyName = pianoKeys[chordData.root].name;
+          chordName = "" + rootKeyName + " " + chordData.quality;
+        } else {
+          chordName = signature;
+        }
+        return chordName;
+      };
+
+
+      /*
+      @params
+        pianoKeyA, pianoKeyB : {
+          id        : (string)
+          frequency : (float)
+          index     : (integer)
+        }
+      @return
+        (integer) the size of the interval
+       */
+
+      KeyanoChordTypeReporter.prototype._getIntervalSize = function(pianoKeyA, pianoKeyB) {
+        return Math.abs(pianoKeyB.index - pianoKeyA.index);
+      };
+
+      KeyanoChordTypeReporter.prototype._getIntervalSizes = function(pianoKeys) {
+        var currPianoKey, i, intervalSize, intervalSizes, lastPianoKey, _i, _ref;
+        intervalSizes = [0];
+        for (i = _i = 1, _ref = pianoKeys.length; 1 <= _ref ? _i < _ref : _i > _ref; i = 1 <= _ref ? ++_i : --_i) {
+          lastPianoKey = pianoKeys[i - 1];
+          currPianoKey = pianoKeys[i];
+          intervalSize = this._getIntervalSize(lastPianoKey, currPianoKey);
+          intervalSizes.push(intervalSize);
+        }
+        return intervalSizes;
+      };
+
+      KeyanoChordTypeReporter.prototype._getIntervalSizesSignature = function(pianoKeys) {
+        var intervalSizes, signature;
+        intervalSizes = this._getIntervalSizes(pianoKeys);
+        signature = intervalSizes.join('-');
+        return signature;
       };
 
       return KeyanoChordTypeReporter;
