@@ -5,25 +5,23 @@
   define(['static/js/KeyanoKeyValidator', 'static/js/Logger', 'static/js/Config', 'static/js/PianoKeys'], function(KeyanoKeyValidator, Logger, Config, PianoKeys) {
     var KeyanoInstrument;
     KeyanoInstrument = (function() {
-      var _audioContext, _impressedKeyIds, _keyMappings, _keyValidator, _nodesForActivePianoKeys, _pianoKeyRegistry;
-
       KeyanoInstrument.prototype.DURATION_WITHOUT_PEDAL = 100;
 
       KeyanoInstrument.prototype.DURATION_WITH_PEDAL = 3000;
 
       KeyanoInstrument.prototype.TIMEOUT = 50;
 
-      _audioContext = null;
+      KeyanoInstrument.prototype._audioContext = null;
 
-      _impressedKeyIds = null;
+      KeyanoInstrument.prototype._impressedKeyIds = null;
 
-      _keyMappings = null;
+      KeyanoInstrument.prototype._keyMappings = null;
 
-      _keyValidator = null;
+      KeyanoInstrument.prototype._keyValidator = null;
 
-      _pianoKeyRegistry = null;
+      KeyanoInstrument.prototype._pianoKeyRegistry = null;
 
-      _nodesForActivePianoKeys = null;
+      KeyanoInstrument.prototype._nodesForActivePianoKeys = null;
 
       function KeyanoInstrument() {
         this._pianoKeyIdComparator = __bind(this._pianoKeyIdComparator, this);

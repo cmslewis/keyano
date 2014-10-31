@@ -30,12 +30,12 @@ define [
     # Private Variables
     # -----------------
 
-    _audioContext            = null
-    _impressedKeyIds         = null
-    _keyMappings             = null
-    _keyValidator            = null
-    _pianoKeyRegistry        = null
-    _nodesForActivePianoKeys = null
+    _audioContext            : null
+    _impressedKeyIds         : null
+    _keyMappings             : null
+    _keyValidator            : null
+    _pianoKeyRegistry        : null
+    _nodesForActivePianoKeys : null
 
 
     # Constructor
@@ -248,8 +248,6 @@ define [
       # By now, we know that the keys are identical.
 
       return 0
-
-
 
 
   return KeyanoInstrument

@@ -1,5 +1,6 @@
 define [], ->
 
+
   ChordData =
 
 
@@ -38,7 +39,7 @@ define [], ->
 
     # Triads (First Inversion) + Upper Octave
 
-    '0-4-5-4' :
+    '0-3-5-4' :
       quality : 'Major Triad (First Inversion)'
       root    : 2
     '0-4-5-3' :
