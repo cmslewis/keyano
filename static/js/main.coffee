@@ -41,7 +41,9 @@ require [
     { keyCode : KeyCodes.KEYPAD_9,      pianoKey : PianoKeys.Bb4 }
     { keyCode : KeyCodes.O,             pianoKey : PianoKeys.B4  }
     { keyCode : KeyCodes.P,             pianoKey : PianoKeys.C5  }
+    { keyCode : KeyCodes.DASH,          pianoKey : PianoKeys.Db5 }
     { keyCode : KeyCodes.OPEN_BRACKET,  pianoKey : PianoKeys.D5  }
+    { keyCode : KeyCodes.EQUAL_SIGN,    pianoKey : PianoKeys.Eb5 }
     { keyCode : KeyCodes.CLOSE_BRACKET, pianoKey : PianoKeys.E5  }
 
   ]
@@ -56,7 +58,7 @@ require [
 
     keyanoChordTypeReporter = new KeyanoChordTypeReporter({
       instrument : keyanoInstrument
-    }).activate(KEYANO_KEYS)
+    }).activate(KEYANO_KEYS, $('.chord-name'))
 
     return
 

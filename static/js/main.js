@@ -54,8 +54,14 @@
         keyCode: KeyCodes.P,
         pianoKey: PianoKeys.C5
       }, {
+        keyCode: KeyCodes.DASH,
+        pianoKey: PianoKeys.Db5
+      }, {
         keyCode: KeyCodes.OPEN_BRACKET,
         pianoKey: PianoKeys.D5
+      }, {
+        keyCode: KeyCodes.EQUAL_SIGN,
+        pianoKey: PianoKeys.Eb5
       }, {
         keyCode: KeyCodes.CLOSE_BRACKET,
         pianoKey: PianoKeys.E5
@@ -70,7 +76,7 @@
       }).activate(KEYANO_KEYS);
       keyanoChordTypeReporter = new KeyanoChordTypeReporter({
         instrument: keyanoInstrument
-      }).activate(KEYANO_KEYS);
+      }).activate(KEYANO_KEYS, $('.chord-name'));
     });
   });
 

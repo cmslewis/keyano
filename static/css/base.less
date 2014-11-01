@@ -12,6 +12,8 @@
 // Variables
 // =========
 
+@container-width-on-desktop : 960px;
+
 @z-index-of-header : 2;
 @z-index-of-panels : 1;
 @z-index-of-footer : 2;
@@ -19,7 +21,11 @@
 @panel-right-stacked-width         : 60%;
 @panel-right-stacked-preview-width : 52.5%;
 
-@num-white-keyano-keys : 8;
+@num-white-keyano-keys : 12;
+
+@white-key-width : @container-width-on-desktop / @num-white-keyano-keys;
+@black-key-width : 0.7 * @white-key-width;
+
 
 // Reset
 // =====
@@ -37,8 +43,9 @@
 
 body {
   .absolute-fill();
-  cursor    : default;
-  overflow  : hidden;
+  background : #141518;
+  cursor     : default;
+  overflow   : hidden;
 }
 
 .header {
@@ -68,28 +75,48 @@ body {
   bottom  : @footer-height;
   left    : 0;
   z-index : @z-index-of-panels;
-
-  .panel {
-    .absolute-fill();
-    .transition(all @animation-duration);
-  }
 }
+
+.container {
+  margin : 0 auto;
+  width  : @container-width-on-desktop;
+}
+
+.chord-name {
+  color       : white;
+  font-size   : 40px;
+  margin-top  : 40px;
+  text-align  : center;
+  text-shadow : 0 1px 2px black;
+}
+
 
 // Keyano Instrument
 // =================
 
 .keyano-instrument {
-  height  : 100%;
-  padding : 50px;
+  .clearfix();
+  height : 100%;
 }
 
 .octave {
-  height   : 100%;
+  .clearfix();
+  float    : left;
   position : relative;
 }
 
-.keyano-white-keys, .keyano-black-keys {
+// .octave + .octave {
+//   margin-left : -1px;
+// }
+
+.keyano-white-keys {
+  .clearfix();
+  z-index : 1;
+}
+
+.keyano-black-keys {
   .absolute-fill();
+  z-index : 2;
 }
 
 .keyano-key-box-shadows(@depth:50px, @l-box-shadow-dist:3px, @l-box-shadow-blur:2px, @l-box-shadow-color:white, @l-box-shadow-opacity:1, @r-box-shadow-dist:3px, @r-box-shadow-blur:2px, @r-box-shadow-color:white, @r-box-shadow-opacity:1) {
@@ -137,7 +164,7 @@ body {
 }
 
 .keyano-key {
-  .border-radius(0 0 10px 10px);
+  .border-radius(0 0 5px 5px);
   // .box-shadow(
   //   0 1px 1px rgba(0,0,0,0.05),
   //   0 50px 0 rgba(0,0,0,0.1),
@@ -146,23 +173,23 @@ body {
   //   inset 0 -3px 2px rgba(255,255,255,1)
   // );
   // .transition(all @animation-duration/2);
-  background    : #f9f9f9;
-  border        : 1px solid #ccc;
+  background    : #F6F2F2;
+  border        : 1px solid #282525;
   float         : left;
-  height        : 95%;
-  margin-right  : -1px;
+  height        : 400px;
+  // margin-right  : -1px;
   position      : relative;
   text-align    : center;
-  width         : 100% / @num-white-keyano-keys;
+  width         : @white-key-width;
 
-  &:last-child {
-    margin-right : 0;
-  }
+  // &:last-child {
+  //   margin-right : 0;
+  // }
 
   &.depressed {
     // .transition(all @animation-duration);
     // .middle-keyano-key-depressed();
-    background-color : red;
+    background : red;
     // height : calc(~"95% - -25px"); // Hack because + doesn't get compiled correctly
 
     // &:first-child {
@@ -198,41 +225,67 @@ body {
 // Keyano Keys
 // ===========
 
-.keyano-key.keyano-black-key {
-  background   : #222;
-  border-color : black;
-  color        : white;
-  height       : 60%;
-  margin-left  : -7.5% / 2;
-  position     : absolute;
-  top          : 0;
-  width        : 7.5%;
-  z-index      : 5;
+.keyano-black-key-wrapper {
+  .transform(translateX(50%));
+  float  : left;
+  height : 60%;
+  padding : 0 ((@white-key-width - @black-key-width) / 2);
+}
+
+.keyano-key.keyano-white-key {
+  .box-shadow(
+    inset 0 -3px 0px #8d7c85,
+    inset 0 -4px 1px #b9a9a9,
+    inset 2px -3px 1px #b9a9a9,
+    inset -2px -3px 1px #b9a9a9;
+  );
+  background : linear-gradient(-20deg, #fff, #f2f2f2, #fff);
 
   &.depressed {
-    background-color : red;
+    background : red;
   }
 }
 
-.keyano-key-Db {
-  left : 12.5%;
+.keyano-key.keyano-black-key {
+  .box-shadow(inset 0px -1px 2px rgba(255,255,255,0.4), 0 2px 3px rgba(0,0,0,0.4));
+  background   : linear-gradient(-20deg, #333, #000, #333);
+  border-width : 0 4px 15px;
+  border-color : transparent fade(white, 0) fade(white, 1%) fade(white, 20%);
+  color        : white;
+  float        : left;
+  height       : 100%;
+  width        : @black-key-width;
+  z-index      : 5;
+
+  &.depressed {
+    background : red;
+  }
 }
 
-.keyano-key-Eb {
-  left : 25%;
+.keyano-key.keyano-black-key-spacer {
+  opacity        : 0;
+  pointer-events : none;
 }
 
-.keyano-key-Gb {
-  left : 50%;
-}
+// .keyano-key-Db {
+//   left : 12.5%;
+// }
 
-.keyano-key-Ab {
-  left : 62.5%;
-}
+// .keyano-key-Eb {
+//   left : 25%;
+// }
 
-.keyano-key-Bb {
-  left : 75%;
-}
+// .keyano-key-Gb {
+//   left : 50%;
+// }
+
+// .keyano-key-Ab {
+//   left : 62.5%;
+// }
+
+// .keyano-key-Bb {
+//   left : 75%;
+// }
 
 
 // Footer

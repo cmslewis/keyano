@@ -28,8 +28,9 @@
 
       KeyanoChordTypeReporter.prototype.keyanoKeys = null;
 
-      KeyanoChordTypeReporter.prototype.activate = function(keyanoKeys) {
+      KeyanoChordTypeReporter.prototype.activate = function(keyanoKeys, $outputElem) {
         this.keyanoKeys = keyanoKeys;
+        this.$outputElem = $outputElem;
         return KeyanoChordTypeReporter.__super__.activate.apply(this, arguments);
       };
 
@@ -42,16 +43,21 @@
       };
 
       KeyanoChordTypeReporter.prototype._printChord = function() {
-        var impressedPianoKeys, name;
+        var impressedPianoKeys, name, _ref, _ref1;
         impressedPianoKeys = this.instrument.getImpressedPianoKeys();
         if (impressedPianoKeys.length <= 1) {
+          if ((_ref = this.$outputElem) != null) {
+            _ref.text('');
+          }
           return;
         } else if (impressedPianoKeys.length === 2) {
           name = this._identifyInterval(impressedPianoKeys);
         } else {
           name = this._identifyChord(impressedPianoKeys);
         }
-        console.log(name);
+        if ((_ref1 = this.$outputElem) != null) {
+          _ref1.text(name);
+        }
       };
 
       KeyanoChordTypeReporter.prototype._identifyInterval = function(pianoKeys) {

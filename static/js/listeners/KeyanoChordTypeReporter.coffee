@@ -33,8 +33,9 @@ define [
     # Overridden Methods
     # ------------------
 
-    activate : (keyanoKeys) ->
-      @keyanoKeys = keyanoKeys
+    activate : (keyanoKeys, $outputElem) ->
+      @keyanoKeys  = keyanoKeys
+      @$outputElem = $outputElem
       super
 
     onPianoKeyStartedPlaying : (ev, pianoKeyId) ->
@@ -53,13 +54,15 @@ define [
       impressedPianoKeys = @instrument.getImpressedPianoKeys()
 
       if impressedPianoKeys.length <= 1
+        @$outputElem?.text('')
         return
       else if impressedPianoKeys.length is 2
         name = @_identifyInterval(impressedPianoKeys)
       else
         name = @_identifyChord(impressedPianoKeys)
 
-      console.log name
+      @$outputElem?.text(name)
+
       return
 
     _identifyInterval : (pianoKeys) ->
