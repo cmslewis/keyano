@@ -142,6 +142,18 @@
       '0-2-3-3': {
         quality: 'Half-Diminished 7 (Third Inversion)',
         root: 1
+      },
+      '0-2-2-3': {
+        quality: 'Major add 9',
+        root: 0
+      },
+      '0-3-5-2': {
+        quality: 'Major add 9 (First Inversion)',
+        root: 2
+      },
+      '0-5-2-2': {
+        quality: 'Major add 9 (Second Inversion)',
+        root: 1
       }
     };
     return ChordData;
