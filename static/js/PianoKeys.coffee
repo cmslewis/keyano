@@ -163,6 +163,30 @@ define [], ->
       frequency : 523.251
       index     : 52
 
+    Db5 :
+      id        : 'Db5'
+      name      : 'Db'
+      frequency : 554.365
+      index     : 53
+
+    D5 :
+      id        : 'D5'
+      name      : 'D'
+      frequency : 587.330
+      index     : 54
+
+    Eb5 :
+      id        : 'Eb5'
+      name      : 'Eb'
+      frequency : 622.254
+      index     : 55
+
+    E5 :
+      id        : 'E5'
+      name      : 'E'
+      frequency : 659.255
+      index     : 56
+
   }
 
   return PianoKeys

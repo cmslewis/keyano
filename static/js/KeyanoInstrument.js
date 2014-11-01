@@ -93,6 +93,9 @@
 
       KeyanoInstrument.prototype._activateKey = function(keyMapping) {
         var keyCode, pianoKey;
+        Logger.debug('activating piano key', {
+          keyMapping: keyMapping
+        });
         this._keyValidator.validateKeyMapping(keyMapping);
         keyCode = keyMapping.keyCode, pianoKey = keyMapping.pianoKey;
         $(document).on('keydown', (function(_this) {

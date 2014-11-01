@@ -6,41 +6,32 @@
     CACHED_KEYANO_KEY_DOM_ELEMENTS = {};
     KEYANO_KEYS = [
       {
-        keyCode: KeyCodes.Z,
-        pianoKey: PianoKeys.C3
-      }, {
-        keyCode: KeyCodes.S,
-        pianoKey: PianoKeys.Db3
-      }, {
-        keyCode: KeyCodes.X,
-        pianoKey: PianoKeys.D3
-      }, {
-        keyCode: KeyCodes.D,
-        pianoKey: PianoKeys.Eb3
-      }, {
-        keyCode: KeyCodes.C,
-        pianoKey: PianoKeys.E3
-      }, {
         keyCode: KeyCodes.Q,
-        pianoKey: PianoKeys.C4
+        pianoKey: PianoKeys.A3
       }, {
         keyCode: KeyCodes.KEYPAD_2,
-        pianoKey: PianoKeys.Db4
+        pianoKey: PianoKeys.Bb3
       }, {
         keyCode: KeyCodes.W,
-        pianoKey: PianoKeys.D4
-      }, {
-        keyCode: KeyCodes.KEYPAD_3,
-        pianoKey: PianoKeys.Eb4
+        pianoKey: PianoKeys.B3
       }, {
         keyCode: KeyCodes.E,
-        pianoKey: PianoKeys.E4
+        pianoKey: PianoKeys.C4
+      }, {
+        keyCode: KeyCodes.KEYPAD_4,
+        pianoKey: PianoKeys.Db4
       }, {
         keyCode: KeyCodes.R,
-        pianoKey: PianoKeys.F4
+        pianoKey: PianoKeys.D4
       }, {
         keyCode: KeyCodes.KEYPAD_5,
-        pianoKey: PianoKeys.Gb4
+        pianoKey: PianoKeys.Eb4
+      }, {
+        keyCode: KeyCodes.T,
+        pianoKey: PianoKeys.E4
+      }, {
+        keyCode: KeyCodes.Y,
+        pianoKey: PianoKeys.F4
       }, {
         keyCode: KeyCodes.KEYPAD_7,
         pianoKey: PianoKeys.Gb4
@@ -62,6 +53,12 @@
       }, {
         keyCode: KeyCodes.P,
         pianoKey: PianoKeys.C5
+      }, {
+        keyCode: KeyCodes.OPEN_BRACKET,
+        pianoKey: PianoKeys.D5
+      }, {
+        keyCode: KeyCodes.CLOSE_BRACKET,
+        pianoKey: PianoKeys.E5
       }
     ];
     return $(document).ready(function() {

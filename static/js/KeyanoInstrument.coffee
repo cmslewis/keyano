@@ -94,6 +94,7 @@ define [
       $(document).on 'keyup',   (ev) => if ev.keyCode is pedalKeyCode then @_isPedalPressed = false
 
     _activateKey : (keyMapping) =>
+      Logger.debug('activating piano key', { keyMapping })
       @_keyValidator.validateKeyMapping(keyMapping)
 
       { keyCode, pianoKey } = keyMapping
