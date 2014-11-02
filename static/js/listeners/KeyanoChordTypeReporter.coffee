@@ -1,10 +1,12 @@
 define [
   'static/js/listeners/AbstractKeyanoListener'
   'static/js/data/ChordData'
+  'static/js/Config'
   'static/js/pianoKeyUtils'
 ], (
   AbstractKeyanoListener
   ChordData
+  Config
   pianoKeyUtils
 ) ->
 
@@ -113,7 +115,10 @@ define [
       if not chordData?
         signature = @_findSignatureForClosedSpelling(filteredKeys)
 
-      chordName = @_getChordNameFromSignature(filteredKeys, signature)
+      if signature?
+        chordName = @_getChordNameFromSignature(filteredKeys, signature)
+      else
+        chordName = Config.LABEL_FOR_UNRECOGNIZED_CHORDS
 
       return chordName
 
@@ -179,7 +184,10 @@ define [
         if chordData?
           break
 
-      return signature ? @_getIntervalSizesSignature(pianoKeys)
+      if not chordData?
+        signature = null
+
+      return signature
 
     _getIntervalSizes : (pianoKeys) ->
       intervalSizes = [0] # 0 Represents the first key being in unison with itself.

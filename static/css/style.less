@@ -12,9 +12,12 @@
 // Variables
 // =========
 
-@brand-green : #45AF66;
-@brand-brown : #504438;
-@brand-tan   : #B6B0AB;
+@brand-green  : #45AF66;
+@brand-brown  : #504438;
+@brand-tan    : #B6B0AB;
+@brand-salmon : #ED795D;
+@brand-yellow : #EDD95D;
+@brand-purple : #664AA2;
 
 @default-text-color : @brand-brown;
 @muted-text-color   : @brand-tan;
@@ -38,7 +41,8 @@ body {
 .header {
 
   &.primary {
-    background-color : @brand-green;
+    .box-shadow(0, 1px, 2px, fade(black, 75%));
+    background-color : @brand-salmon;
     color            : white;
     font-size        : @brand-font-size-1;
     font-weight      : 600;

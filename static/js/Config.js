@@ -5,7 +5,8 @@
     Config = {
       DEBUG_MODE: false,
       PITCH_TYPE: 'sine',
-      PEDAL_KEY_CODE: KeyCodes.SPACE_BAR
+      PEDAL_KEY_CODE: KeyCodes.SPACE_BAR,
+      LABEL_FOR_UNRECOGNIZED_CHORDS: ' '
     };
     return Config;
   });

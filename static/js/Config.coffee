@@ -5,9 +5,10 @@ define [
 ) ->
 
   Config = {
-    DEBUG_MODE     : false              # (true|false)
-    PITCH_TYPE     : 'sine'           # (sine|square|sawtooth|triangle)
-    PEDAL_KEY_CODE : KeyCodes.SPACE_BAR
+    DEBUG_MODE                    : false              # (true|false)
+    PITCH_TYPE                    : 'sine'             # (sine|square|sawtooth|triangle)
+    PEDAL_KEY_CODE                : KeyCodes.SPACE_BAR
+    LABEL_FOR_UNRECOGNIZED_CHORDS : ' '
   }
 
   return Config

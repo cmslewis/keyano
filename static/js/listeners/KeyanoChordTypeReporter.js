@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['static/js/listeners/AbstractKeyanoListener', 'static/js/data/ChordData', 'static/js/pianoKeyUtils'], function(AbstractKeyanoListener, ChordData, pianoKeyUtils) {
+  define(['static/js/listeners/AbstractKeyanoListener', 'static/js/data/ChordData', 'static/js/Config', 'static/js/pianoKeyUtils'], function(AbstractKeyanoListener, ChordData, Config, pianoKeyUtils) {
     var IntervalName, KeyanoChordTypeReporter;
     IntervalName = {
       1: 'Minor 2nd',
@@ -107,7 +107,11 @@
         if (chordData == null) {
           signature = this._findSignatureForClosedSpelling(filteredKeys);
         }
-        chordName = this._getChordNameFromSignature(filteredKeys, signature);
+        if (signature != null) {
+          chordName = this._getChordNameFromSignature(filteredKeys, signature);
+        } else {
+          chordName = Config.LABEL_FOR_UNRECOGNIZED_CHORDS;
+        }
         return chordName;
       };
 
@@ -170,7 +174,10 @@
             break;
           }
         }
-        return signature != null ? signature : this._getIntervalSizesSignature(pianoKeys);
+        if (chordData == null) {
+          signature = null;
+        }
+        return signature;
       };
 
       KeyanoChordTypeReporter.prototype._getIntervalSizes = function(pianoKeys) {
