@@ -4,7 +4,7 @@
     var Config;
     Config = {
       DEBUG_MODE: false,
-      PITCH_TYPE: 'square',
+      PITCH_TYPE: 'sine',
       PEDAL_KEY_CODE: KeyCodes.SPACE_BAR
     };
     return Config;
