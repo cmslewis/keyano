@@ -73,6 +73,7 @@ define [
         name = @_identifyChord(impressedPianoKeys)
 
       @$outputElem?.text(name)
+      @$outputElem.toggleClass 'unknown', name is Config.LABEL_FOR_UNRECOGNIZED_CHORDS
 
       return
 

@@ -111,22 +111,6 @@
         quality: 'Diminished 7',
         root: 0
       },
-      '0-3-4-4': {
-        quality: 'Minor-Major 7',
-        root: 0
-      },
-      '0-4-4-1': {
-        quality: 'Minor-Major 7 (First Inversion)',
-        root: 3
-      },
-      '0-4-1-3': {
-        quality: 'Minor-Major 7 (Second Inversion)',
-        root: 2
-      },
-      '0-1-3-4': {
-        quality: 'Minor-Major 7 (Third Inversion)',
-        root: 1
-      },
       '0-4-4-3': {
         quality: 'Augmented Major 7',
         root: 0
@@ -216,7 +200,7 @@
         root: 0
       },
       '0-7-5': {
-        quality: 'POWER CHORRRD!!!',
+        quality: 'POWER CHORD!!!',
         root: 0
       }
     };
