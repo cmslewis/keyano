@@ -19,6 +19,13 @@ define [
     10 : 'Minor 7th'
     11 : 'Major 7th'
     12 : 'Octave'
+    13 : 'Minor 9th'
+    14 : 'Major 9th'
+    15 : 'Minor 10th'
+    16 : 'Major 10th'
+    17 : 'Perfect 11th'
+    18 : 'Diminished 12th'
+    19 : 'Perfect 12th'
 
 
   class KeyanoChordTypeReporter extends AbstractKeyanoListener
@@ -74,6 +81,9 @@ define [
       [lowerKey, higherKey] = pianoKeys
       intervalSize = @_getIntervalSize(lowerKey, higherKey)
 
+      if not IntervalName[intervalSize]?
+        throw new Error "This interval size (#{intervalSize}) is not explicitly named in the IntervalName object"
+
       return IntervalName[intervalSize]
 
     ###
@@ -87,16 +97,48 @@ define [
       (string) the name of the chord (e.g. CM7)
     ###
     _identifyChord : (pianoKeys) ->
-      signature = @_getIntervalSizesSignature(pianoKeys)
-      chordData = ChordData[signature]
+      # If there are only three keys in pianoKeys, then filtering out a higher duplicate will make the resultant pair
+      # be identified as an interval (e.g. Major 3rd, Perfect Fifth). It'd be weird to identify a three-note
+      # combination as an interval; thus, we only filter out duplicates if there are four or more keys provided.
+      if _.size(pianoKeys) >= 4
+        filteredKeys = @_rejectHigherDuplicatesOfLowerKeys(pianoKeys)
+      else
+        filteredKeys = pianoKeys
+
+      signature    = @_getIntervalSizesSignature(filteredKeys)
+      chordData    = ChordData[signature]
 
       chordName = null
       if chordData?
-        rootKeyName = pianoKeys[chordData.root].name
+        rootKeyName = filteredKeys[chordData.root].name
         chordName   = "#{rootKeyName} #{chordData.quality}"
       else
         chordName = signature
       return chordName
+
+    _rejectHigherDuplicatesOfLowerKeys : (pianoKeys) ->
+      seenKeyNames = new Set()
+      uniqueKeys   = []
+
+      # This loop assumes that pianoKeys is already sorted in ascending order of key index.
+      for pianoKey in pianoKeys
+        if seenKeyNames.has(pianoKey.name)
+          continue
+        seenKeyNames.add(pianoKey.name)
+        uniqueKeys.push(pianoKey)
+
+      return uniqueKeys
+
+    _getIntervalSizes : (pianoKeys) ->
+      intervalSizes = [0] # 0 Represents the first key being in unison with itself.
+
+      for i in [1...pianoKeys.length]
+        lastPianoKey = pianoKeys[i - 1]
+        currPianoKey = pianoKeys[i]
+        intervalSize = @_getIntervalSize(lastPianoKey, currPianoKey)
+        intervalSizes.push(intervalSize)
+
+      return intervalSizes
 
     ###
     @params
@@ -110,17 +152,6 @@ define [
     ###
     _getIntervalSize : (pianoKeyA, pianoKeyB) ->
       return Math.abs(pianoKeyB.index - pianoKeyA.index)
-
-    _getIntervalSizes : (pianoKeys) ->
-      intervalSizes = [0] # 0 Represents the first key being in unison with itself.
-
-      for i in [1...pianoKeys.length]
-        lastPianoKey = pianoKeys[i - 1]
-        currPianoKey = pianoKeys[i]
-        intervalSize = @_getIntervalSize(lastPianoKey, currPianoKey)
-        intervalSizes.push(intervalSize)
-
-      return intervalSizes
 
     _getIntervalSizesSignature : (pianoKeys) ->
       intervalSizes = @_getIntervalSizes(pianoKeys)

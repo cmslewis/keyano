@@ -29,9 +29,6 @@ define [], ->
     '0-3-3' :
       quality : 'Diminished Triad'
       root    : 0
-    '0-3-3-6' :
-      quality : 'Diminished Triad' # + Upper Octave
-      root    : 0
     '0-3-6' :
       quality : 'Diminished Triad (First Inversion)'
       root    : 2
@@ -44,50 +41,35 @@ define [], ->
     '0-4-4' :
       quality : 'Augmented Triad'
       root    : 0
-    '0-4-4-4' :
-      quality : 'Augmented Triad' # + Upper Octave
-      root    : 0
 
     # Minor Triad
 
     '0-3-4' :
-      quality : 'Minor Triad'
+      quality : 'Minor'
       root    : 0
-    '0-3-4-5' :
-      quality : 'Minor Triad' # + Upper Octave
+    '0-7-5-3' :
+      quality : 'Minor' # + 1-5-1-3 Spelling
       root    : 0
     '0-4-5' :
-      quality : 'Minor Triad (First Inversion)'
-      root    : 2
-    '0-4-5-3' :
-      quality : 'Minor Triad (First Inversion)' # + Upper Octave
+      quality : 'Minor (First Inversion)'
       root    : 2
     '0-5-3' :
-      quality : 'Minor Triad (Second Inversion)'
-      root    : 1
-    '0-5-3-4' :
-      quality : 'Minor Triad (Second Inversion)' # + Upper Octave
+      quality : 'Minor (Second Inversion)'
       root    : 1
 
-    # Major Triad
+    # Major
 
     '0-4-3' :
-      quality : 'Major Triad'
+      quality : 'Major'
       root    : 0
-    '0-4-3-5' :
-      quality : 'Major Triad' # + Upper Octave
+    '0-7-5-4' :
+      quality : 'Major' # + 1-5-1-3 Spelling
       root    : 0
     '0-3-5' :
-      quality : 'Major Triad (First Inversion)'
-      root    : 2
-    '0-3-5-4' :
-      quality : 'Major Triad (First Inversion)' # + Upper Octave
+      quality : 'Major (First Inversion)'
       root    : 2
     '0-5-4' :
-      quality : 'Major Triad (Second Inversion)'
-      root    : 1
-    '0-5-4-3' :
-      quality : 'Major Triad (Second Inversion)' # + Upper Octave
+      quality : 'Major (Second Inversion)'
       root    : 1
 
 
@@ -98,9 +80,6 @@ define [], ->
 
     '0-4-3-4' :
       quality : 'Major 7'
-      root    : 0
-    '0-4-3-4-1' :
-      quality : 'Major 7' # + Upper Octave
       root    : 0
     '0-3-4-1' :
       quality : 'Major 7 (First Inversion)'
@@ -117,9 +96,6 @@ define [], ->
     '0-4-3-3' :
       quality : 'Dominant 7'
       root    : 0
-    '0-4-3-3-2' :
-      quality : 'Dominant 7' # + Upper Octave
-      root    : 0
     '0-3-3-2' :
       quality : 'Dominant 7 (First Inversion)'
       root    : 3
@@ -134,9 +110,6 @@ define [], ->
 
     '0-3-4-3' :
       quality : 'Minor 7'
-      root    : 0
-    '0-3-4-3-2' :
-      quality : 'Minor 7' # + Uppper Octave
       root    : 0
     '0-4-3-2' :
       quality : 'Minor 7 (First Inversion)'
@@ -153,9 +126,6 @@ define [], ->
     '0-3-3-4' :
       quality : 'Half Diminished 7'
       root    : 0
-    '0-3-3-4-2' :
-      quality : 'Half Diminished 7' # + Uppper Octave
-      root    : 0
     '0-3-4-2' :
       quality : 'Half-Diminished 7 (First Inversion)'
       root    : 3
@@ -170,9 +140,6 @@ define [], ->
 
     '0-3-3-3' :
       quality : 'Diminished 7'
-      root    : 0
-    '0-3-3-3-3' :
-      quality : 'Diminished 7' # + Uppper Octave
       root    : 0
 
     # Minor-Major 7
@@ -230,10 +197,22 @@ define [], ->
     '0-2-5' :
       quality : 'sus2'
       root    : 0
+    '0-7-7-2' :
+      quality : 'sus2'
+      root    : 0
+
+    # Minor sus2
+
+    '0-7-7-1' :
+      quality : 'Minor sus2'
+      root    : 0
 
     # sus4
 
     '0-5-2' :
+      quality : 'sus4'
+      root    : 0
+    '0-5-2-5' :
       quality : 'sus4'
       root    : 0
 
@@ -245,6 +224,9 @@ define [], ->
 
     '0-2-2-3' :
       quality : 'add2'
+      root    : 0
+    '0-7-5-2-2' :
+      quality : 'add9' # 1-5-1-2-3 Spelling
       root    : 0
     '0-3-5-2' :
       quality : 'add2 (First Inversion)'

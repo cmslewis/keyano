@@ -17,7 +17,14 @@
       9: 'Major 6th',
       10: 'Minor 7th',
       11: 'Major 7th',
-      12: 'Octave'
+      12: 'Octave',
+      13: 'Minor 9th',
+      14: 'Major 9th',
+      15: 'Minor 10th',
+      16: 'Major 10th',
+      17: 'Perfect 11th',
+      18: 'Diminished 12th',
+      19: 'Perfect 12th'
     };
     KeyanoChordTypeReporter = (function(_super) {
       __extends(KeyanoChordTypeReporter, _super);
@@ -70,6 +77,9 @@
         }
         lowerKey = pianoKeys[0], higherKey = pianoKeys[1];
         intervalSize = this._getIntervalSize(lowerKey, higherKey);
+        if (IntervalName[intervalSize] == null) {
+          throw new Error("This interval size (" + intervalSize + ") is not explicitly named in the IntervalName object");
+        }
         return IntervalName[intervalSize];
       };
 
@@ -86,17 +96,49 @@
        */
 
       KeyanoChordTypeReporter.prototype._identifyChord = function(pianoKeys) {
-        var chordData, chordName, rootKeyName, signature;
-        signature = this._getIntervalSizesSignature(pianoKeys);
+        var chordData, chordName, filteredKeys, rootKeyName, signature;
+        if (_.size(pianoKeys) >= 4) {
+          filteredKeys = this._rejectHigherDuplicatesOfLowerKeys(pianoKeys);
+        } else {
+          filteredKeys = pianoKeys;
+        }
+        signature = this._getIntervalSizesSignature(filteredKeys);
         chordData = ChordData[signature];
         chordName = null;
         if (chordData != null) {
-          rootKeyName = pianoKeys[chordData.root].name;
+          rootKeyName = filteredKeys[chordData.root].name;
           chordName = "" + rootKeyName + " " + chordData.quality;
         } else {
           chordName = signature;
         }
         return chordName;
+      };
+
+      KeyanoChordTypeReporter.prototype._rejectHigherDuplicatesOfLowerKeys = function(pianoKeys) {
+        var pianoKey, seenKeyNames, uniqueKeys, _i, _len;
+        seenKeyNames = new Set();
+        uniqueKeys = [];
+        for (_i = 0, _len = pianoKeys.length; _i < _len; _i++) {
+          pianoKey = pianoKeys[_i];
+          if (seenKeyNames.has(pianoKey.name)) {
+            continue;
+          }
+          seenKeyNames.add(pianoKey.name);
+          uniqueKeys.push(pianoKey);
+        }
+        return uniqueKeys;
+      };
+
+      KeyanoChordTypeReporter.prototype._getIntervalSizes = function(pianoKeys) {
+        var currPianoKey, i, intervalSize, intervalSizes, lastPianoKey, _i, _ref;
+        intervalSizes = [0];
+        for (i = _i = 1, _ref = pianoKeys.length; 1 <= _ref ? _i < _ref : _i > _ref; i = 1 <= _ref ? ++_i : --_i) {
+          lastPianoKey = pianoKeys[i - 1];
+          currPianoKey = pianoKeys[i];
+          intervalSize = this._getIntervalSize(lastPianoKey, currPianoKey);
+          intervalSizes.push(intervalSize);
+        }
+        return intervalSizes;
       };
 
 
@@ -113,18 +155,6 @@
 
       KeyanoChordTypeReporter.prototype._getIntervalSize = function(pianoKeyA, pianoKeyB) {
         return Math.abs(pianoKeyB.index - pianoKeyA.index);
-      };
-
-      KeyanoChordTypeReporter.prototype._getIntervalSizes = function(pianoKeys) {
-        var currPianoKey, i, intervalSize, intervalSizes, lastPianoKey, _i, _ref;
-        intervalSizes = [0];
-        for (i = _i = 1, _ref = pianoKeys.length; 1 <= _ref ? _i < _ref : _i > _ref; i = 1 <= _ref ? ++_i : --_i) {
-          lastPianoKey = pianoKeys[i - 1];
-          currPianoKey = pianoKeys[i];
-          intervalSize = this._getIntervalSize(lastPianoKey, currPianoKey);
-          intervalSizes.push(intervalSize);
-        }
-        return intervalSizes;
       };
 
       KeyanoChordTypeReporter.prototype._getIntervalSizesSignature = function(pianoKeys) {

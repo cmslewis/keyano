@@ -7,10 +7,6 @@
         quality: 'Diminished Triad',
         root: 0
       },
-      '0-3-3-6': {
-        quality: 'Diminished Triad',
-        root: 0
-      },
       '0-3-6': {
         quality: 'Diminished Triad (First Inversion)',
         root: 2
@@ -23,63 +19,39 @@
         quality: 'Augmented Triad',
         root: 0
       },
-      '0-4-4-4': {
-        quality: 'Augmented Triad',
-        root: 0
-      },
       '0-3-4': {
-        quality: 'Minor Triad',
+        quality: 'Minor',
         root: 0
       },
-      '0-3-4-5': {
-        quality: 'Minor Triad',
+      '0-7-5-3': {
+        quality: 'Minor',
         root: 0
       },
       '0-4-5': {
-        quality: 'Minor Triad (First Inversion)',
-        root: 2
-      },
-      '0-4-5-3': {
-        quality: 'Minor Triad (First Inversion)',
+        quality: 'Minor (First Inversion)',
         root: 2
       },
       '0-5-3': {
-        quality: 'Minor Triad (Second Inversion)',
-        root: 1
-      },
-      '0-5-3-4': {
-        quality: 'Minor Triad (Second Inversion)',
+        quality: 'Minor (Second Inversion)',
         root: 1
       },
       '0-4-3': {
-        quality: 'Major Triad',
+        quality: 'Major',
         root: 0
       },
-      '0-4-3-5': {
-        quality: 'Major Triad',
+      '0-7-5-4': {
+        quality: 'Major',
         root: 0
       },
       '0-3-5': {
-        quality: 'Major Triad (First Inversion)',
-        root: 2
-      },
-      '0-3-5-4': {
-        quality: 'Major Triad (First Inversion)',
+        quality: 'Major (First Inversion)',
         root: 2
       },
       '0-5-4': {
-        quality: 'Major Triad (Second Inversion)',
-        root: 1
-      },
-      '0-5-4-3': {
-        quality: 'Major Triad (Second Inversion)',
+        quality: 'Major (Second Inversion)',
         root: 1
       },
       '0-4-3-4': {
-        quality: 'Major 7',
-        root: 0
-      },
-      '0-4-3-4-1': {
         quality: 'Major 7',
         root: 0
       },
@@ -99,10 +71,6 @@
         quality: 'Dominant 7',
         root: 0
       },
-      '0-4-3-3-2': {
-        quality: 'Dominant 7',
-        root: 0
-      },
       '0-3-3-2': {
         quality: 'Dominant 7 (First Inversion)',
         root: 3
@@ -116,10 +84,6 @@
         root: 1
       },
       '0-3-4-3': {
-        quality: 'Minor 7',
-        root: 0
-      },
-      '0-3-4-3-2': {
         quality: 'Minor 7',
         root: 0
       },
@@ -139,10 +103,6 @@
         quality: 'Half Diminished 7',
         root: 0
       },
-      '0-3-3-4-2': {
-        quality: 'Half Diminished 7',
-        root: 0
-      },
       '0-3-4-2': {
         quality: 'Half-Diminished 7 (First Inversion)',
         root: 3
@@ -156,10 +116,6 @@
         root: 1
       },
       '0-3-3-3': {
-        quality: 'Diminished 7',
-        root: 0
-      },
-      '0-3-3-3-3': {
         quality: 'Diminished 7',
         root: 0
       },
@@ -215,12 +171,28 @@
         quality: 'sus2',
         root: 0
       },
+      '0-7-7-2': {
+        quality: 'sus2',
+        root: 0
+      },
+      '0-7-7-1': {
+        quality: 'Minor sus2',
+        root: 0
+      },
       '0-5-2': {
+        quality: 'sus4',
+        root: 0
+      },
+      '0-5-2-5': {
         quality: 'sus4',
         root: 0
       },
       '0-2-2-3': {
         quality: 'add2',
+        root: 0
+      },
+      '0-7-5-2-2': {
+        quality: 'add9',
         root: 0
       },
       '0-3-5-2': {
