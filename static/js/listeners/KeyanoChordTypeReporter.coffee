@@ -1,9 +1,11 @@
 define [
   'static/js/listeners/AbstractKeyanoListener'
   'static/js/data/ChordData'
+  'static/js/pianoKeyUtils'
 ], (
   AbstractKeyanoListener
   ChordData
+  pianoKeyUtils
 ) ->
 
   IntervalName =
@@ -105,15 +107,25 @@ define [
       else
         filteredKeys = pianoKeys
 
-      signature    = @_getIntervalSizesSignature(filteredKeys)
-      chordData    = ChordData[signature]
+      signature = @_getIntervalSizesSignature(filteredKeys)
+      chordData = ChordData[signature]
 
-      chordName = null
+      if not chordData?
+        signature = @_findSignatureForClosedSpelling(filteredKeys)
+
+      chordName = @_getChordNameFromSignature(filteredKeys, signature)
+
+      return chordName
+
+    _getChordNameFromSignature : (filteredKeys, signature) ->
+      chordData = ChordData[signature]
+      rootKey   = filteredKeys[chordData?.root]
+
       if chordData?
-        rootKeyName = filteredKeys[chordData.root].name
-        chordName   = "#{rootKeyName} #{chordData.quality}"
+        chordName = "#{rootKey.name} #{chordData.quality}"
       else
         chordName = signature
+
       return chordName
 
     _rejectHigherDuplicatesOfLowerKeys : (pianoKeys) ->
@@ -128,6 +140,46 @@ define [
         uniqueKeys.push(pianoKey)
 
       return uniqueKeys
+
+    _findSignatureForClosedSpelling : (pianoKeys) ->
+      # We might have already rejected all duplicates, but it's an idempotent operation, so might as well do it again
+      # since the correctness of this function absolutely depends on duplicates being rejected.
+      filteredKeys     = @_rejectHigherDuplicatesOfLowerKeys(pianoKeys)
+      filteredKeysCopy = _.cloneDeep(filteredKeys)
+      rootKey          = filteredKeys[0]
+
+      chordData = null
+
+      # Keep dropping the highest keys by an octave until we find a defined signature.
+      for i in [(filteredKeys.length - 1)..0] by -1
+        pianoKey = filteredKeys[i]
+        lowerKey = pianoKeyUtils.getSameKeyInNextLowestOctave(pianoKey)
+
+        if not lowerKey?
+          break
+
+        if lowerKey.index < rootKey.index
+          break
+
+        # Delete the last element (the highest remaining key).
+        filteredKeysCopy.splice(filteredKeys.length - 1)
+
+        # Append the same pitch from the lower octave.
+        filteredKeysCopy.push(lowerKey)
+
+        # Sort the keys by pitch index.
+        filteredKeysCopy.sort((a, b) ->
+          if a.index < b.index then return -1
+          if a.index > b.index then return 1
+          return 0
+        )
+
+        signature = @_getIntervalSizesSignature(filteredKeysCopy)
+        chordData = ChordData[signature]
+        if chordData?
+          break
+
+      return signature ? @_getIntervalSizesSignature(pianoKeys)
 
     _getIntervalSizes : (pianoKeys) ->
       intervalSizes = [0] # 0 Represents the first key being in unison with itself.

@@ -23,10 +23,6 @@
         quality: 'Minor',
         root: 0
       },
-      '0-7-5-3': {
-        quality: 'Minor',
-        root: 0
-      },
       '0-4-5': {
         quality: 'Minor (First Inversion)',
         root: 2
@@ -36,10 +32,6 @@
         root: 1
       },
       '0-4-3': {
-        quality: 'Major',
-        root: 0
-      },
-      '0-7-5-4': {
         quality: 'Major',
         root: 0
       },
@@ -191,9 +183,9 @@
         quality: 'add2',
         root: 0
       },
-      '0-7-5-2-2': {
-        quality: 'add9',
-        root: 0
+      '0-2-3-5': {
+        quality: 'add2 (Ninth as Root)',
+        root: 3
       },
       '0-3-5-2': {
         quality: 'add2 (First Inversion)',
@@ -221,6 +213,10 @@
       },
       '0-4-3-3-5': {
         quality: 'Dominant 7 Sharp 9th',
+        root: 0
+      },
+      '0-7-5': {
+        quality: 'POWER CHORRRD!!!',
         root: 0
       }
     };

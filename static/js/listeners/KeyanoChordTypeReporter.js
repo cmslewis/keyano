@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['static/js/listeners/AbstractKeyanoListener', 'static/js/data/ChordData'], function(AbstractKeyanoListener, ChordData) {
+  define(['static/js/listeners/AbstractKeyanoListener', 'static/js/data/ChordData', 'static/js/pianoKeyUtils'], function(AbstractKeyanoListener, ChordData, pianoKeyUtils) {
     var IntervalName, KeyanoChordTypeReporter;
     IntervalName = {
       1: 'Minor 2nd',
@@ -96,7 +96,7 @@
        */
 
       KeyanoChordTypeReporter.prototype._identifyChord = function(pianoKeys) {
-        var chordData, chordName, filteredKeys, rootKeyName, signature;
+        var chordData, chordName, filteredKeys, signature;
         if (_.size(pianoKeys) >= 4) {
           filteredKeys = this._rejectHigherDuplicatesOfLowerKeys(pianoKeys);
         } else {
@@ -104,10 +104,19 @@
         }
         signature = this._getIntervalSizesSignature(filteredKeys);
         chordData = ChordData[signature];
-        chordName = null;
+        if (chordData == null) {
+          signature = this._findSignatureForClosedSpelling(filteredKeys);
+        }
+        chordName = this._getChordNameFromSignature(filteredKeys, signature);
+        return chordName;
+      };
+
+      KeyanoChordTypeReporter.prototype._getChordNameFromSignature = function(filteredKeys, signature) {
+        var chordData, chordName, rootKey;
+        chordData = ChordData[signature];
+        rootKey = filteredKeys[chordData != null ? chordData.root : void 0];
         if (chordData != null) {
-          rootKeyName = filteredKeys[chordData.root].name;
-          chordName = "" + rootKeyName + " " + chordData.quality;
+          chordName = "" + rootKey.name + " " + chordData.quality;
         } else {
           chordName = signature;
         }
@@ -127,6 +136,41 @@
           uniqueKeys.push(pianoKey);
         }
         return uniqueKeys;
+      };
+
+      KeyanoChordTypeReporter.prototype._findSignatureForClosedSpelling = function(pianoKeys) {
+        var chordData, filteredKeys, filteredKeysCopy, i, lowerKey, pianoKey, rootKey, signature, _i, _ref;
+        filteredKeys = this._rejectHigherDuplicatesOfLowerKeys(pianoKeys);
+        filteredKeysCopy = _.cloneDeep(filteredKeys);
+        rootKey = filteredKeys[0];
+        chordData = null;
+        for (i = _i = _ref = filteredKeys.length - 1; _i >= 0; i = _i += -1) {
+          pianoKey = filteredKeys[i];
+          lowerKey = pianoKeyUtils.getSameKeyInNextLowestOctave(pianoKey);
+          if (lowerKey == null) {
+            break;
+          }
+          if (lowerKey.index < rootKey.index) {
+            break;
+          }
+          filteredKeysCopy.splice(filteredKeys.length - 1);
+          filteredKeysCopy.push(lowerKey);
+          filteredKeysCopy.sort(function(a, b) {
+            if (a.index < b.index) {
+              return -1;
+            }
+            if (a.index > b.index) {
+              return 1;
+            }
+            return 0;
+          });
+          signature = this._getIntervalSizesSignature(filteredKeysCopy);
+          chordData = ChordData[signature];
+          if (chordData != null) {
+            break;
+          }
+        }
+        return signature != null ? signature : this._getIntervalSizesSignature(pianoKeys);
       };
 
       KeyanoChordTypeReporter.prototype._getIntervalSizes = function(pianoKeys) {

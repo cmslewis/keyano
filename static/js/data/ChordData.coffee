@@ -47,9 +47,6 @@ define [], ->
     '0-3-4' :
       quality : 'Minor'
       root    : 0
-    '0-7-5-3' :
-      quality : 'Minor' # + 1-5-1-3 Spelling
-      root    : 0
     '0-4-5' :
       quality : 'Minor (First Inversion)'
       root    : 2
@@ -61,9 +58,6 @@ define [], ->
 
     '0-4-3' :
       quality : 'Major'
-      root    : 0
-    '0-7-5-4' :
-      quality : 'Major' # + 1-5-1-3 Spelling
       root    : 0
     '0-3-5' :
       quality : 'Major (First Inversion)'
@@ -188,7 +182,6 @@ define [], ->
       root    : 1
 
 
-
     # Suspensions
     # ===========
 
@@ -225,9 +218,9 @@ define [], ->
     '0-2-2-3' :
       quality : 'add2'
       root    : 0
-    '0-7-5-2-2' :
-      quality : 'add9' # 1-5-1-2-3 Spelling
-      root    : 0
+    '0-2-3-5' :
+      quality : 'add2 (Ninth as Root)'
+      root    : 3
     '0-3-5-2' :
       quality : 'add2 (First Inversion)'
       root    : 2
@@ -266,6 +259,12 @@ define [], ->
       root    : 0
 
 
+    # Miscellaneous
+    # =============
+
+    '0-7-5' :
+      quality : 'POWER CHORRRD!!!'
+      root    : 0
 
 
   return ChordData
