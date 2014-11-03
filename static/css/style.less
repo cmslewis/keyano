@@ -36,6 +36,7 @@
 
 body {
   .default-font();
+  background : black url(http://subtlepatterns.com/patterns/dark_wood.png);
 }
 
 .header {
@@ -76,11 +77,12 @@ body {
 }
 
 .footer {
-  .box-shadow(0 -1px 3px fade(black, 25%));
-  background  : white;
-  color       : @default-text-color;
-  font-size   : @brand-font-size-5;
-  padding     : 0 @component-lr-padding;
+  .box-shadow(0 -2px 3px black);
+  background : fade(black, 35%);
+  border-top : 1px solid fade(white, 15%);
+  color      : @default-text-color;
+  font-size  : @brand-font-size-5;
+  padding    : 0 @component-lr-padding;
 
   .bottom-text {
 
