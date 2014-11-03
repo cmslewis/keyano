@@ -64,9 +64,11 @@ define [
     _printChord : ->
       impressedPianoKeys = @instrument.getImpressedPianoKeys()
 
-      if impressedPianoKeys.length <= 1
+      if impressedPianoKeys.length is 0
         @$outputElem?.text('')
         return
+      else if impressedPianoKeys.length is 1
+        name = impressedPianoKeys[0].name
       else if impressedPianoKeys.length is 2
         name = @_identifyInterval(impressedPianoKeys)
       else

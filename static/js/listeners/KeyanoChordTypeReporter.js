@@ -52,11 +52,13 @@
       KeyanoChordTypeReporter.prototype._printChord = function() {
         var impressedPianoKeys, name, _ref, _ref1;
         impressedPianoKeys = this.instrument.getImpressedPianoKeys();
-        if (impressedPianoKeys.length <= 1) {
+        if (impressedPianoKeys.length === 0) {
           if ((_ref = this.$outputElem) != null) {
             _ref.text('');
           }
           return;
+        } else if (impressedPianoKeys.length === 1) {
+          name = impressedPianoKeys[0].name;
         } else if (impressedPianoKeys.length === 2) {
           name = this._identifyInterval(impressedPianoKeys);
         } else {
