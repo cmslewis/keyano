@@ -175,6 +175,7 @@ body {
 }
 .KeyanoInstrument-key.is-depressed {
   background: #5dbced !important;
+  color: white !important;
 }
 .KeyanoInstrument-keyLabel {
   bottom: 30px;
