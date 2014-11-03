@@ -1,35 +1,51 @@
 
+
 .KeyanoInstrument {
+
+  // Position
   .clearfix();
+
+  // Box Model
   height : 100%;
 }
 
+
 .KeyanoInstrument-octaveGroup {
+
+  // Position
   .clearfix();
   float    : left;
   position : relative;
 }
 
+
 .KeyanoInstrument-octaveGroupWhiteKeys {
+
+  // Position
   .clearfix();
   z-index : 1;
 }
 
+
 .KeyanoInstrument-octaveGroupBlackKeys {
+
+  // Position
   .absolute-fill();
   z-index : 2;
 }
 
 .KeyanoInstrument-key {
+
+  // Position
+  float    : left;
+  position : relative;
+
+  // Style
   .border-radius(0 0 5px 5px);
-  background : #F6F2F2;
-  border     : 1px solid #282525;
-  border-top : 0;
-  float      : left;
-  height     : 400px;
-  position   : relative;
+  border-style : solid;
+
+  // Text
   text-align : center;
-  width      : @white-key-width;
 
   &.is-depressed {
     background : @keyano-key-depressed-color !important;
@@ -45,44 +61,74 @@
   right       : 0;
 }
 
-.KeyanoInstrument-blackKeyWrapper {
-  .transform(translateX(50%));
-  float  : left;
-  height : 60%;
-  padding : 0 ((@white-key-width - @black-key-width) / 2);
-}
-
 .KeyanoInstrument-whiteKey {
+
+  // Box Model
+  height : 400px;
+  width  : @white-key-width;
+
+  // Style
   .box-shadow(
     inset  0   -3px 1px fade(black, 35%),
     inset  2px  0   1px fade(black, 25%),
     inset -2px  0   1px fade(black, 25%);
   );
   background : linear-gradient(-20deg, #fff, #f2f2f2, #fff);
+  border     : 1px solid #282525;
+  border-top : 0;
+}
+
+.KeyanoInstrument-blackKeyWrapper {
+
+  // Position
+  .transform(translateX(50%));
+  float : left;
+
+  // Box Model
+  height  : 60%;
+  padding : 0 ((@white-key-width - @black-key-width) / 2);
 }
 
 .KeyanoInstrument-blackKey {
-  .box-shadow(inset 0px -1px 2px rgba(255,255,255,0.4), 0 2px 3px rgba(0,0,0,0.4));
+
+  // Position
+  float   : left;
+  z-index : 5;
+
+  // Box Model
+  height : 100%;
+  width  : @black-key-width;
+
+  // Style
+  .box-shadow(inset 0px -1px 2px fade(white, 40%), 0 2px 3px fade(black, 40%));
   background   : linear-gradient(-20deg, #333, #000, #333);
   border-width : 0 4px 15px;
-  border-color : transparent fade(white, 0) fade(white, 1%) fade(white, 20%);
-  color        : white;
-  float        : left;
-  height       : 100%;
-  width        : @black-key-width;
-  z-index      : 5;
+  border-color : transparent fade(white, 0) fade(white, 3%) fade(white, 20%);
+
+  // Text
+  color : white;
 }
 
 .KeyanoInstrument-blackKeySpacer {
-  .box-shadow(inset 0px -1px 2px rgba(255,255,255,0.4), 0 2px 3px rgba(0,0,0,0.4));
-  background     : linear-gradient(-20deg, #333, #000, #333);
-  border-color   : transparent fade(white, 0) fade(white, 1%) fade(white, 20%);
-  border-width   : 0 4px 15px;
-  color          : white;
-  float          : left;
-  height         : 100%;
-  opacity        : 0;
+
+  // Position
+  float   : left;
+  z-index : 5;
+
+  // Box Model
+  height : 100%;
+  width  : @black-key-width;
+
+  // Style
+  .box-shadow(inset 0px -1px 2px fade(white, 40%), 0 2px 3px fade(black, 40%));
+  background   : linear-gradient(-20deg, #333, #000, #333);
+  border-color : transparent fade(white, 0) fade(white, 3%) fade(white, 20%);
+  border-width : 0 4px 15px;
+  opacity      : 0;
+
+  // Text
+  color : white;
+
+  // Miscellaneous
   pointer-events : none;
-  width          : @black-key-width;
-  z-index        : 5;
 }

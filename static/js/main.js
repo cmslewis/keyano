@@ -66,7 +66,7 @@
       }
     ];
     $ui = {
-      chordNameLabel: $('.chord-name')
+      chordNameLabel: $('.ChordLabel')
     };
     return $(document).ready(function() {
       var keyanoChordTypeReporter, keyanoDomElementHighlighter, keyanoInstrument;

@@ -17,7 +17,7 @@ body {
   right: 0;
   bottom: 0;
   left: 0;
-  background: #141518 url(http://subtlepatterns.com/patterns/dark_wood.png);
+  background: #1A1B1F;
   cursor: default;
   overflow: hidden;
   font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -36,14 +36,14 @@ body {
   margin: 0 auto;
   width: 960px;
 }
-.chord-name {
+.ChordLabel {
   color: white;
   font-size: 40px;
   margin-top: 40px;
   text-align: center;
   text-shadow: 0 1px 2px black;
 }
-.chord-name.unknown {
+.ChordLabel.is-unknown {
   opacity: 0.35;
 }
 .fb-like.fb_iframe_widget {
@@ -96,12 +96,11 @@ body {
   height: 60px;
   line-height: 60px;
   padding: 0 20px;
-  -webkit-box-shadow: 0 -2px 3px #000000;
-  -moz-box-shadow: 0 -2px 3px #000000;
-  box-shadow: 0 -2px 3px #000000;
-  background: rgba(0, 0, 0, 0.35);
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  color: #504438;
+  -webkit-box-shadow: 0 -1px 0 #000000;
+  -moz-box-shadow: 0 -1px 0 #000000;
+  box-shadow: 0 -1px 0 #000000;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #9E9E9E;
   font-size: 14px;
 }
 .Footer-bottomText {
@@ -113,7 +112,7 @@ body {
   font-weight: 300;
 }
 .Footer-authorLink {
-  color: #b6b0ab;
+  color: #9E9E9E;
   font-weight: 300;
   text-decoration: none;
 }
@@ -163,20 +162,16 @@ body {
   z-index: 2;
 }
 .KeyanoInstrument-key {
+  float: left;
+  position: relative;
   -webkit-border-radius: 0 0 5px 5px;
   -webkit-background-clip: padding-box;
   -moz-border-radius: 0 0 5px 5px;
   -moz-background-clip: padding;
   border-radius: 0 0 5px 5px;
   background-clip: padding-box;
-  background: #F6F2F2;
-  border: 1px solid #282525;
-  border-top: 0;
-  float: left;
-  height: 400px;
-  position: relative;
+  border-style: solid;
   text-align: center;
-  width: 80px;
 }
 .KeyanoInstrument-key.is-depressed {
   background: #5dbced !important;
@@ -189,6 +184,16 @@ body {
   position: absolute;
   right: 0;
 }
+.KeyanoInstrument-whiteKey {
+  height: 400px;
+  width: 80px;
+  -webkit-box-shadow: inset 0 -3px 1px rgba(0, 0, 0, 0.35), inset 2px 0 1px rgba(0, 0, 0, 0.25), inset -2px 0 1px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: inset 0 -3px 1px rgba(0, 0, 0, 0.35), inset 2px 0 1px rgba(0, 0, 0, 0.25), inset -2px 0 1px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 -3px 1px rgba(0, 0, 0, 0.35), inset 2px 0 1px rgba(0, 0, 0, 0.25), inset -2px 0 1px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(-20deg, #ffffff, #f2f2f2, #ffffff);
+  border: 1px solid #282525;
+  border-top: 0;
+}
 .KeyanoInstrument-blackKeyWrapper {
   -webkit-transform: translateX(50%);
   -moz-transform: translateX(50%);
@@ -199,37 +204,31 @@ body {
   height: 60%;
   padding: 0 12px;
 }
-.KeyanoInstrument-whiteKey {
-  -webkit-box-shadow: inset 0 -3px 1px rgba(0, 0, 0, 0.35), inset 2px 0 1px rgba(0, 0, 0, 0.25), inset -2px 0 1px rgba(0, 0, 0, 0.25);
-  -moz-box-shadow: inset 0 -3px 1px rgba(0, 0, 0, 0.35), inset 2px 0 1px rgba(0, 0, 0, 0.25), inset -2px 0 1px rgba(0, 0, 0, 0.25);
-  box-shadow: inset 0 -3px 1px rgba(0, 0, 0, 0.35), inset 2px 0 1px rgba(0, 0, 0, 0.25), inset -2px 0 1px rgba(0, 0, 0, 0.25);
-  background: linear-gradient(-20deg, #ffffff, #f2f2f2, #ffffff);
-}
 .KeyanoInstrument-blackKey {
+  float: left;
+  z-index: 5;
+  height: 100%;
+  width: 56px;
   -webkit-box-shadow: inset 0px -1px 2px rgba(255, 255, 255, 0.4), 0 2px 3px rgba(0, 0, 0, 0.4);
   -moz-box-shadow: inset 0px -1px 2px rgba(255, 255, 255, 0.4), 0 2px 3px rgba(0, 0, 0, 0.4);
   box-shadow: inset 0px -1px 2px rgba(255, 255, 255, 0.4), 0 2px 3px rgba(0, 0, 0, 0.4);
   background: linear-gradient(-20deg, #333333, #000000, #333333);
   border-width: 0 4px 15px;
-  border-color: transparent rgba(255, 255, 255, 0) rgba(255, 255, 255, 0.01) rgba(255, 255, 255, 0.2);
+  border-color: transparent rgba(255, 255, 255, 0) rgba(255, 255, 255, 0.03) rgba(255, 255, 255, 0.2);
   color: white;
-  float: left;
-  height: 100%;
-  width: 56px;
-  z-index: 5;
 }
 .KeyanoInstrument-blackKeySpacer {
+  float: left;
+  z-index: 5;
+  height: 100%;
+  width: 56px;
   -webkit-box-shadow: inset 0px -1px 2px rgba(255, 255, 255, 0.4), 0 2px 3px rgba(0, 0, 0, 0.4);
   -moz-box-shadow: inset 0px -1px 2px rgba(255, 255, 255, 0.4), 0 2px 3px rgba(0, 0, 0, 0.4);
   box-shadow: inset 0px -1px 2px rgba(255, 255, 255, 0.4), 0 2px 3px rgba(0, 0, 0, 0.4);
   background: linear-gradient(-20deg, #333333, #000000, #333333);
-  border-color: transparent rgba(255, 255, 255, 0) rgba(255, 255, 255, 0.01) rgba(255, 255, 255, 0.2);
+  border-color: transparent rgba(255, 255, 255, 0) rgba(255, 255, 255, 0.03) rgba(255, 255, 255, 0.2);
   border-width: 0 4px 15px;
-  color: white;
-  float: left;
-  height: 100%;
   opacity: 0;
+  color: white;
   pointer-events: none;
-  width: 56px;
-  z-index: 5;
 }

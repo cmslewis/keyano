@@ -67,7 +67,7 @@
         if ((_ref1 = this.$outputElem) != null) {
           _ref1.text(name);
         }
-        this.$outputElem.toggleClass('unknown', name === Config.LABEL_FOR_UNRECOGNIZED_CHORDS);
+        this.$outputElem.toggleClass('is-unknown', name === Config.LABEL_FOR_UNRECOGNIZED_CHORDS);
       };
 
       KeyanoChordTypeReporter.prototype._identifyInterval = function(pianoKeys) {

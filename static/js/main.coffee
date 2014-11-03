@@ -47,7 +47,7 @@ require [
   ]
 
   $ui =
-    chordNameLabel : $('.chord-name')
+    chordNameLabel : $('.ChordLabel')
 
   $(document).ready ->
     keyanoInstrument = new KeyanoInstrument()
