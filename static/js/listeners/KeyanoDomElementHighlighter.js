@@ -12,7 +12,7 @@
         return KeyanoDomElementHighlighter.__super__.constructor.apply(this, arguments);
       }
 
-      KeyanoDomElementHighlighter.prototype.DEFAULT_KEYANO_KEY_SELECTOR = '.keyano-key';
+      KeyanoDomElementHighlighter.prototype.DEFAULT_KEYANO_KEY_SELECTOR = '.KeyanoInstrument-key';
 
       KeyanoDomElementHighlighter.prototype._domElementCache = null;
 
@@ -37,14 +37,14 @@
       KeyanoDomElementHighlighter.prototype.onPianoKeyStartedPlaying = function(ev, pianoKeyId) {
         var _ref;
         if ((_ref = this._domElementCache[pianoKeyId]) != null) {
-          _ref.addClass('depressed');
+          _ref.addClass('is-depressed');
         }
       };
 
       KeyanoDomElementHighlighter.prototype.onPianoKeyStoppedPlaying = function(ev, pianoKeyId) {
         var _ref;
         if ((_ref = this._domElementCache[pianoKeyId]) != null) {
-          _ref.removeClass('depressed');
+          _ref.removeClass('is-depressed');
         }
       };
 

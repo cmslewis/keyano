@@ -11,7 +11,7 @@ define [
     # Private Constants
     # -----------------
 
-    DEFAULT_KEYANO_KEY_SELECTOR : '.keyano-key'
+    DEFAULT_KEYANO_KEY_SELECTOR : '.KeyanoInstrument-key'
 
 
     # Instance Variables
@@ -35,11 +35,11 @@ define [
       @_fillCacheOfKeyanoKeyDomElements(keyanoKeys)
 
     onPianoKeyStartedPlaying : (ev, pianoKeyId) ->
-      @_domElementCache[pianoKeyId]?.addClass('depressed')
+      @_domElementCache[pianoKeyId]?.addClass('is-depressed')
       return
 
     onPianoKeyStoppedPlaying : (ev, pianoKeyId) ->
-      @_domElementCache[pianoKeyId]?.removeClass('depressed')
+      @_domElementCache[pianoKeyId]?.removeClass('is-depressed')
       return
 
 

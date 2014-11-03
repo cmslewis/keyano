@@ -1,0 +1,60 @@
+
+
+// .Footer
+// =======
+
+.Footer {
+
+  // Position
+  .fixed-to-bottom();
+  z-index : @z-index-of-footer;
+
+  // Box Model
+  .height-with-vertically-centered-text(@footer-height);
+  padding : 0 @component-lr-padding;
+
+  // Style
+  .box-shadow(0 -2px 3px black);
+  background : fade(black, 35%);
+  border-top : 1px solid fade(white, 15%);
+
+  // Text
+  color     : @default-text-color;
+  font-size : @brand-font-size-5;
+}
+
+
+// .Footer-bottomText
+// ==================
+
+.Footer-bottomText {
+  float : right;
+}
+
+
+// .Footer-dotSeparator
+// ====================
+
+.Footer-dotSeparator {
+  // Box Model
+  margin : 0 3px;
+
+  // Text
+  color       : @muted-text-color;
+  font-weight : 300;
+}
+
+
+// .Footer-authorLink
+// ==================
+
+.Footer-authorLink {
+  // Text
+  color           : @muted-text-color;
+  font-weight     : 300;
+  text-decoration : none;
+
+  &:hover {
+    text-decoration : underline;
+  }
+}

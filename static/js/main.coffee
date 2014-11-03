@@ -16,9 +16,7 @@ require [
   KeyanoChordTypeReporter
 ) ->
 
-  KEYANO_KEY_SELECTOR             = '.keyano-key'
-  CACHED_KEYANO_KEY_DOM_ELEMENTS = {}
-  KEYANO_KEYS                    = [
+  KEYANO_KEYS = [
 
     # Left Hand
 
@@ -48,6 +46,9 @@ require [
 
   ]
 
+  $ui =
+    chordNameLabel : $('.chord-name')
+
   $(document).ready ->
     keyanoInstrument = new KeyanoInstrument()
     keyanoInstrument.activateKeys(KEYANO_KEYS)
@@ -58,7 +59,7 @@ require [
 
     keyanoChordTypeReporter = new KeyanoChordTypeReporter({
       instrument : keyanoInstrument
-    }).activate(KEYANO_KEYS, $('.chord-name'))
+    }).activate(KEYANO_KEYS, $ui.chordNameLabel)
 
     return
 
