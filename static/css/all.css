@@ -104,6 +104,9 @@ body {
   font-size: 14px;
 }
 .Footer-bottomText {
+  float: left;
+}
+.Footer-bottomText--right {
   float: right;
 }
 .Footer-dotSeparator {
