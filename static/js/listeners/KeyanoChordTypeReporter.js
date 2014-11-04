@@ -99,33 +99,26 @@
        */
 
       KeyanoChordTypeReporter.prototype._identifyChord = function(pianoKeys) {
-        var chordData, chordName, filteredKeys, signature;
+        var chordName, closedSpellingKeys, filteredKeys, signature;
         if (_.size(pianoKeys) >= 4) {
           filteredKeys = this._rejectHigherDuplicatesOfLowerKeys(pianoKeys);
         } else {
           filteredKeys = pianoKeys;
         }
-        signature = this._getIntervalSizesSignature(filteredKeys);
-        chordData = ChordData[signature];
-        if (chordData == null) {
-          signature = this._findSignatureForClosedSpelling(filteredKeys);
-        }
-        if (signature != null) {
-          chordName = this._getChordNameFromSignature(filteredKeys, signature);
-        } else {
-          chordName = Config.LABEL_FOR_UNRECOGNIZED_CHORDS;
-        }
+        closedSpellingKeys = this._findRecognizedClosedSpelling(filteredKeys);
+        signature = this._getIntervalSizesSignature(closedSpellingKeys);
+        chordName = this._getChordNameFromSignature(closedSpellingKeys, signature);
         return chordName;
       };
 
-      KeyanoChordTypeReporter.prototype._getChordNameFromSignature = function(filteredKeys, signature) {
+      KeyanoChordTypeReporter.prototype._getChordNameFromSignature = function(keys, signature) {
         var chordData, chordName, rootKey;
         chordData = ChordData[signature];
-        rootKey = filteredKeys[chordData != null ? chordData.root : void 0];
+        rootKey = keys[chordData != null ? chordData.root : void 0];
         if (chordData != null) {
           chordName = "" + rootKey.name + " " + chordData.quality;
         } else {
-          chordName = signature;
+          chordName = Config.LABEL_FOR_UNRECOGNIZED_CHORDS;
         }
         return chordName;
       };
@@ -145,8 +138,8 @@
         return uniqueKeys;
       };
 
-      KeyanoChordTypeReporter.prototype._findSignatureForClosedSpelling = function(pianoKeys) {
-        var chordData, filteredKeys, filteredKeysCopy, i, lowerKey, pianoKey, rootKey, signature, _i, _ref;
+      KeyanoChordTypeReporter.prototype._findRecognizedClosedSpelling = function(pianoKeys) {
+        var chordData, closedSpellingKeys, filteredKeys, filteredKeysCopy, i, lowerKey, pianoKey, rootKey, signature, _i, _ref;
         filteredKeys = this._rejectHigherDuplicatesOfLowerKeys(pianoKeys);
         filteredKeysCopy = _.cloneDeep(filteredKeys);
         rootKey = filteredKeys[0];
@@ -177,10 +170,12 @@
             break;
           }
         }
-        if (chordData == null) {
-          signature = null;
+        if (chordData != null) {
+          closedSpellingKeys = filteredKeysCopy;
+        } else {
+          closedSpellingKeys = filteredKeys;
         }
-        return signature;
+        return closedSpellingKeys;
       };
 
       KeyanoChordTypeReporter.prototype._getIntervalSizes = function(pianoKeys) {

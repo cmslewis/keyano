@@ -112,27 +112,21 @@ define [
       else
         filteredKeys = pianoKeys
 
-      signature = @_getIntervalSizesSignature(filteredKeys)
-      chordData = ChordData[signature]
+      closedSpellingKeys = @_findRecognizedClosedSpelling(filteredKeys)
 
-      if not chordData?
-        signature = @_findSignatureForClosedSpelling(filteredKeys)
-
-      if signature?
-        chordName = @_getChordNameFromSignature(filteredKeys, signature)
-      else
-        chordName = Config.LABEL_FOR_UNRECOGNIZED_CHORDS
+      signature = @_getIntervalSizesSignature(closedSpellingKeys)
+      chordName = @_getChordNameFromSignature(closedSpellingKeys, signature)
 
       return chordName
 
-    _getChordNameFromSignature : (filteredKeys, signature) ->
+    _getChordNameFromSignature : (keys, signature) ->
       chordData = ChordData[signature]
-      rootKey   = filteredKeys[chordData?.root]
+      rootKey   = keys[chordData?.root]
 
       if chordData?
         chordName = "#{rootKey.name} #{chordData.quality}"
       else
-        chordName = signature
+        chordName = Config.LABEL_FOR_UNRECOGNIZED_CHORDS
 
       return chordName
 
@@ -149,7 +143,7 @@ define [
 
       return uniqueKeys
 
-    _findSignatureForClosedSpelling : (pianoKeys) ->
+    _findRecognizedClosedSpelling : (pianoKeys) ->
       # We might have already rejected all duplicates, but it's an idempotent operation, so might as well do it again
       # since the correctness of this function absolutely depends on duplicates being rejected.
       filteredKeys     = @_rejectHigherDuplicatesOfLowerKeys(pianoKeys)
@@ -187,10 +181,12 @@ define [
         if chordData?
           break
 
-      if not chordData?
-        signature = null
+      if chordData?
+        closedSpellingKeys = filteredKeysCopy
+      else
+        closedSpellingKeys = filteredKeys
 
-      return signature
+      return closedSpellingKeys
 
     _getIntervalSizes : (pianoKeys) ->
       intervalSizes = [0] # 0 Represents the first key being in unison with itself.
