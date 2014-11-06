@@ -13,6 +13,13 @@ define [
 ) ->
 
 
+  #
+  # EventNames
+  # ==========
+  # An enumeration of event names that this module triggers. The purpose here is to keep the event names emitted from
+  # KeyanoInstrument in one place for easy reference. Note: You may NOT freely change these event names, as other
+  # modules depend on them; again, this enumeration is only here as a convenience for easy reference.
+  #
   EventNames =
     ON_KEY_STARTED_PLAYING : 'piano:key:did:start:playing'
     ON_KEY_STOPPED_PLAYING : 'piano:key:did:stop:playing'

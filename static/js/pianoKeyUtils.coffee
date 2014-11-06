@@ -51,7 +51,7 @@ define [
     if aOctave < bOctave
       return -1
 
-    # By now, we know the keys are in the same octave.
+    # By now, we know that the keys are in the same octave.
 
     aKey = a.substring(0, a.length - 1)
     bKey = b.substring(0, b.length - 1)
