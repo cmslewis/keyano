@@ -19,7 +19,7 @@
 
       KeyanoInstrument.prototype._impressedKeyIds = null;
 
-      KeyanoInstrument.prototype._keyMappings = null;
+      KeyanoInstrument.prototype._activatedKeyMappings = null;
 
       KeyanoInstrument.prototype._keyValidator = null;
 
@@ -32,7 +32,7 @@
         this._activatePedalKey = __bind(this._activatePedalKey, this);
         this._audioContext = new (window.AudioContext || window.webkitAudioContext);
         this._impressedKeyIds = {};
-        this._keyMappings = [];
+        this._activatedKeyMappings = {};
         this._keyValidator = new KeyanoKeyValidator();
         this._pianoKeyRegistry = {};
         this._nodesForActivePianoKeys = {};
@@ -58,7 +58,6 @@
        */
 
       KeyanoInstrument.prototype.activateKeys = function(keyMappings) {
-        this._keyMappings = _.flatten([this._keyMappings, keyMappings]);
         _.forEach(keyMappings, this._activateKey);
       };
 
@@ -96,6 +95,13 @@
 
       KeyanoInstrument.prototype._activateKey = function(keyMapping) {
         var keyCode, pianoKey;
+        if (keyMapping.keyCode === Config.PEDAL_KEY_CODE) {
+          throw new Error("Tried to activate a key " + keyMapping.pianoKey.id + " using the key code Config.PEDAL_KEY_CODE, which is already in use by the pedal key.");
+        }
+        if (this._activatedKeyMappings[keyMapping.keyCode] != null) {
+          throw new Error("Tried to activate a key " + keyMapping.pianoKey.id + " using the key code " + keyMapping.keyCode + ", which is already mapped to " + this._activatedKeyMappings[keyMapping.keyCode]);
+        }
+        this._activatedKeyMappings[keyMapping.keyCode] = keyMapping.pianoKey.id;
         Logger.debug('activating piano key', {
           keyMapping: keyMapping
         });

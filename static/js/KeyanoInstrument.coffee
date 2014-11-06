@@ -46,7 +46,7 @@ define [
 
     _audioContext            : null
     _impressedKeyIds         : null
-    _keyMappings             : null
+    _activatedKeyMappings    : null
     _keyValidator            : null
     _pianoKeyRegistry        : null
     _nodesForActivePianoKeys : null
@@ -58,7 +58,7 @@ define [
     constructor : ->
       @_audioContext            = new (window.AudioContext || window.webkitAudioContext)
       @_impressedKeyIds         = {}
-      @_keyMappings             = []
+      @_activatedKeyMappings    = {}
       @_keyValidator            = new KeyanoKeyValidator()
       @_pianoKeyRegistry        = {}
       @_nodesForActivePianoKeys = {}
@@ -86,7 +86,6 @@ define [
       'piano:key:did:stop:playing'  : emitted on $(document) once a piano key's pitch has stopped playing
     ###
     activateKeys : (keyMappings) ->
-      @_keyMappings = _.flatten [@_keyMappings, keyMappings]
       _.forEach keyMappings, @_activateKey
       return
 
@@ -108,6 +107,13 @@ define [
       $(document).on 'keyup',   (ev) => if ev.keyCode is pedalKeyCode then @_isPedalPressed = false
 
     _activateKey : (keyMapping) =>
+      if keyMapping.keyCode is Config.PEDAL_KEY_CODE
+        throw new Error "Tried to activate a key #{keyMapping.pianoKey.id} using the key code Config.PEDAL_KEY_CODE, which is already in use by the pedal key."
+
+      if @_activatedKeyMappings[keyMapping.keyCode]?
+        throw new Error "Tried to activate a key #{keyMapping.pianoKey.id} using the key code #{keyMapping.keyCode}, which is already mapped to #{@_activatedKeyMappings[keyMapping.keyCode]}"
+      @_activatedKeyMappings[keyMapping.keyCode] = keyMapping.pianoKey.id
+
       Logger.debug('activating piano key', { keyMapping })
       @_keyValidator.validateKeyMapping(keyMapping)
 
