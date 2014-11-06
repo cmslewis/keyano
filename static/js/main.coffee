@@ -1,8 +1,8 @@
 require [
   # General
-  'static/js/KeyCodes'
-  'static/js/PianoKeys'
-  'static/js/KeyanoInstrument'
+  'static/js/data/KeyCodes'
+  'static/js/data/PianoKeys'
+  'static/js/instrument/KeyanoInstrument'
   # Listeners
   'static/js/listeners/KeyanoDomElementHighlighter'
   'static/js/listeners/KeyanoChordTypeReporter'

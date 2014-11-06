@@ -1,8 +1,8 @@
 define [
   'static/js/listeners/AbstractKeyanoListener'
   'static/js/data/ChordData'
-  'static/js/Config'
-  'static/js/pianoKeyUtils'
+  'static/js/config/Config'
+  'static/js/utils/pianoKeyUtils'
 ], (
   AbstractKeyanoListener
   ChordData
