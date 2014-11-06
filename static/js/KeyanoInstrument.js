@@ -2,7 +2,7 @@
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-  define(['static/js/KeyanoKeyValidator', 'static/js/Logger', 'static/js/Config', 'static/js/PianoKeys'], function(KeyanoKeyValidator, Logger, Config, PianoKeys) {
+  define(['static/js/KeyanoKeyValidator', 'static/js/Logger', 'static/js/Config', 'static/js/PianoKeys', 'static/js/pianoKeyUtils'], function(KeyanoKeyValidator, Logger, Config, PianoKeys, pianoKeyUtils) {
     var KeyanoInstrument;
     KeyanoInstrument = (function() {
       KeyanoInstrument.prototype.DURATION_WITHOUT_PEDAL = 200;
@@ -228,21 +228,6 @@
         return this._nodesForActivePianoKeys[pianoKey.id];
       };
 
-      KeyanoInstrument.prototype.PIANO_KEY_INDICES = {
-        'C': 0,
-        'Db': 1,
-        'D': 2,
-        'Eb': 3,
-        'E': 4,
-        'F': 5,
-        'Gb': 6,
-        'G': 7,
-        'Ab': 8,
-        'A': 9,
-        'Bb': 10,
-        'B': 11
-      };
-
       KeyanoInstrument.prototype._pianoKeyIdComparator = function(a, b) {
         var aIndex, aKey, aOctave, bIndex, bKey, bOctave;
         if (_.isEmpty(a) && _.isEmpty(b)) {
@@ -264,8 +249,8 @@
         }
         aKey = a.substring(0, a.length - 1);
         bKey = b.substring(0, b.length - 1);
-        aIndex = this.PIANO_KEY_INDICES[aKey];
-        bIndex = this.PIANO_KEY_INDICES[bKey];
+        aIndex = pianoKeyUtils.getKeyIndexInOctave(aKey);
+        bIndex = pianoKeyUtils.getKeyIndexInOctave(bKey);
         if (bIndex < aIndex) {
           return 1;
         }

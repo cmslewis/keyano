@@ -3,11 +3,13 @@ define [
   'static/js/Logger'
   'static/js/Config'
   'static/js/PianoKeys'
+  'static/js/pianoKeyUtils'
 ], (
   KeyanoKeyValidator
   Logger
   Config
   PianoKeys
+  pianoKeyUtils
 ) ->
 
 
@@ -199,22 +201,6 @@ define [
     # Private Methods (Sorting)
     # -------------------------
 
-    # Unlike a simple array, this gives us O(1) access, dramatically speed up the sort operation.
-    PIANO_KEY_INDICES : {
-      'C'  : 0
-      'Db' : 1
-      'D'  : 2
-      'Eb' : 3
-      'E'  : 4
-      'F'  : 5
-      'Gb' : 6
-      'G'  : 7
-      'Ab' : 8
-      'A'  : 9
-      'Bb' : 10
-      'B'  : 11
-    }
-
     _pianoKeyIdComparator : (a, b) =>
       if _.isEmpty(a) and _.isEmpty(b)
         return 0
@@ -238,8 +224,8 @@ define [
       aKey = a.substring(0, a.length - 1)
       bKey = b.substring(0, b.length - 1)
 
-      aIndex = @PIANO_KEY_INDICES[aKey]
-      bIndex = @PIANO_KEY_INDICES[bKey]
+      aIndex = pianoKeyUtils.getKeyIndexInOctave(aKey)
+      bIndex = pianoKeyUtils.getKeyIndexInOctave(bKey)
 
       if bIndex < aIndex
         return 1

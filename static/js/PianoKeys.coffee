@@ -1,5 +1,13 @@
 define [], ->
 
+  #
+  # PianoKeys
+  # =========
+  # This is an object mapping piano key IDs to piano key data. This allows for O(1) lookup of piano key data when an ID
+  # is known; if this were stored as an array, we could omit the 'index' property from each data object, but we'd
+  # lookup time would be a dramatically slower O(n).
+  #
+
   PianoKeys = {
 
     # Octave 3 (C3 - B3)
