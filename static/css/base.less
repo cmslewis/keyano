@@ -24,6 +24,9 @@ body {
   // Position
   .absolute-fill();
 
+  // Box Model
+  min-width : @container-width-on-desktop;
+
   // Style
   background : #1A1B1F;
   cursor     : default;
@@ -33,28 +36,7 @@ body {
   .default-font();
 }
 
-.panels {
-  .absolute-fill();
-  top     : @header-primary-height;
-  right   : 0;
-  bottom  : @footer-height;
-  left    : 0;
-  z-index : @z-index-of-panels;
-}
-
-.container {
-  margin : 0 auto;
+.Container {
+  margin : @header-primary-height auto;
   width  : @container-width-on-desktop;
-}
-
-.ChordLabel {
-  color       : white;
-  font-size   : 40px;
-  margin-top  : 40px;
-  text-align  : center;
-  text-shadow : 0 1px 2px black;
-
-  &.is-unknown {
-    opacity : 0.35;
-  }
 }

@@ -22,7 +22,7 @@ define [
     # Constants
     # ---------
 
-    DURATION_WITHOUT_PEDAL : 100
+    DURATION_WITHOUT_PEDAL : 200
     DURATION_WITH_PEDAL    : 3000
     TIMEOUT                : 50
 

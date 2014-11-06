@@ -17,34 +17,15 @@ body {
   right: 0;
   bottom: 0;
   left: 0;
+  min-width: 960px;
   background: #1A1B1F;
   cursor: default;
   overflow: hidden;
   font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
-.panels {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  top: 90px;
-  right: 0;
-  bottom: 60px;
-  left: 0;
-  z-index: 1;
-}
-.container {
-  margin: 0 auto;
+.Container {
+  margin: 90px auto;
   width: 960px;
-}
-.ChordLabel {
-  color: white;
-  font-size: 40px;
-  margin-top: 40px;
-  text-align: center;
-  text-shadow: 0 1px 2px black;
-}
-.ChordLabel.is-unknown {
-  opacity: 0.35;
 }
 .fb-like.fb_iframe_widget {
   margin-right: 5px;
@@ -66,6 +47,7 @@ body {
   z-index: 2;
   height: 90px;
   line-height: 90px;
+  min-width: 960px;
   padding: 14px 20px 0;
   -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
@@ -95,6 +77,7 @@ body {
   z-index: 2;
   height: 60px;
   line-height: 60px;
+  min-width: 960px;
   padding: 0 20px;
   -webkit-box-shadow: 0 -1px 0 #000000;
   -moz-box-shadow: 0 -1px 0 #000000;
@@ -232,4 +215,14 @@ body {
   opacity: 0;
   color: white;
   pointer-events: none;
+}
+.ChordLabel {
+  color: white;
+  font-size: 40px;
+  margin-top: 40px;
+  text-align: center;
+  text-shadow: 0 1px 2px black;
+}
+.ChordLabel.is-unknown {
+  opacity: 0.35;
 }

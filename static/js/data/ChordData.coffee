@@ -138,18 +138,18 @@ define [], ->
 
     # Minor-Major 7
 
-    # '0-3-4-4' :
-    #   quality : 'Minor-Major 7'
-    #   root    : 0
-    # '0-4-4-1' :
-    #   quality : 'Minor-Major 7 (First Inversion)'
-    #   root    : 3
-    # '0-4-1-3' :
-    #   quality : 'Minor-Major 7 (Second Inversion)'
-    #   root    : 2
-    # '0-1-3-4' :
-    #   quality : 'Minor-Major 7 (Third Inversion)'
-    #   root    : 1
+    '0-3-4-4' :
+      quality : 'Minor-Major 7'
+      root    : 0
+    '0-4-4-1' :
+      quality : 'Minor-Major 7 (First Inversion)'
+      root    : 3
+    '0-4-1-3' :
+      quality : 'Minor-Major 7 (Second Inversion)'
+      root    : 2
+    '0-1-3-4' :
+      quality : 'Minor-Major 7 (Third Inversion)'
+      root    : 1
 
     # Augmented Major 7
 

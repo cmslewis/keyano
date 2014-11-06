@@ -5,7 +5,7 @@
   define(['static/js/KeyanoKeyValidator', 'static/js/Logger', 'static/js/Config', 'static/js/PianoKeys'], function(KeyanoKeyValidator, Logger, Config, PianoKeys) {
     var KeyanoInstrument;
     KeyanoInstrument = (function() {
-      KeyanoInstrument.prototype.DURATION_WITHOUT_PEDAL = 100;
+      KeyanoInstrument.prototype.DURATION_WITHOUT_PEDAL = 200;
 
       KeyanoInstrument.prototype.DURATION_WITH_PEDAL = 3000;
 
