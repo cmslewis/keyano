@@ -3,7 +3,11 @@
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   define(['static/js/KeyanoKeyValidator', 'static/js/Logger', 'static/js/Config', 'static/js/PianoKeys', 'static/js/pianoKeyUtils'], function(KeyanoKeyValidator, Logger, Config, PianoKeys, pianoKeyUtils) {
-    var KeyanoInstrument;
+    var EventNames, KeyanoInstrument;
+    EventNames = {
+      ON_KEY_STARTED_PLAYING: 'piano:key:did:start:playing',
+      ON_KEY_STOPPED_PLAYING: 'piano:key:did:stop:playing'
+    };
     KeyanoInstrument = (function() {
       KeyanoInstrument.prototype.DURATION_WITHOUT_PEDAL = 200;
 
@@ -24,7 +28,6 @@
       KeyanoInstrument.prototype._nodesForActivePianoKeys = null;
 
       function KeyanoInstrument() {
-        this._pianoKeyIdComparator = __bind(this._pianoKeyIdComparator, this);
         this._activateKey = __bind(this._activateKey, this);
         this._activatePedalKey = __bind(this._activatePedalKey, this);
         this._audioContext = new (window.AudioContext || window.webkitAudioContext);
@@ -66,10 +69,10 @@
        */
 
       KeyanoInstrument.prototype.getImpressedPianoKeys = function() {
-        var pianoKeyIds;
+        var pianoKeyIds, sortedPianoKeyIds;
         pianoKeyIds = _.keys(this._impressedKeyIds);
-        pianoKeyIds.sort(this._pianoKeyIdComparator);
-        return _.map(pianoKeyIds, function(pianoKeyId) {
+        sortedPianoKeyIds = pianoKeyUtils.getSortedPianoKeyIds(pianoKeyIds);
+        return _.map(sortedPianoKeyIds, function(pianoKeyId) {
           return _.cloneDeep(PianoKeys[pianoKeyId]);
         });
       };
@@ -130,7 +133,7 @@
           pitchNode: pitchNode,
           gainNode: gainNode
         });
-        return $(document).trigger('piano:key:did:start:playing', pianoKey.id);
+        return $(document).trigger(EventNames.ON_KEY_STARTED_PLAYING, pianoKey.id);
       };
 
       KeyanoInstrument.prototype._stopPlayingPianoKeyIfNecessary = function(pianoKey, isPedalPressed) {
@@ -150,7 +153,7 @@
         } else {
           this._stopPitchNodeWithoutPedal(pitchNode, gainNode);
         }
-        $(document).trigger('piano:key:did:stop:playing', pianoKey.id);
+        $(document).trigger(EventNames.ON_KEY_STOPPED_PLAYING, pianoKey.id);
         this._deleteActivePianoKeyInstance(pianoKey);
       };
 
@@ -226,38 +229,6 @@
 
       KeyanoInstrument.prototype._getActivePianoKey = function(pianoKey) {
         return this._nodesForActivePianoKeys[pianoKey.id];
-      };
-
-      KeyanoInstrument.prototype._pianoKeyIdComparator = function(a, b) {
-        var aIndex, aKey, aOctave, bIndex, bKey, bOctave;
-        if (_.isEmpty(a) && _.isEmpty(b)) {
-          return 0;
-        }
-        if (_.isEmpty(b)) {
-          return -1;
-        }
-        if (_.isEmpty(a)) {
-          return 1;
-        }
-        aOctave = parseInt(a[a.length - 1]);
-        bOctave = parseInt(b[b.length - 1]);
-        if (bOctave < aOctave) {
-          return 1;
-        }
-        if (aOctave < bOctave) {
-          return -1;
-        }
-        aKey = a.substring(0, a.length - 1);
-        bKey = b.substring(0, b.length - 1);
-        aIndex = pianoKeyUtils.getKeyIndexInOctave(aKey);
-        bIndex = pianoKeyUtils.getKeyIndexInOctave(bKey);
-        if (bIndex < aIndex) {
-          return 1;
-        }
-        if (aIndex < bIndex) {
-          return -1;
-        }
-        return 0;
       };
 
       return KeyanoInstrument;

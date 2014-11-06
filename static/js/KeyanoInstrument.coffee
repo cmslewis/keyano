@@ -13,6 +13,11 @@ define [
 ) ->
 
 
+  EventNames =
+    ON_KEY_STARTED_PLAYING : 'piano:key:did:start:playing'
+    ON_KEY_STOPPED_PLAYING : 'piano:key:did:stop:playing'
+
+
   #
   # KeyanoInstrument
   # ================
@@ -24,9 +29,9 @@ define [
     # Constants
     # ---------
 
-    DURATION_WITHOUT_PEDAL : 200
-    DURATION_WITH_PEDAL    : 3000
-    TIMEOUT                : 50
+    DURATION_WITHOUT_PEDAL   : 200
+    DURATION_WITH_PEDAL      : 3000
+    TIMEOUT                  : 50
 
 
     # Private Variables
@@ -84,8 +89,8 @@ define [
     ###
     getImpressedPianoKeys : ->
       pianoKeyIds = _.keys(@_impressedKeyIds)
-      pianoKeyIds.sort(@_pianoKeyIdComparator)
-      return _.map pianoKeyIds, (pianoKeyId) -> _.cloneDeep PianoKeys[pianoKeyId]
+      sortedPianoKeyIds = pianoKeyUtils.getSortedPianoKeyIds(pianoKeyIds)
+      return _.map sortedPianoKeyIds, (pianoKeyId) -> _.cloneDeep PianoKeys[pianoKeyId]
 
 
     # Private Methods (Setup)
@@ -123,7 +128,7 @@ define [
 
       @_saveActivePianoKeyInstance(pianoKey, { pitchNode, gainNode })
 
-      $(document).trigger('piano:key:did:start:playing', pianoKey.id)
+      $(document).trigger(EventNames.ON_KEY_STARTED_PLAYING, pianoKey.id)
 
     _stopPlayingPianoKeyIfNecessary : (pianoKey, isPedalPressed = true) ->
       if not @_isPianoKeyPlaying(pianoKey)
@@ -139,7 +144,7 @@ define [
       else
         @_stopPitchNodeWithoutPedal(pitchNode, gainNode)
 
-      $(document).trigger('piano:key:did:stop:playing', pianoKey.id)
+      $(document).trigger(EventNames.ON_KEY_STOPPED_PLAYING, pianoKey.id)
 
       @_deleteActivePianoKeyInstance(pianoKey)
 
@@ -196,45 +201,6 @@ define [
 
     _getActivePianoKey : (pianoKey) ->
       return @_nodesForActivePianoKeys[pianoKey.id]
-
-
-    # Private Methods (Sorting)
-    # -------------------------
-
-    _pianoKeyIdComparator : (a, b) =>
-      if _.isEmpty(a) and _.isEmpty(b)
-        return 0
-      if _.isEmpty(b)
-        return -1
-      if _.isEmpty(a)
-        return 1
-
-      # By now, we know that neither key is empty.
-
-      aOctave = parseInt(a[a.length - 1])
-      bOctave = parseInt(b[b.length - 1])
-
-      if bOctave < aOctave
-        return 1
-      if aOctave < bOctave
-        return -1
-
-      # By now, we know the keys are in the same octave.
-
-      aKey = a.substring(0, a.length - 1)
-      bKey = b.substring(0, b.length - 1)
-
-      aIndex = pianoKeyUtils.getKeyIndexInOctave(aKey)
-      bIndex = pianoKeyUtils.getKeyIndexInOctave(bKey)
-
-      if bIndex < aIndex
-        return 1
-      if aIndex < bIndex
-        return -1
-
-      # By now, we know that the keys are identical.
-
-      return 0
 
 
   return KeyanoInstrument

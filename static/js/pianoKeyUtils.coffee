@@ -27,6 +27,47 @@ define [
     'B'  : 11
   }
 
+  #
+  # Private Helpers
+  # ===============
+  # Private helpers for use within public utility methods.
+  #
+
+  _pianoKeyIdComparator = (a, b) =>
+    if _.isEmpty(a) and _.isEmpty(b)
+      return 0
+    if _.isEmpty(b)
+      return -1
+    if _.isEmpty(a)
+      return 1
+
+    # By now, we know that neither key is empty.
+
+    aOctave = parseInt(a[a.length - 1])
+    bOctave = parseInt(b[b.length - 1])
+
+    if bOctave < aOctave
+      return 1
+    if aOctave < bOctave
+      return -1
+
+    # By now, we know the keys are in the same octave.
+
+    aKey = a.substring(0, a.length - 1)
+    bKey = b.substring(0, b.length - 1)
+
+    aIndex = pianoKeyUtils.getKeyIndexInOctave(aKey)
+    bIndex = pianoKeyUtils.getKeyIndexInOctave(bKey)
+
+    if bIndex < aIndex
+      return 1
+    if aIndex < bIndex
+      return -1
+
+    # By now, we know that the keys are identical.
+
+    return 0
+
 
   #
   # pianoKeyUtils
@@ -35,6 +76,11 @@ define [
   #
 
   pianoKeyUtils = {
+
+    getSortedPianoKeyIds : (pianoKeyIds) ->
+      sortedPianoKeyIds = _.cloneDeep(pianoKeyIds)
+      sortedPianoKeyIds.sort(_pianoKeyIdComparator)
+      return sortedPianoKeyIds
 
     getKeyIndexInOctave : (pianoKeyName) ->
       index = PIANO_KEY_OCTAVE_INDICES[pianoKeyName]
