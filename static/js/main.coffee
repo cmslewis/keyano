@@ -1,25 +1,18 @@
 require [
-  # General
   'static/js/data/KeyCodes'
   'static/js/data/PianoKeys'
   'static/js/instrument/KeyanoInstrument'
-  # Listeners
   'static/js/listeners/KeyanoDomElementHighlighter'
   'static/js/listeners/KeyanoChordTypeReporter'
 ], (
-  # General
   KeyCodes
   PianoKeys
   KeyanoInstrument
-  # Listeners
   KeyanoDomElementHighlighter
   KeyanoChordTypeReporter
 ) ->
 
-  KEYANO_KEYS = [
-
-    # Left Hand
-
+  KEY_MAPPINGS = [
     { keyCode : KeyCodes.Q,             pianoKey : PianoKeys.A3  }
     { keyCode : KeyCodes.KEYPAD_2,      pianoKey : PianoKeys.Bb3 }
     { keyCode : KeyCodes.W,             pianoKey : PianoKeys.B3  }
@@ -29,9 +22,6 @@ require [
     { keyCode : KeyCodes.KEYPAD_5,      pianoKey : PianoKeys.Eb4 }
     { keyCode : KeyCodes.T,             pianoKey : PianoKeys.E4  }
     { keyCode : KeyCodes.Y,             pianoKey : PianoKeys.F4  }
-
-    # Right Hand
-
     { keyCode : KeyCodes.KEYPAD_7,      pianoKey : PianoKeys.Gb4 }
     { keyCode : KeyCodes.U,             pianoKey : PianoKeys.G4  }
     { keyCode : KeyCodes.KEYPAD_8,      pianoKey : PianoKeys.Ab4 }
@@ -43,7 +33,6 @@ require [
     { keyCode : KeyCodes.OPEN_BRACKET,  pianoKey : PianoKeys.D5  }
     { keyCode : KeyCodes.EQUAL_SIGN,    pianoKey : PianoKeys.Eb5 }
     { keyCode : KeyCodes.CLOSE_BRACKET, pianoKey : PianoKeys.E5  }
-
   ]
 
   $ui =
@@ -51,12 +40,12 @@ require [
 
   $(document).ready ->
     instrument = new KeyanoInstrument()
-    instrument.activateKeys(KEYANO_KEYS)
+    instrument.activateKeys(KEY_MAPPINGS)
 
     keyanoDomElementHighlighter = new KeyanoDomElementHighlighter({ instrument })
-    keyanoDomElementHighlighter.activate(KEYANO_KEYS)
+    keyanoDomElementHighlighter.activate(KEY_MAPPINGS)
 
     keyanoChordTypeReporter = new KeyanoChordTypeReporter({ instrument })
-    keyanoChordTypeReporter.activate(KEYANO_KEYS, $ui.chordNameLabel)
+    keyanoChordTypeReporter.activate(KEY_MAPPINGS, $ui.chordNameLabel)
 
     return

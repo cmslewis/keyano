@@ -14,21 +14,9 @@ define [
 
 
   #
-  # EventNames
-  # ==========
-  # An enumeration of event names that this module triggers. The purpose here is to keep the event names emitted from
-  # KeyanoInstrument in one place for easy reference. Note: You may NOT freely change these event names, as other
-  # modules depend on them; again, this enumeration is only here as a convenience for easy reference.
-  #
-  EventNames =
-    ON_KEY_STARTED_PLAYING : 'piano:key:did:start:playing'
-    ON_KEY_STOPPED_PLAYING : 'piano:key:did:stop:playing'
-
-
-  #
   # KeyanoInstrument
   # ================
-  # Registers piano keys and handles their playback.
+  # Registers KeyCode => PianoKey mappings and handles all audio playback.
   #
   class KeyanoInstrument
 
@@ -48,7 +36,6 @@ define [
     _impressedKeyIds         : null
     _activatedKeyMappings    : null
     _keyValidator            : null
-    _pianoKeyRegistry        : null
     _nodesForActivePianoKeys : null
 
 
@@ -60,7 +47,6 @@ define [
       @_impressedKeyIds         = {}
       @_activatedKeyMappings    = {}
       @_keyValidator            = new KeyMappingValidator()
-      @_pianoKeyRegistry        = {}
       @_nodesForActivePianoKeys = {}
 
       @_activatePedalKey(Config.PEDAL_KEY_CODE)
@@ -141,7 +127,7 @@ define [
 
       @_saveActivePianoKeyInstance(pianoKey, { pitchNode, gainNode })
 
-      $(document).trigger(EventNames.ON_KEY_STARTED_PLAYING, pianoKey.id)
+      $(document).trigger('piano:key:did:start:playing', pianoKey.id)
 
     _stopPlayingPianoKeyIfNecessary : (pianoKey, isPedalPressed = true) ->
       if not @_isPianoKeyPlaying(pianoKey)
@@ -157,7 +143,7 @@ define [
       else
         @_stopPitchNodeWithoutPedal(pitchNode, gainNode)
 
-      $(document).trigger(EventNames.ON_KEY_STOPPED_PLAYING, pianoKey.id)
+      $(document).trigger('piano:key:did:stop:playing', pianoKey.id)
 
       @_deleteActivePianoKeyInstance(pianoKey)
 

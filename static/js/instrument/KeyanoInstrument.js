@@ -3,11 +3,7 @@
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   define(['static/js/instrument/KeyMappingValidator', 'static/js/utils/Logger', 'static/js/config/Config', 'static/js/data/PianoKeys', 'static/js/utils/pianoKeyUtils'], function(KeyMappingValidator, Logger, Config, PianoKeys, pianoKeyUtils) {
-    var EventNames, KeyanoInstrument;
-    EventNames = {
-      ON_KEY_STARTED_PLAYING: 'piano:key:did:start:playing',
-      ON_KEY_STOPPED_PLAYING: 'piano:key:did:stop:playing'
-    };
+    var KeyanoInstrument;
     KeyanoInstrument = (function() {
       KeyanoInstrument.prototype.DURATION_WITHOUT_PEDAL = 200;
 
@@ -23,8 +19,6 @@
 
       KeyanoInstrument.prototype._keyValidator = null;
 
-      KeyanoInstrument.prototype._pianoKeyRegistry = null;
-
       KeyanoInstrument.prototype._nodesForActivePianoKeys = null;
 
       function KeyanoInstrument() {
@@ -34,7 +28,6 @@
         this._impressedKeyIds = {};
         this._activatedKeyMappings = {};
         this._keyValidator = new KeyMappingValidator();
-        this._pianoKeyRegistry = {};
         this._nodesForActivePianoKeys = {};
         this._activatePedalKey(Config.PEDAL_KEY_CODE);
       }
@@ -139,7 +132,7 @@
           pitchNode: pitchNode,
           gainNode: gainNode
         });
-        return $(document).trigger(EventNames.ON_KEY_STARTED_PLAYING, pianoKey.id);
+        return $(document).trigger('piano:key:did:start:playing', pianoKey.id);
       };
 
       KeyanoInstrument.prototype._stopPlayingPianoKeyIfNecessary = function(pianoKey, isPedalPressed) {
@@ -159,7 +152,7 @@
         } else {
           this._stopPitchNodeWithoutPedal(pitchNode, gainNode);
         }
-        $(document).trigger(EventNames.ON_KEY_STOPPED_PLAYING, pianoKey.id);
+        $(document).trigger('piano:key:did:stop:playing', pianoKey.id);
         this._deleteActivePianoKeyInstance(pianoKey);
       };
 
