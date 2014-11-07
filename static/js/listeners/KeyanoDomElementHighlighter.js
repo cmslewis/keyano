@@ -31,7 +31,7 @@
         KeyanoDomElementHighlighter.__super__.activate.apply(this, arguments);
         this._domElementCache = {};
         this._keyanoKeySelector = keyanoKeySelector;
-        return this._fillCacheOfKeyanoKeyDomElements(keyanoKeys);
+        this._fillCacheOfKeyanoKeyDomElements(keyanoKeys);
       };
 
       KeyanoDomElementHighlighter.prototype.onPianoKeyStartedPlaying = function(ev, pianoKeyId) {

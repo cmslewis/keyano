@@ -50,16 +50,13 @@ require [
     chordNameLabel : $('.ChordLabel')
 
   $(document).ready ->
-    keyanoInstrument = new KeyanoInstrument()
-    keyanoInstrument.activateKeys(KEYANO_KEYS)
+    instrument = new KeyanoInstrument()
+    instrument.activateKeys(KEYANO_KEYS)
 
-    keyanoDomElementHighlighter = new KeyanoDomElementHighlighter({
-      instrument : keyanoInstrument
-    }).activate(KEYANO_KEYS)
+    keyanoDomElementHighlighter = new KeyanoDomElementHighlighter({ instrument })
+    keyanoDomElementHighlighter.activate(KEYANO_KEYS)
 
-    keyanoChordTypeReporter = new KeyanoChordTypeReporter({
-      instrument : keyanoInstrument
-    }).activate(KEYANO_KEYS, $ui.chordNameLabel)
+    keyanoChordTypeReporter = new KeyanoChordTypeReporter({ instrument })
+    keyanoChordTypeReporter.activate(KEYANO_KEYS, $ui.chordNameLabel)
 
     return
-

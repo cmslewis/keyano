@@ -33,6 +33,7 @@ define [
       @_domElementCache   = {}
       @_keyanoKeySelector = keyanoKeySelector
       @_fillCacheOfKeyanoKeyDomElements(keyanoKeys)
+      return
 
     onPianoKeyStartedPlaying : (ev, pianoKeyId) ->
       @_domElementCache[pianoKeyId]?.addClass('is-depressed')

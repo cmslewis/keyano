@@ -69,15 +69,17 @@
       chordNameLabel: $('.ChordLabel')
     };
     return $(document).ready(function() {
-      var keyanoChordTypeReporter, keyanoDomElementHighlighter, keyanoInstrument;
-      keyanoInstrument = new KeyanoInstrument();
-      keyanoInstrument.activateKeys(KEYANO_KEYS);
+      var instrument, keyanoChordTypeReporter, keyanoDomElementHighlighter;
+      instrument = new KeyanoInstrument();
+      instrument.activateKeys(KEYANO_KEYS);
       keyanoDomElementHighlighter = new KeyanoDomElementHighlighter({
-        instrument: keyanoInstrument
-      }).activate(KEYANO_KEYS);
+        instrument: instrument
+      });
+      keyanoDomElementHighlighter.activate(KEYANO_KEYS);
       keyanoChordTypeReporter = new KeyanoChordTypeReporter({
-        instrument: keyanoInstrument
-      }).activate(KEYANO_KEYS, $ui.chordNameLabel);
+        instrument: instrument
+      });
+      keyanoChordTypeReporter.activate(KEYANO_KEYS, $ui.chordNameLabel);
     });
   });
 

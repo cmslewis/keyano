@@ -1,0 +1,11 @@
+utils/pianoKeyUtils.coffee
+utils/Logger.coffee
+listeners/KeyanoDomElementHighlighter.coffee
+listeners/KeyanoChordTypeReporter.coffee
+listeners/AbstractKeyanoListener.coffee
+instrument/KeyanoInstrument.coffee
+instrument/KeyMappingValidator.coffee
+data/PianoKeys.coffee
+data/KeyCodes.coffee
+data/ChordData.coffee
+config/Config.coffee
