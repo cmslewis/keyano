@@ -37,6 +37,16 @@ body {
   vertical-align: middle;
   width: 96px !important;
 }
+.fb-like.fb_iframe_widget {
+  margin-right: 5px;
+}
+.fb-like.fb_iframe_widget span {
+  vertical-align: middle !important;
+}
+.twitter-share-button {
+  vertical-align: middle;
+  width: 96px !important;
+}
 .Header {
   position: fixed;
   top: 0;

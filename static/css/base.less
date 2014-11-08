@@ -1,8 +1,3 @@
-//
-// base.less
-// =========
-// A set of styles that give the page its basic visual structure.
-//
 
 
 // Reset
@@ -40,3 +35,20 @@ body {
   margin : @header-primary-height auto;
   width  : @container-width-on-desktop;
 }
+
+
+.fb-like.fb_iframe_widget {
+  margin-right : 5px;
+
+  span {
+    // Ugh, Facebook programmatically resets this to bottom, so we have to fight fire with fire (hence the !important).
+    vertical-align : middle !important;
+  }
+}
+
+
+.twitter-share-button {
+  vertical-align : middle;
+  width          : 96px !important; // Need to override inline styling.
+}
+
