@@ -34,10 +34,14 @@ define [
         throw new Error 'Received a missing or invalid keyanoKeys object parameter'
       if not _.isString(keyanoKeySelector)
         throw new Error 'Received a non-string keyanoKeySelector parameter'
+
       super
+
       @_domElementCache   = {}
       @_keyanoKeySelector = keyanoKeySelector
+
       @_fillCacheOfKeyanoKeyDomElements(keyanoKeys)
+
       return
 
     onPianoKeyStartedPlaying : (ev, pianoKeyId) ->
