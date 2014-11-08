@@ -4,34 +4,34 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(['static/js/listeners/AbstractKeyanoListener', 'static/js/config/Config', 'static/js/utils/pianoKeyUtils'], function(AbstractKeyanoListener, Config, pianoKeyUtils) {
-    var KeyanoChordTypeReporter;
-    KeyanoChordTypeReporter = (function(_super) {
-      __extends(KeyanoChordTypeReporter, _super);
+    var KeyanoKeyCombinationNameReporter;
+    KeyanoKeyCombinationNameReporter = (function(_super) {
+      __extends(KeyanoKeyCombinationNameReporter, _super);
 
-      function KeyanoChordTypeReporter() {
-        return KeyanoChordTypeReporter.__super__.constructor.apply(this, arguments);
+      function KeyanoKeyCombinationNameReporter() {
+        return KeyanoKeyCombinationNameReporter.__super__.constructor.apply(this, arguments);
       }
 
-      KeyanoChordTypeReporter.prototype.keyanoKeys = null;
+      KeyanoKeyCombinationNameReporter.prototype.keyanoKeys = null;
 
-      KeyanoChordTypeReporter.prototype.activate = function(keyanoKeys, $outputElem) {
+      KeyanoKeyCombinationNameReporter.prototype.activate = function(keyanoKeys, $outputElem) {
         if (!(($outputElem != null ? $outputElem.size() : void 0) > 0)) {
-          throw new Error('Provided an $outputElem in KeyanoChordTypeReporter that does not exist in the DOM');
+          throw new Error('Provided an $outputElem in KeyanoKeyCombinationNameReporter that does not exist in the DOM');
         }
-        KeyanoChordTypeReporter.__super__.activate.apply(this, arguments);
+        KeyanoKeyCombinationNameReporter.__super__.activate.apply(this, arguments);
         this.keyanoKeys = keyanoKeys;
         this.$outputElem = $outputElem;
       };
 
-      KeyanoChordTypeReporter.prototype.onPianoKeyStartedPlaying = function(ev, pianoKeyId) {
-        this._printChord();
+      KeyanoKeyCombinationNameReporter.prototype.onPianoKeyStartedPlaying = function(ev, pianoKeyId) {
+        this._printNameOfKeyCombination();
       };
 
-      KeyanoChordTypeReporter.prototype.onPianoKeyStoppedPlaying = function(ev, pianoKeyId) {
-        this._printChord();
+      KeyanoKeyCombinationNameReporter.prototype.onPianoKeyStoppedPlaying = function(ev, pianoKeyId) {
+        this._printNameOfKeyCombination();
       };
 
-      KeyanoChordTypeReporter.prototype._printChord = function() {
+      KeyanoKeyCombinationNameReporter.prototype._printNameOfKeyCombination = function() {
         var name, pianoKeys, _ref, _ref1;
         pianoKeys = this.instrument.getImpressedPianoKeys();
         name = pianoKeyUtils.identifyPianoKeyCombination(pianoKeys);
@@ -43,12 +43,12 @@
         }
       };
 
-      return KeyanoChordTypeReporter;
+      return KeyanoKeyCombinationNameReporter;
 
     })(AbstractKeyanoListener);
-    return KeyanoChordTypeReporter;
+    return KeyanoKeyCombinationNameReporter;
   });
 
 }).call(this);
 
-//# sourceMappingURL=KeyanoChordTypeReporter.js.map
+//# sourceMappingURL=KeyanoKeyCombinationNameReporter.js.map

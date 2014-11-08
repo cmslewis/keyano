@@ -4,7 +4,12 @@ define [
   AbstractKeyanoListener
 ) ->
 
-
+  #
+  # KeyanoDomElementHighlighter
+  # ===========================
+  # A listener that highlights a particular piano key in the UI whenever its associated pitch starts playing
+  # (furthermore, this listener also de-highlights a piano key in the UI when its pitch stops playing).
+  #
   class KeyanoDomElementHighlighter extends AbstractKeyanoListener
 
 

@@ -3,13 +3,13 @@ require [
   'static/js/data/PianoKeys'
   'static/js/instrument/KeyanoInstrument'
   'static/js/listeners/KeyanoDomElementHighlighter'
-  'static/js/listeners/KeyanoChordTypeReporter'
+  'static/js/listeners/KeyanoKeyCombinationNameReporter'
 ], (
   KeyCodes
   PianoKeys
   KeyanoInstrument
   KeyanoDomElementHighlighter
-  KeyanoChordTypeReporter
+  KeyanoKeyCombinationNameReporter
 ) ->
 
   KEY_MAPPINGS = [
@@ -36,7 +36,7 @@ require [
   ]
 
   $ui =
-    chordNameLabel : $('.ChordLabel')
+    keyCombinationNameLabel : $('.KeyCombinationNameLabel')
 
   $(document).ready ->
     instrument = new KeyanoInstrument()
@@ -45,7 +45,7 @@ require [
     keyanoDomElementHighlighter = new KeyanoDomElementHighlighter({ instrument })
     keyanoDomElementHighlighter.activate(KEY_MAPPINGS)
 
-    keyanoChordTypeReporter = new KeyanoChordTypeReporter({ instrument })
-    keyanoChordTypeReporter.activate(KEY_MAPPINGS, $ui.chordNameLabel)
+    keyanoKeyCombinationNameReporter = new KeyanoKeyCombinationNameReporter({ instrument })
+    keyanoKeyCombinationNameReporter.activate(KEY_MAPPINGS, $ui.keyCombinationNameLabel)
 
     return
