@@ -161,13 +161,30 @@ body {
   background: #5dbced !important;
   color: white !important;
 }
+.KeyanoInstrument-key.is-depressed > .KeyanoInstrument-keyNameLabel {
+  color: #147fb6;
+}
 .KeyanoInstrument-keyLabel {
-  bottom: 30px;
-  font-weight: bold;
+  bottom: 40px;
   left: 0;
-  line-height: 30px;
   position: absolute;
   right: 0;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 30px;
+}
+.KeyanoInstrument-keyNameLabel {
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+  transform: translateX(-50%);
+  bottom: 24px;
+  left: 50%;
+  position: absolute;
+  color: #c0c0c0;
+  font-size: 13px;
+  font-weight: 300;
 }
 .KeyanoInstrument-whiteKey {
   height: 400px;
@@ -216,6 +233,9 @@ body {
   opacity: 0;
   color: white;
   pointer-events: none;
+}
+.KeyanoInstrument-blackKeyNameLabel {
+  color: #848484;
 }
 .KeyCombinationNameLabel {
   color: white;

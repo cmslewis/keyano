@@ -36,6 +36,23 @@ define [
     PEDAL_KEY_CODE : KeyCodes.SPACE_BAR # (KeyCodes.*)
 
     #
+    # KEYBOARD_SHIFT_[*]_KEY_CODE
+    # ===========================
+    # Specifies the two key codes that on key-press should shift the keyboard downward and upward, respectively, by one
+    # piano key.
+    #
+    KEYBOARD_SHIFT_DOWNWARD_KEY_CODE : KeyCodes.LEFT_ARROW
+    KEYBOARD_SHIFT_UPWARD_KEY_CODE   : KeyCodes.RIGHT_ARROW
+
+    #
+    # KEYBOARD_SHIFT_THROTTLE_LIMIT_IN_MILLIS
+    # =======================================
+    # Specifies how frequently the piano keyboard is allowed to shift when either of the KEYBOARD_SHIFT keys defined
+    # above is held down by the user.
+    #
+    KEYBOARD_SHIFT_THROTTLE_LIMIT_IN_MILLIS : 250
+
+    #
     # LABEL_FOR_UNRECOGNIZED_CHORDS
     # -----------------------------
     # The string to display in the UI when a particular key combination does not map to a known chord.

@@ -51,17 +51,41 @@
   &.is-depressed {
     background : @keyano-key-depressed-color !important;
     color      : white !important;
+
+    > .KeyanoInstrument-keyNameLabel {
+      color : darken(@keyano-key-depressed-color, 25%);
+    }
   }
 }
 
 
 .KeyanoInstrument-keyLabel {
-  bottom      : 30px;
-  font-weight : bold;
+
+  // Position
+  bottom      : 40px;
   left        : 0;
-  line-height : 30px;
   position    : absolute;
   right       : 0;
+
+  // Text
+  font-size   : 20px;
+  font-weight : bold;
+  line-height : 30px;
+}
+
+
+.KeyanoInstrument-keyNameLabel {
+
+  // Position
+  .transform(translateX(-50%));
+  bottom   : 24px;
+  left     : 50%;
+  position : absolute;
+
+  // Text
+  color       : #c0c0c0;
+  font-size   : 13px;
+  font-weight : 300;
 }
 
 
@@ -138,4 +162,11 @@
 
   // Miscellaneous
   pointer-events : none;
+}
+
+
+.KeyanoInstrument-blackKeyNameLabel {
+
+  // Text
+  color : #848484;
 }

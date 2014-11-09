@@ -16,7 +16,10 @@ define [
   #
   # KeyanoInstrument
   # ================
-  # Registers KeyCode => PianoKey mappings and handles all audio playback.
+  # Registers KeyCode => PianoKey mappings and handles all audio playback. This instrument emits the following events:
+  #
+  # 'piano:key:did:start:playing' : emitted on $(document) once a piano key's pitch has started playing
+  # 'piano:key:did:stop:playing'  : emitted on $(document) once a piano key's pitch has stopped playing
   #
   class KeyanoInstrument
 
@@ -32,31 +35,36 @@ define [
     # Private Variables
     # -----------------
 
-    _audioContext            : null
-    _impressedKeyIds         : null
     _activatedKeyMappings    : null
+    _audioContext            : null
+    _impressedPianoKeyIds    : null
     _keyValidator            : null
     _nodesForActivePianoKeys : null
     _onKeydownFns            : null
     _onKeyupFns              : null
 
+
     # Constructor
     # -----------
 
     constructor : ->
-      @_audioContext    = new (window.AudioContext || window.webkitAudioContext)
-      @_impressedKeyIds = {}
-      @_keyValidator    = new KeyMappingValidator()
-      @_onKeydownFns    = []
-      @_onKeyupFns      = []
+      @_audioContext         = new (window.AudioContext || window.webkitAudioContext)
+      @_impressedPianoKeyIds = {}
+      @_keyValidator         = new KeyMappingValidator()
+      @_onKeydownFns         = []
+      @_onKeyupFns           = []
 
-      @_reset()
+      @_resetKeyMappings()
 
       @_activatePedalKey(Config.PEDAL_KEY_CODE)
 
-    _reset : ->
+    _resetKeyMappings : ->
+      # Clear existing mappings and any active pitch nodes.
+
       @_activatedKeyMappings    = {}
       @_nodesForActivePianoKeys = {}
+
+      # Unbind all key events for the existing key mappings.
 
       _.forEach @_onKeydownFns, (onKeydownFn) -> $(document).unbind 'keydown', onKeydownFn
       _.forEach @_onKeyupFns,   (onKeyupFn)   -> $(document).unbind 'keyup',   onKeyupFn
@@ -82,12 +90,9 @@ define [
         },
         ...
       ]
-    @events
-      'piano:key:did:start:playing' : emitted on $(document) once a piano key's pitch has started playing
-      'piano:key:did:stop:playing'  : emitted on $(document) once a piano key's pitch has stopped playing
     ###
     activateKeys : (keyMappings) ->
-      @_reset()
+      @_resetKeyMappings()
       _.forEach keyMappings, @_activateKey
       return
 
@@ -96,7 +101,7 @@ define [
       (list) the sorted list of ids for the currently impressed piano keys
     ###
     getImpressedPianoKeys : ->
-      pianoKeyIds = _.keys(@_impressedKeyIds)
+      pianoKeyIds = _.keys(@_impressedPianoKeyIds)
       sortedPianoKeyIds = pianoKeyUtils.getSortedPianoKeyIds(pianoKeyIds)
       return _.map sortedPianoKeyIds, (pianoKeyId) -> _.cloneDeep PianoKeys[pianoKeyId]
 
@@ -144,8 +149,8 @@ define [
         return
 
       Logger.debug('user pressed the key:', pianoKey.id)
-      @_impressedKeyIds[pianoKey.id] ?= true
-      Logger.debug('impressed keys:', @_impressedKeyIds)
+      @_impressedPianoKeyIds[pianoKey.id] ?= true
+      Logger.debug('impressed keys:', @_impressedPianoKeyIds)
 
       { pitchNode, gainNode } = @_startPitchNode(pianoKey)
 
@@ -159,7 +164,7 @@ define [
         return
 
       Logger.debug('user released the key:', pianoKey.id)
-      delete @_impressedKeyIds[pianoKey.id]
+      delete @_impressedPianoKeyIds[pianoKey.id]
 
       { pitchNode, gainNode } = @_getActivePianoKey(pianoKey)
       if @_isPedalPressed

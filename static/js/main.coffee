@@ -4,19 +4,21 @@ require [
   'static/js/instrument/KeyanoInstrument'
   'static/js/listeners/KeyanoDomElementHighlighter'
   'static/js/listeners/KeyanoKeyCombinationNameReporter'
+  'static/js/utils/pianoKeyUtils'
+  'static/js/config/Config'
 ], (
   KeyCodes
   PianoKeys
   KeyanoInstrument
   KeyanoDomElementHighlighter
   KeyanoKeyCombinationNameReporter
+  pianoKeyUtils
+  Config
 ) ->
 
 
   # Constants
   # =========
-
-  VALID_KEY_NAMES = 'ABCDEFG'.split('')
 
   KEYBOARD_SHIFT_THROTTLE_LIMIT_IN_MILLIS = 500
 
@@ -114,28 +116,6 @@ require [
 
     return pianoKeyIdsInOrder
 
-  _getNextWhiteKeyName = (keyName) ->
-    if not keyName in VALID_KEY_NAMES
-      throw new Error "Invalid keyName #{keyName}"
-
-    if keyName is _.last(VALID_KEY_NAMES)
-      higherKeyIndex = 0
-    else
-      higherKeyIndex = VALID_KEY_NAMES.indexOf(keyName) + 1
-
-    return VALID_KEY_NAMES[higherKeyIndex]
-
-  _getPreviousWhiteKeyName = (keyName) ->
-    if not keyName in VALID_KEY_NAMES
-      throw new Error "Invalid keyName #{keyName}"
-
-    if keyName is _.first(VALID_KEY_NAMES)
-      lowerKeyIndex = VALID_KEY_NAMES.length - 1
-    else
-      lowerKeyIndex = VALID_KEY_NAMES.indexOf(keyName) - 1
-
-    return VALID_KEY_NAMES[lowerKeyIndex]
-
   _generateKeyMappingsForInstrumentWithLowestKey = (lowestKeyName) ->
     $instrument = _getDomElementForInstrument(lowestKeyName)
     keyMappings = []
@@ -164,7 +144,7 @@ require [
   _showDomElementForKeyanoInstrumentWithLowestKey = (lowestKeyName) ->
     if not _.isString(lowestKeyName)
       throw new Error 'Passed a lowestKeyName to _showKeyanoInstrumentWithLowestKey that was not a string'
-    if not lowestKeyName in VALID_KEY_NAMES
+    if not pianoKeyUtils.isValidWhiteKeyName(lowestKeyName)
       throw new Error 'Passed an invalid lowestKeyName to _showDefaultKeyanoInstrument'
 
     $ui.keyboards.hide()
@@ -180,15 +160,21 @@ require [
       $whiteKeysInOrder.each (index) ->
         # Every white key contains a label element, so all white-key key codes should appear in the UI after the
         # following operation.
-        $label = $(this).find('.KeyanoInstrument-keyLabel')
+        pianoKeyId = $(this).attr('data-piano-key-id')
+        $label     = $(this).find('.KeyanoInstrument-keyLabel')
+        $name      = $(this).find('.KeyanoInstrument-whiteKeyNameLabel')
         $label.text(KEYBOARD_KEYS_FOR_WHITE_PIANO_KEYS[index].label)
+        $name.text(pianoKeyId)
 
       $blackKeyWrappersInOrder.each (index) ->
         # Note that some of these elements wrap "spacers" that will have no label element within them. Setting the
         # .text(...) for these non-existent labels will effectively skip the key code at the current index, which is
         # exactly what we want to happen.
-        $label = $(this).find('.KeyanoInstrument-keyLabel')
+        pianoKeyId = $(this).find('[data-piano-key-id]').attr('data-piano-key-id')
+        $label     = $(this).find('.KeyanoInstrument-keyLabel')
+        $name      = $(this).find('.KeyanoInstrument-blackKeyNameLabel')
         $label.text(KEYBOARD_KEYS_FOR_BLACK_PIANO_KEY_WRAPPERS[index].label)
+        $name.text(pianoKeyId)
 
   _shiftKeyboardToHaveLowestKey = (instrument, lowestKeyName) ->
     lowestKeyOfCurrentKeyboardRange = lowestKeyName
@@ -197,12 +183,19 @@ require [
     instrument.activateKeys(keyMappings)
 
   _shiftKeyboardDownward = (instrument) ->
-    previousKeyName = _getPreviousWhiteKeyName(lowestKeyOfCurrentKeyboardRange)
+    previousKeyName = pianoKeyUtils.getKeyNameOfNextLowestWhiteKey(lowestKeyOfCurrentKeyboardRange)
     _shiftKeyboardToHaveLowestKey(instrument, previousKeyName)
 
   _shiftKeyboardUpward = (instrument) ->
-    nextKeyName = _getNextWhiteKeyName(lowestKeyOfCurrentKeyboardRange)
+    nextKeyName = pianoKeyUtils.getKeyNameOfNextHighestWhiteKey(lowestKeyOfCurrentKeyboardRange)
     _shiftKeyboardToHaveLowestKey(instrument, nextKeyName)
+
+  _activateKeyboardSwitchingKeys = ({ instrument, downwardKeyCode, upwardKeyCode } = {}) ->
+    $(document).on 'keydown', _.throttle (ev) ->
+      switch ev.keyCode
+        when downwardKeyCode then _shiftKeyboardDownward(instrument)
+        when upwardKeyCode   then _shiftKeyboardUpward(instrument)
+    , Config.KEYBOARD_SHIFT_THROTTLE_LIMIT_IN_MILLIS
 
   $(document).ready ->
     KEYBOARD_KEYS_FOR_ALL_PIANO_KEYS = _zipKeys({
@@ -212,15 +205,14 @@ require [
 
     instrument = new KeyanoInstrument()
 
-    $(document).on 'keydown', _.throttle (ev) ->
-      switch ev.keyCode
-        when KeyCodes.LEFT_ARROW  then _shiftKeyboardDownward(instrument)
-        when KeyCodes.RIGHT_ARROW then _shiftKeyboardUpward(instrument)
-    , KEYBOARD_SHIFT_THROTTLE_LIMIT_IN_MILLIS
-
     new KeyanoDomElementHighlighter({ instrument }).activate()
     new KeyanoKeyCombinationNameReporter({ instrument }).activate()
 
+    _activateKeyboardSwitchingKeys({
+      instrument      : instrument
+      downwardKeyCode : Config.KEYBOARD_SHIFT_DOWNWARD_KEY_CODE
+      upwardKeyCode   : Config.KEYBOARD_SHIFT_UPWARD_KEY_CODE
+    })
     _populateKeyLabelsInDom()
     _shiftKeyboardToHaveLowestKey(instrument, LOWEST_KEY_OF_DEFAULT_KEYBOARD_RANGE)
 

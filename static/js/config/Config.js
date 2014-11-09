@@ -6,6 +6,9 @@
       DEBUG_MODE: false,
       PITCH_TYPE: 'square',
       PEDAL_KEY_CODE: KeyCodes.SPACE_BAR,
+      KEYBOARD_SHIFT_DOWNWARD_KEY_CODE: KeyCodes.LEFT_ARROW,
+      KEYBOARD_SHIFT_UPWARD_KEY_CODE: KeyCodes.RIGHT_ARROW,
+      KEYBOARD_SHIFT_THROTTLE_LIMIT_IN_MILLIS: 250,
       LABEL_FOR_UNRECOGNIZED_CHORDS: 'Unrecognized Chord'
     };
     return Config;

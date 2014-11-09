@@ -11,11 +11,11 @@
 
       KeyanoInstrument.prototype.TIMEOUT = 50;
 
+      KeyanoInstrument.prototype._activatedKeyMappings = null;
+
       KeyanoInstrument.prototype._audioContext = null;
 
-      KeyanoInstrument.prototype._impressedKeyIds = null;
-
-      KeyanoInstrument.prototype._activatedKeyMappings = null;
+      KeyanoInstrument.prototype._impressedPianoKeyIds = null;
 
       KeyanoInstrument.prototype._keyValidator = null;
 
@@ -29,15 +29,15 @@
         this._activateKey = __bind(this._activateKey, this);
         this._activatePedalKey = __bind(this._activatePedalKey, this);
         this._audioContext = new (window.AudioContext || window.webkitAudioContext);
-        this._impressedKeyIds = {};
+        this._impressedPianoKeyIds = {};
         this._keyValidator = new KeyMappingValidator();
         this._onKeydownFns = [];
         this._onKeyupFns = [];
-        this._reset();
+        this._resetKeyMappings();
         this._activatePedalKey(Config.PEDAL_KEY_CODE);
       }
 
-      KeyanoInstrument.prototype._reset = function() {
+      KeyanoInstrument.prototype._resetKeyMappings = function() {
         this._activatedKeyMappings = {};
         this._nodesForActivePianoKeys = {};
         _.forEach(this._onKeydownFns, function(onKeydownFn) {
@@ -63,13 +63,10 @@
           },
           ...
         ]
-      @events
-        'piano:key:did:start:playing' : emitted on $(document) once a piano key's pitch has started playing
-        'piano:key:did:stop:playing'  : emitted on $(document) once a piano key's pitch has stopped playing
        */
 
       KeyanoInstrument.prototype.activateKeys = function(keyMappings) {
-        this._reset();
+        this._resetKeyMappings();
         _.forEach(keyMappings, this._activateKey);
       };
 
@@ -81,7 +78,7 @@
 
       KeyanoInstrument.prototype.getImpressedPianoKeys = function() {
         var pianoKeyIds, sortedPianoKeyIds;
-        pianoKeyIds = _.keys(this._impressedKeyIds);
+        pianoKeyIds = _.keys(this._impressedPianoKeyIds);
         sortedPianoKeyIds = pianoKeyUtils.getSortedPianoKeyIds(pianoKeyIds);
         return _.map(sortedPianoKeyIds, function(pianoKeyId) {
           return _.cloneDeep(PianoKeys[pianoKeyId]);
@@ -146,10 +143,10 @@
           return;
         }
         Logger.debug('user pressed the key:', pianoKey.id);
-        if ((_base = this._impressedKeyIds)[_name = pianoKey.id] == null) {
+        if ((_base = this._impressedPianoKeyIds)[_name = pianoKey.id] == null) {
           _base[_name] = true;
         }
-        Logger.debug('impressed keys:', this._impressedKeyIds);
+        Logger.debug('impressed keys:', this._impressedPianoKeyIds);
         _ref = this._startPitchNode(pianoKey), pitchNode = _ref.pitchNode, gainNode = _ref.gainNode;
         this._saveActivePianoKeyInstance(pianoKey, {
           pitchNode: pitchNode,
@@ -168,7 +165,7 @@
           return;
         }
         Logger.debug('user released the key:', pianoKey.id);
-        delete this._impressedKeyIds[pianoKey.id];
+        delete this._impressedPianoKeyIds[pianoKey.id];
         _ref = this._getActivePianoKey(pianoKey), pitchNode = _ref.pitchNode, gainNode = _ref.gainNode;
         if (this._isPedalPressed) {
           this._stopPitchNodeWithPedal(pitchNode, gainNode);

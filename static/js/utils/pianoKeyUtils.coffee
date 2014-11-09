@@ -10,6 +10,7 @@ define [
   Logger
 ) ->
 
+  VALID_WHITE_KEY_NAMES = 'ABCDEFG'.split('')
 
   #
   # PianoKeyOctaveIndices
@@ -267,6 +268,35 @@ define [
         return null
 
       return higherKey
+
+    getKeyNameOfNextHighestWhiteKey : (whiteKeyName) ->
+      if not pianoKeyUtils.isValidWhiteKeyName(whiteKeyName)
+        throw new Error "Invalid whiteKeyName #{whiteKeyName}"
+
+      # Wrap around to the beginning if necessary.
+
+      if whiteKeyName is _.last(VALID_WHITE_KEY_NAMES)
+        higherKeyIndex = 0
+      else
+        higherKeyIndex = VALID_WHITE_KEY_NAMES.indexOf(whiteKeyName) + 1
+
+      return VALID_WHITE_KEY_NAMES[higherKeyIndex]
+
+    getKeyNameOfNextLowestWhiteKey : (whiteKeyName) ->
+      if not pianoKeyUtils.isValidWhiteKeyName(whiteKeyName)
+        throw new Error "Invalid whiteKeyName #{whiteKeyName}"
+
+      # Wrap around to the end if necessary.
+
+      if whiteKeyName is _.first(VALID_WHITE_KEY_NAMES)
+        lowerKeyIndex = VALID_WHITE_KEY_NAMES.length - 1
+      else
+        lowerKeyIndex = VALID_WHITE_KEY_NAMES.indexOf(whiteKeyName) - 1
+
+      return VALID_WHITE_KEY_NAMES[lowerKeyIndex]
+
+    isValidWhiteKeyName : (keyName) ->
+      return keyName in VALID_WHITE_KEY_NAMES
 
     ###
     @params
