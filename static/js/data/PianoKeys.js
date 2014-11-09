@@ -19,7 +19,7 @@
       },
       D3: {
         id: 'D3',
-        name: 'D3',
+        name: 'D',
         octave: 3,
         frequency: 146.832,
         index: 30
