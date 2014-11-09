@@ -4,6 +4,11 @@ define [
   Config
 ) ->
 
+  #
+  # Logger
+  # ======
+  # A utility class for logging statements when Config.DEBUG_MODE is enabled.
+  #
   class Logger
 
     ###
@@ -12,9 +17,10 @@ define [
     @return
       N/A
     ###
-    @debug : (contents...)->
+    @debug : (contents...) ->
       if Config.DEBUG_MODE
         console.log(contents)
       return
+
 
   return Logger

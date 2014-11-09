@@ -82,10 +82,10 @@ require [
   cachedKeyMappingsForInstrumentWithLowestKey = {}
 
   $ui =
-    keyanoInstruments : $('.KeyanoInstrument')
+    keyboards : $('.KeyanoInstrument-keyboard')
 
   _getDomElementForInstrument = (lowestKeyName) ->
-    return $ui.keyanoInstruments.filter("[data-lowest-key='#{lowestKeyName}']")
+    return $ui.keyboards.filter("[data-lowest-key='#{lowestKeyName}']")
 
   _getDomElementsForWhiteKeysInInstrument = ($instrument) ->
     return $instrument.find('.KeyanoInstrument-whiteKey')
@@ -167,11 +167,11 @@ require [
     if not lowestKeyName in VALID_KEY_NAMES
       throw new Error 'Passed an invalid lowestKeyName to _showDefaultKeyanoInstrument'
 
-    $ui.keyanoInstruments.hide()
+    $ui.keyboards.hide()
     _getDomElementForInstrument(lowestKeyName).show()
 
   _populateKeyLabelsInDom = ->
-    $ui.keyanoInstruments.each ->
+    $ui.keyboards.each ->
       $instrument = $(this)
 
       $whiteKeysInOrder        = _getDomElementsForWhiteKeysInInstrument($instrument)

@@ -4,215 +4,215 @@
     var ChordData;
     ChordData = {
       '0-3-3': {
-        quality: 'Diminished Triad',
+        name: 'Diminished Triad',
         root: 0
       },
       '0-3-6': {
-        quality: 'Diminished Triad (First Inversion)',
+        name: 'Diminished Triad (First Inversion)',
         root: 2
       },
       '0-6-3': {
-        quality: 'Diminished Triad (Second Inversion)',
+        name: 'Diminished Triad (Second Inversion)',
         root: 1
       },
       '0-4-4': {
-        quality: 'Augmented Triad',
+        name: 'Augmented Triad',
         root: 0
       },
       '0-3-4': {
-        quality: 'Minor',
+        name: 'Minor',
         root: 0
       },
       '0-4-5': {
-        quality: 'Minor (First Inversion)',
+        name: 'Minor (First Inversion)',
         root: 2
       },
       '0-5-3': {
-        quality: 'Minor (Second Inversion)',
+        name: 'Minor (Second Inversion)',
         root: 1
       },
       '0-4-3': {
-        quality: 'Major',
+        name: 'Major',
         root: 0
       },
       '0-3-5': {
-        quality: 'Major (First Inversion)',
+        name: 'Major (First Inversion)',
         root: 2
       },
       '0-5-4': {
-        quality: 'Major (Second Inversion)',
+        name: 'Major (Second Inversion)',
         root: 1
       },
       '0-4-3-4': {
-        quality: 'Major 7',
+        name: 'Major 7',
         root: 0
       },
       '0-3-4-1': {
-        quality: 'Major 7 (First Inversion)',
+        name: 'Major 7 (First Inversion)',
         root: 3
       },
       '0-4-1-4': {
-        quality: 'Major 7 (Second Inversion)',
+        name: 'Major 7 (Second Inversion)',
         root: 2
       },
       '0-1-4-3': {
-        quality: 'Major 7 (Third Inversion)',
+        name: 'Major 7 (Third Inversion)',
         root: 1
       },
       '0-4-3-3': {
-        quality: 'Dominant 7',
+        name: 'Dominant 7',
         root: 0
       },
       '0-3-3-2': {
-        quality: 'Dominant 7 (First Inversion)',
+        name: 'Dominant 7 (First Inversion)',
         root: 3
       },
       '0-3-2-4': {
-        quality: 'Dominant 7 (Second Inversion)',
+        name: 'Dominant 7 (Second Inversion)',
         root: 2
       },
       '0-2-4-3': {
-        quality: 'Dominant 7 (Third Inversion)',
+        name: 'Dominant 7 (Third Inversion)',
         root: 1
       },
       '0-3-4-3': {
-        quality: 'Minor 7',
+        name: 'Minor 7',
         root: 0
       },
       '0-4-3-2': {
-        quality: 'Minor 7 (First Inversion)',
+        name: 'Minor 7 (First Inversion)',
         root: 3
       },
       '0-3-2-3': {
-        quality: 'Minor 7 (Second Inversion)',
+        name: 'Minor 7 (Second Inversion)',
         root: 2
       },
       '0-2-3-4': {
-        quality: 'Minor 7 (Third Inversion)',
+        name: 'Minor 7 (Third Inversion)',
         root: 1
       },
       '0-3-3-4': {
-        quality: 'Half Diminished 7',
+        name: 'Half Diminished 7',
         root: 0
       },
       '0-3-4-2': {
-        quality: 'Half-Diminished 7 (First Inversion)',
+        name: 'Half-Diminished 7 (First Inversion)',
         root: 3
       },
       '0-4-2-3': {
-        quality: 'Half-Diminished 7 (Second Inversion)',
+        name: 'Half-Diminished 7 (Second Inversion)',
         root: 2
       },
       '0-2-3-3': {
-        quality: 'Half-Diminished 7 (Third Inversion)',
+        name: 'Half-Diminished 7 (Third Inversion)',
         root: 1
       },
       '0-3-3-3': {
-        quality: 'Diminished 7',
+        name: 'Diminished 7',
         root: 0
       },
       '0-3-4-4': {
-        quality: 'Minor-Major 7',
+        name: 'Minor-Major 7',
         root: 0
       },
       '0-4-4-1': {
-        quality: 'Minor-Major 7 (First Inversion)',
+        name: 'Minor-Major 7 (First Inversion)',
         root: 3
       },
       '0-4-1-3': {
-        quality: 'Minor-Major 7 (Second Inversion)',
+        name: 'Minor-Major 7 (Second Inversion)',
         root: 2
       },
       '0-1-3-4': {
-        quality: 'Minor-Major 7 (Third Inversion)',
+        name: 'Minor-Major 7 (Third Inversion)',
         root: 1
       },
       '0-4-4-3': {
-        quality: 'Augmented Major 7',
+        name: 'Augmented Major 7',
         root: 0
       },
       '0-4-3-1': {
-        quality: 'Augmented Major 7 (First Inversion)',
+        name: 'Augmented Major 7 (First Inversion)',
         root: 3
       },
       '0-3-1-4': {
-        quality: 'Augmented Major 7 (Second Inversion)',
+        name: 'Augmented Major 7 (Second Inversion)',
         root: 2
       },
       '0-1-4-4': {
-        quality: 'Augmented Major 7 (Third Inversion)',
+        name: 'Augmented Major 7 (Third Inversion)',
         root: 1
       },
       '0-4-4-2': {
-        quality: 'Augmented 7',
+        name: 'Augmented 7',
         root: 0
       },
       '0-4-2-2': {
-        quality: 'Augmented 7 (First Inversion)',
+        name: 'Augmented 7 (First Inversion)',
         root: 3
       },
       '0-2-2-4': {
-        quality: 'Augmented 7 (Second Inversion)',
+        name: 'Augmented 7 (Second Inversion)',
         root: 2
       },
       '0-2-4-4': {
-        quality: 'Augmented 7 (Third Inversion)',
+        name: 'Augmented 7 (Third Inversion)',
         root: 1
       },
       '0-2-5': {
-        quality: 'sus2',
+        name: 'sus2',
         root: 0
       },
       '0-7-7-2': {
-        quality: 'sus2',
+        name: 'sus2',
         root: 0
       },
       '0-7-7-1': {
-        quality: 'Minor sus2',
+        name: 'Minor sus2',
         root: 0
       },
       '0-5-2': {
-        quality: 'sus4',
+        name: 'sus4',
         root: 0
       },
       '0-5-2-5': {
-        quality: 'sus4',
+        name: 'sus4',
         root: 0
       },
       '0-2-2-3': {
-        quality: 'add2',
+        name: 'add2',
         root: 0
       },
       '0-2-3-5': {
-        quality: 'add2 (Ninth as Root)',
+        name: 'add2 (Ninth as Root)',
         root: 3
       },
       '0-3-5-2': {
-        quality: 'add2 (First Inversion)',
+        name: 'add2 (First Inversion)',
         root: 2
       },
       '0-5-2-2': {
-        quality: 'add2 (Second Inversion)',
+        name: 'add2 (Second Inversion)',
         root: 1
       },
       '0-4-3-4-3': {
-        quality: 'Major 9th',
+        name: 'Major 9th',
         root: 0
       },
       '0-4-3-3-4': {
-        quality: 'Dominant 9th',
+        name: 'Dominant 9th',
         root: 0
       },
       '0-4-3-3-3': {
-        quality: 'Dominant Minor 9th',
+        name: 'Dominant Minor 9th',
         root: 0
       },
       '0-3-4-3-3': {
-        quality: 'Minor 9th',
+        name: 'Minor 9th',
         root: 0
       },
       '0-4-3-3-5': {
-        quality: 'Dominant 7 Sharp 9th',
+        name: 'Dominant 7 Sharp 9th',
         root: 0
       }
     };

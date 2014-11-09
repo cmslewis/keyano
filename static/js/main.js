@@ -109,10 +109,10 @@
     lowestKeyOfCurrentKeyboardRange = null;
     cachedKeyMappingsForInstrumentWithLowestKey = {};
     $ui = {
-      keyanoInstruments: $('.KeyanoInstrument')
+      keyboards: $('.KeyanoInstrument-keyboard')
     };
     _getDomElementForInstrument = function(lowestKeyName) {
-      return $ui.keyanoInstruments.filter("[data-lowest-key='" + lowestKeyName + "']");
+      return $ui.keyboards.filter("[data-lowest-key='" + lowestKeyName + "']");
     };
     _getDomElementsForWhiteKeysInInstrument = function($instrument) {
       return $instrument.find('.KeyanoInstrument-whiteKey');
@@ -199,11 +199,11 @@
       if (_ref = !lowestKeyName, __indexOf.call(VALID_KEY_NAMES, _ref) >= 0) {
         throw new Error('Passed an invalid lowestKeyName to _showDefaultKeyanoInstrument');
       }
-      $ui.keyanoInstruments.hide();
+      $ui.keyboards.hide();
       return _getDomElementForInstrument(lowestKeyName).show();
     };
     _populateKeyLabelsInDom = function() {
-      return $ui.keyanoInstruments.each(function() {
+      return $ui.keyboards.each(function() {
         var $blackKeyWrappersInOrder, $instrument, $whiteKeysInOrder;
         $instrument = $(this);
         $whiteKeysInOrder = _getDomElementsForWhiteKeysInInstrument($instrument);

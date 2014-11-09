@@ -2,10 +2,12 @@ define [
   'static/js/data/ChordData'
   'static/js/data/PianoKeys'
   'static/js/config/Config'
+  'static/js/utils/Logger'
 ], (
   ChordData
   PianoKeys
   Config
+  Logger
 ) ->
 
 
@@ -13,21 +15,21 @@ define [
   # PianoKeyOctaveIndices
   # =====================
   # This key=>index mapping gives us O(1) lookup of a key's index within a single octave, dramatically speed up the
-  # sort operation.
+  # sort operation. Note that we follow the convention of an octave starting with C and ending with B.
   #
   PianoKeyOctaveIndices = {
-    'C'  : 0
-    'Db' : 1
-    'D'  : 2
-    'Eb' : 3
-    'E'  : 4
-    'F'  : 5
-    'Gb' : 6
-    'G'  : 7
-    'Ab' : 8
-    'A'  : 9
-    'Bb' : 10
-    'B'  : 11
+    C  : 0
+    Db : 1
+    D  : 2
+    Eb : 3
+    E  : 4
+    F  : 5
+    Gb : 6
+    G  : 7
+    Ab : 8
+    A  : 9
+    Bb : 10
+    B  : 11
   }
 
 
@@ -139,7 +141,7 @@ define [
     rootKey   = keys[chordData?.root]
 
     if chordData?
-      chordName = "#{rootKey.name} #{chordData.quality}"
+      chordName = "#{rootKey.name} #{chordData.name}"
     else
       chordName = Config.LABEL_FOR_UNRECOGNIZED_CHORDS
 
@@ -248,7 +250,7 @@ define [
       lowerKey   = PianoKeys[lowerKeyId]
 
       if not lowerKey?
-        console.error "Tried to get the #{pianoKey.name} an octave below #{pianoKey.id}, but #{lowerKeyId} is not defined in the PianoKeys object"
+        Logger.debug "Tried to get the #{pianoKey.name} an octave below #{pianoKey.id}, but #{lowerKeyId} is not defined in the PianoKeys object"
         return null
 
       return lowerKey
@@ -261,7 +263,7 @@ define [
       higherKey   = PianoKeys[higherKeyId]
 
       if not higherKey?
-        console.error "Tried to get the #{pianoKey.name} an octave above #{pianoKey.id}, but #{higherKeyId} is not defined in the PianoKeys object"
+        Logger.debug "Tried to get the #{pianoKey.name} an octave above #{pianoKey.id}, but #{higherKeyId} is not defined in the PianoKeys object"
         return null
 
       return higherKey

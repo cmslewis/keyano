@@ -4,7 +4,7 @@
     var Config;
     Config = {
       DEBUG_MODE: false,
-      PITCH_TYPE: 'sine',
+      PITCH_TYPE: 'square',
       PEDAL_KEY_CODE: KeyCodes.SPACE_BAR,
       LABEL_FOR_UNRECOGNIZED_CHORDS: 'Unrecognized Chord'
     };
