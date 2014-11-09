@@ -247,3 +247,75 @@ body {
 .KeyCombinationNameLabel.is-unknown {
   opacity: 0.35;
 }
+.KeyboardShiftButton {
+  height: 60px;
+  line-height: 60px;
+  margin-top: 35px;
+  width: 90px;
+  -webkit-border-radius: 60px;
+  -webkit-background-clip: padding-box;
+  -moz-border-radius: 60px;
+  -moz-background-clip: padding;
+  border-radius: 60px;
+  background-clip: padding-box;
+  -webkit-transition: all 0.05s;
+  -moz-transition: all 0.05s;
+  -o-transition: all 0.05s;
+  transition: all 0.05s;
+  border: 1px solid #333;
+  color: #666;
+  font-size: 50px;
+  font-weight: bold;
+  line-height: 57px;
+  text-align: center;
+  cursor: pointer;
+}
+.KeyboardShiftButton:hover {
+  background: #5dbced;
+  border-color: #5dbced;
+  color: white;
+}
+.KeyboardShiftButton:active {
+  -webkit-transform: translateY(2px);
+  -moz-transform: translateY(2px);
+  -ms-transform: translateY(2px);
+  -o-transform: translateY(2px);
+  transform: translateY(2px);
+}
+.KeyboardShiftButton--selected {
+  background: #5dbced;
+  border-color: #5dbced;
+  color: white;
+}
+.KeyboardShiftButton-leftButton {
+  float: left;
+}
+.KeyboardShiftButton-rightButton {
+  float: right;
+}
+.qtip.qtip-default.KeyboardShiftButton-tooltip {
+  height: 40px;
+  line-height: 40px;
+  max-width: none;
+  min-width: 0;
+  -webkit-border-radius: 3px;
+  -webkit-background-clip: padding-box;
+  -moz-border-radius: 3px;
+  -moz-background-clip: padding;
+  border-radius: 3px;
+  background-clip: padding-box;
+}
+.qtip.qtip-default.KeyboardShiftButton-tooltip .qtip-content {
+  padding: 0 15px;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 16px;
+  text-transform: uppercase;
+}
+.KeyboardShiftButton-tooltipMain {
+  display: inline-block;
+}
+.KeyboardShiftButton-tooltipSecondary {
+  display: inline-block;
+  color: rgba(0, 0, 0, 0.3);
+  font-size: 13px;
+}

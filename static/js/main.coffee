@@ -55,11 +55,11 @@ require [
 
   KEYBOARD_KEYS_FOR_ALL_PIANO_KEYS = null
 
-  _zipKeys = ({ whiteKeys, blackKeys } = {}) ->
+  _zipKeyArrays = ({ whiteKeys, blackKeys } = {}) ->
     if not whiteKeys?
-      throw new Error 'No whiteKeys passed to _zipKeys'
+      throw new Error 'No whiteKeys passed to _zipKeyArrays'
     if not blackKeys?
-      throw new Error 'No blackKeys passed to _zipKeys'
+      throw new Error 'No blackKeys passed to _zipKeyArrays'
 
     whiteKeyboardKeys = whiteKeys
     blackKeyboardKeys = blackKeys
@@ -84,7 +84,9 @@ require [
   cachedKeyMappingsForInstrumentWithLowestKey = {}
 
   $ui =
-    keyboards : $('.KeyanoInstrument-keyboard')
+    keyboards                : $('.KeyanoInstrument-keyboard')
+    keyboardLeftShiftButton  : $('.KeyboardShiftButton-leftButton')
+    keyboardRightShiftButton : $('.KeyboardShiftButton-rightButton')
 
   _getDomElementForInstrument = (lowestKeyName) ->
     return $ui.keyboards.filter("[data-lowest-key='#{lowestKeyName}']")
@@ -190,15 +192,84 @@ require [
     nextKeyName = pianoKeyUtils.getKeyNameOfNextHighestWhiteKey(lowestKeyOfCurrentKeyboardRange)
     _shiftKeyboardToHaveLowestKey(instrument, nextKeyName)
 
-  _activateKeyboardSwitchingKeys = ({ instrument, downwardKeyCode, upwardKeyCode } = {}) ->
+  _activateKeyboardSwitching = ({ instrument, downwardKeyCodes, upwardKeyCodes } = {}) ->
+    # Have an unthrottled keydown listener to prevent default behavior of special keys (tab, escape, etc).
+    $(document).on 'keydown', (ev) ->
+      if ev.keyCode in downwardKeyCodes or ev.keyCode in upwardKeyCodes
+        ev.stopPropagation()
+        ev.preventDefault()
+
+    selectedClass = 'KeyboardShiftButton--selected'
+
+    TRANSITION_END_EVENTS = '''
+      transitionend
+      webkitTransitionEnd
+      oTransitionEnd
+      otransitionend
+      MSTransitionEnd
+    '''
+
+    flashSelectedState = ($button) ->
+      if not $button.is(':hover')
+        $button.on TRANSITION_END_EVENTS, ->
+          $button.removeClass(selectedClass)
+        .addClass(selectedClass)
+
+    # Have a throttled keydown listener to actually trigger keyboard shift operations.
     $(document).on 'keydown', _.throttle (ev) ->
-      switch ev.keyCode
-        when downwardKeyCode then _shiftKeyboardDownward(instrument)
-        when upwardKeyCode   then _shiftKeyboardUpward(instrument)
+      if ev.keyCode in downwardKeyCodes
+        _shiftKeyboardDownward(instrument)
+        flashSelectedState($ui.keyboardLeftShiftButton)
+      if ev.keyCode in upwardKeyCodes
+        _shiftKeyboardUpward(instrument)
+        flashSelectedState($ui.keyboardRightShiftButton)
     , Config.KEYBOARD_SHIFT_THROTTLE_LIMIT_IN_MILLIS
 
+    $ui.keyboardLeftShiftButton.on  'click', -> _shiftKeyboardDownward(instrument)
+    $ui.keyboardRightShiftButton.on 'click', -> _shiftKeyboardUpward(instrument)
+
+  _activateTooltips = ->
+    defaultOptions = {
+      show :
+        delay  : 50
+        effect : false
+      hide :
+        effect : false
+      style :
+        classes : 'KeyboardShiftButton-tooltip'
+    }
+
+    leftButtonOptions = _.defaults {
+      position :
+        my : 'left center'
+        at : 'right center'
+      content :
+        text : '''
+          <div class="KeyboardShiftButton-tooltipMain">Shift Keyboard Down</div>
+          <div class="KeyboardShiftButton-tooltipSecondary">
+            (Shortcut: Tab or Left Arrow Keys)
+          </div>
+        '''
+    }, defaultOptions
+
+    rightButtonOptions = _.defaults {
+      position :
+        my : 'right center'
+        at : 'left center'
+      content :
+        text : '''
+          <div class="KeyboardShiftButton-tooltipMain">Shift Keyboard Up</div>
+          <div class="KeyboardShiftButton-tooltipSecondary">
+            (Shortcut: \\ or Right Arrow Keys)
+          </div>
+        '''
+    }, defaultOptions
+
+    $ui.keyboardLeftShiftButton.qtip(leftButtonOptions)
+    $ui.keyboardRightShiftButton.qtip(rightButtonOptions)
+
   $(document).ready ->
-    KEYBOARD_KEYS_FOR_ALL_PIANO_KEYS = _zipKeys({
+    KEYBOARD_KEYS_FOR_ALL_PIANO_KEYS = _zipKeyArrays({
       whiteKeys : KEYBOARD_KEYS_FOR_WHITE_PIANO_KEYS
       blackKeys : KEYBOARD_KEYS_FOR_BLACK_PIANO_KEY_WRAPPERS
     })
@@ -208,10 +279,11 @@ require [
     new KeyanoDomElementHighlighter({ instrument }).activate()
     new KeyanoKeyCombinationNameReporter({ instrument }).activate()
 
-    _activateKeyboardSwitchingKeys({
-      instrument      : instrument
-      downwardKeyCode : Config.KEYBOARD_SHIFT_DOWNWARD_KEY_CODE
-      upwardKeyCode   : Config.KEYBOARD_SHIFT_UPWARD_KEY_CODE
+    _activateTooltips()
+    _activateKeyboardSwitching({
+      instrument       : instrument
+      downwardKeyCodes : Config.KEYBOARD_SHIFT_DOWNWARD_KEY_CODES
+      upwardKeyCodes   : Config.KEYBOARD_SHIFT_UPWARD_KEY_CODES
     })
     _populateKeyLabelsInDom()
     _shiftKeyboardToHaveLowestKey(instrument, LOWEST_KEY_OF_DEFAULT_KEYBOARD_RANGE)

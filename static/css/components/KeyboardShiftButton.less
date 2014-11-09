@@ -1,0 +1,95 @@
+
+
+.KeyboardShiftButton {
+
+  // Box Model
+  .height-with-vertically-centered-text(60px);
+  margin-top : 35px;
+  width      : 90px;
+
+  // Style
+  .border-radius(60px);
+  .transition(all @animation-duration);
+  border : 1px solid #333;
+
+  // Text
+  color       : #666;
+  font-size   : 50px;
+  font-weight : bold;
+  line-height : 57px; // Font-awesome icons have weird line-height issues.
+  text-align  : center;
+
+  // Miscellaneous
+  cursor : pointer;
+
+  &:hover {
+    .KeyboardShiftButton--selected;
+  }
+
+  &:active {
+    .transform(translateY(2px));
+  }
+}
+
+
+.KeyboardShiftButton--selected {
+  background   : @selected-color;
+  border-color : @selected-color;
+  color        : white;
+}
+
+
+.KeyboardShiftButton-leftButton {
+
+  // Position
+  float : left;
+}
+
+
+.KeyboardShiftButton-rightButton {
+
+  // Position
+  float : right;
+}
+
+
+.qtip.qtip-default.KeyboardShiftButton-tooltip {
+
+  // Box Model
+  .height-with-vertically-centered-text(40px);
+  max-width : none;
+  min-width : 0;
+
+  // Style
+  .border-radius(3px);
+
+  .qtip-content {
+
+    // Box Model
+    padding : 0 15px;
+
+    // Text
+    color          : fade(black, 40%);
+    font-size      : 16px;
+    text-transform : uppercase;
+  }
+}
+
+
+.KeyboardShiftButton-tooltipMain {
+
+  // Position
+  display : inline-block;
+}
+
+
+.KeyboardShiftButton-tooltipSecondary {
+
+  // Position
+  display : inline-block;
+
+  // Text
+  color     : fade(black, 30%);
+  font-size : 13px;
+}
+

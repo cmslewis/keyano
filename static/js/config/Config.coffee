@@ -36,13 +36,19 @@ define [
     PEDAL_KEY_CODE : KeyCodes.SPACE_BAR # (KeyCodes.*)
 
     #
-    # KEYBOARD_SHIFT_[*]_KEY_CODE
-    # ===========================
-    # Specifies the two key codes that on key-press should shift the keyboard downward and upward, respectively, by one
+    # KEYBOARD_SHIFT_[*]_KEY_CODES
+    # ============================
+    # Specifies the key codes that on key-press should shift the keyboard downward and upward, respectively, by one
     # piano key.
     #
-    KEYBOARD_SHIFT_DOWNWARD_KEY_CODE : KeyCodes.LEFT_ARROW
-    KEYBOARD_SHIFT_UPWARD_KEY_CODE   : KeyCodes.RIGHT_ARROW
+    KEYBOARD_SHIFT_DOWNWARD_KEY_CODES : [
+      KeyCodes.LEFT_ARROW
+      KeyCodes.TAB # The key just to the left of the lowest keyboard key.
+    ]
+    KEYBOARD_SHIFT_UPWARD_KEY_CODES : [
+      KeyCodes.RIGHT_ARROW
+      KeyCodes.BACK_SLASH # The key just to the right of the highest keyboard key.
+    ]
 
     #
     # KEYBOARD_SHIFT_THROTTLE_LIMIT_IN_MILLIS
