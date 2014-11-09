@@ -150,6 +150,7 @@ define [
           return
         { pitchNode, gainNode } = nodesForPianoKey
         @_stopPitchNodeImmediately(pitchNode, gainNode)
+        delete @_impressedPianoKeyIds[pianoKeyId]
         $(document).trigger('piano:key:did:stop:playing', pianoKeyId)
       @_nodesForActivePianoKeys = {}
       $(document).trigger('did:stop:all:piano:keys:immediately')

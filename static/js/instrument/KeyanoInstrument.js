@@ -145,6 +145,7 @@
             }
             pitchNode = nodesForPianoKey.pitchNode, gainNode = nodesForPianoKey.gainNode;
             _this._stopPitchNodeImmediately(pitchNode, gainNode);
+            delete _this._impressedPianoKeyIds[pianoKeyId];
             return $(document).trigger('piano:key:did:stop:playing', pianoKeyId);
           };
         })(this));
