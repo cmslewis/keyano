@@ -18,7 +18,9 @@ require [
 
   VALID_KEY_NAMES = 'ABCDEFG'.split('')
 
-  LOWEST_KEY_OF_DEFAULT_KEYANO_INSTRUMENT = 'B'
+  KEYBOARD_SHIFT_THROTTLE_LIMIT_IN_MILLIS = 500
+
+  LOWEST_KEY_OF_DEFAULT_KEYBOARD_RANGE = 'C'
 
   KEYBOARD_KEYS_FOR_WHITE_PIANO_KEYS = [
     { keyCode : KeyCodes.Q,             label : 'Q' }
@@ -74,29 +76,9 @@ require [
 
     return zippedKeys
 
-  # KEY_MAPPINGS = [
-  #   { keyCode : KeyCodes.Q,             pianoKey : PianoKeys.A3  }
-  #   { keyCode : KeyCodes.KEYPAD_2,      pianoKey : PianoKeys.Bb3 }
-  #   { keyCode : KeyCodes.W,             pianoKey : PianoKeys.B3  }
-  #   { keyCode : KeyCodes.E,             pianoKey : PianoKeys.C4  }
-  #   { keyCode : KeyCodes.KEYPAD_4,      pianoKey : PianoKeys.Db4 }
-  #   { keyCode : KeyCodes.R,             pianoKey : PianoKeys.D4  }
-  #   { keyCode : KeyCodes.KEYPAD_5,      pianoKey : PianoKeys.Eb4 }
-  #   { keyCode : KeyCodes.T,             pianoKey : PianoKeys.E4  }
-  #   { keyCode : KeyCodes.Y,             pianoKey : PianoKeys.F4  }
-  #   { keyCode : KeyCodes.KEYPAD_7,      pianoKey : PianoKeys.Gb4 }
-  #   { keyCode : KeyCodes.U,             pianoKey : PianoKeys.G4  }
-  #   { keyCode : KeyCodes.KEYPAD_8,      pianoKey : PianoKeys.Ab4 }
-  #   { keyCode : KeyCodes.I,             pianoKey : PianoKeys.A4  }
-  #   { keyCode : KeyCodes.KEYPAD_9,      pianoKey : PianoKeys.Bb4 }
-  #   { keyCode : KeyCodes.O,             pianoKey : PianoKeys.B4  }
-  #   { keyCode : KeyCodes.P,             pianoKey : PianoKeys.C5  }
-  #   { keyCode : KeyCodes.DASH,          pianoKey : PianoKeys.Db5 }
-  #   { keyCode : KeyCodes.OPEN_BRACKET,  pianoKey : PianoKeys.D5  }
-  #   { keyCode : KeyCodes.EQUAL_SIGN,    pianoKey : PianoKeys.Eb5 }
-  #   { keyCode : KeyCodes.CLOSE_BRACKET, pianoKey : PianoKeys.E5  }
-  # ]
-
+  isLeftKeyPressed                            = false
+  isRightKeyPressed                           = false
+  lowestKeyOfCurrentKeyboardRange             = null
   cachedKeyMappingsForInstrumentWithLowestKey = {}
 
   $ui =
@@ -131,6 +113,28 @@ require [
         pianoKeyIdsInOrder.push(blackKeyPianoKeyId)
 
     return pianoKeyIdsInOrder
+
+  _getNextWhiteKeyName = (keyName) ->
+    if not keyName in VALID_KEY_NAMES
+      throw new Error "Invalid keyName #{keyName}"
+
+    if keyName is _.last(VALID_KEY_NAMES)
+      higherKeyIndex = 0
+    else
+      higherKeyIndex = VALID_KEY_NAMES.indexOf(keyName) + 1
+
+    return VALID_KEY_NAMES[higherKeyIndex]
+
+  _getPreviousWhiteKeyName = (keyName) ->
+    if not keyName in VALID_KEY_NAMES
+      throw new Error "Invalid keyName #{keyName}"
+
+    if keyName is _.first(VALID_KEY_NAMES)
+      lowerKeyIndex = VALID_KEY_NAMES.length - 1
+    else
+      lowerKeyIndex = VALID_KEY_NAMES.indexOf(keyName) - 1
+
+    return VALID_KEY_NAMES[lowerKeyIndex]
 
   _generateKeyMappingsForInstrumentWithLowestKey = (lowestKeyName) ->
     $instrument = _getDomElementForInstrument(lowestKeyName)
@@ -186,9 +190,19 @@ require [
         $label = $(this).find('.KeyanoInstrument-keyLabel')
         $label.text(KEYBOARD_KEYS_FOR_BLACK_PIANO_KEY_WRAPPERS[index].label)
 
-  isLeftKeyPressed             = false
-  isRightKeyPressed            = false
-  lowestKeyOfCurrentInstrument = null
+  _shiftKeyboardToHaveLowestKey = (instrument, lowestKeyName) ->
+    lowestKeyOfCurrentKeyboardRange = lowestKeyName
+    _showDomElementForKeyanoInstrumentWithLowestKey(lowestKeyName)
+    # keyMappings = _generateKeyMappingsForInstrumentWithLowestKey(lowestKeyName)
+    # instrument.activateKeys(keyMappings)
+
+  _shiftKeyboardDownward = (instrument) ->
+    previousKeyName = _getPreviousWhiteKeyName(lowestKeyOfCurrentKeyboardRange)
+    _shiftKeyboardToHaveLowestKey(instrument, previousKeyName)
+
+  _shiftKeyboardUpward = (instrument) ->
+    nextKeyName = _getNextWhiteKeyName(lowestKeyOfCurrentKeyboardRange)
+    _shiftKeyboardToHaveLowestKey(instrument, nextKeyName)
 
   $(document).ready ->
     KEYBOARD_KEYS_FOR_ALL_PIANO_KEYS = _zipKeys({
@@ -196,34 +210,18 @@ require [
       blackKeys : KEYBOARD_KEYS_FOR_BLACK_PIANO_KEY_WRAPPERS
     })
 
-    lowestKeyOfCurrentInstrument = LOWEST_KEY_OF_DEFAULT_KEYANO_INSTRUMENT
-
-    _populateKeyLabelsInDom()
-    _showDomElementForKeyanoInstrumentWithLowestKey(lowestKeyOfCurrentInstrument)
-    keyMappings = _generateKeyMappingsForInstrumentWithLowestKey(lowestKeyOfCurrentInstrument)
-
-    $(document).on 'keydown', (ev) ->
-      if isLeftKeyPressed or isRightKeyPressed
-        return
-      switch ev.keyCode
-        when KeyCodes.LEFT_ARROW
-          isLeftKeyPressed = true
-        when KeyCodes.RIGHT_ARROW
-          isRightKeyPressed = true
-
-    $(document).on 'keyup', (ev) ->
-      switch ev.keyCode
-        when KeyCodes.LEFT_ARROW
-          if isLeftKeyPressed
-            isLeftKeyPressed = false
-        when KeyCodes.RIGHT_ARROW
-          if isRightKeyPressed
-            isRightKeyPressed = false
-
     instrument = new KeyanoInstrument()
-    instrument.activateKeys(keyMappings)
+
+    $(document).on 'keydown', _.throttle (ev) ->
+      switch ev.keyCode
+        when KeyCodes.LEFT_ARROW  then _shiftKeyboardDownward(instrument)
+        when KeyCodes.RIGHT_ARROW then _shiftKeyboardUpward(instrument)
+    , KEYBOARD_SHIFT_THROTTLE_LIMIT_IN_MILLIS
 
     new KeyanoDomElementHighlighter({ instrument }).activate()
     new KeyanoKeyCombinationNameReporter({ instrument }).activate()
+
+    _populateKeyLabelsInDom()
+    _shiftKeyboardToHaveLowestKey(instrument, LOWEST_KEY_OF_DEFAULT_KEYBOARD_RANGE)
 
     return

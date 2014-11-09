@@ -22,15 +22,23 @@
       KeyanoInstrument.prototype._nodesForActivePianoKeys = null;
 
       function KeyanoInstrument() {
+        this._onKeyboardKeyUp = __bind(this._onKeyboardKeyUp, this);
+        this._onKeyboardKeyDown = __bind(this._onKeyboardKeyDown, this);
         this._activateKey = __bind(this._activateKey, this);
         this._activatePedalKey = __bind(this._activatePedalKey, this);
         this._audioContext = new (window.AudioContext || window.webkitAudioContext);
         this._impressedKeyIds = {};
-        this._activatedKeyMappings = {};
         this._keyValidator = new KeyMappingValidator();
-        this._nodesForActivePianoKeys = {};
+        this._reset();
         this._activatePedalKey(Config.PEDAL_KEY_CODE);
       }
+
+      KeyanoInstrument.prototype._reset = function() {
+        this._activatedKeyMappings = {};
+        this._nodesForActivePianoKeys = {};
+        $(document).unbind('keydown', this._onKeyboardKeyDown);
+        return $(document).unbind('keyup', this._onKeyboardKeyUp);
+      };
 
 
       /*
@@ -51,7 +59,12 @@
        */
 
       KeyanoInstrument.prototype.activateKeys = function(keyMappings) {
+        this.deactivateKeys();
         _.forEach(keyMappings, this._activateKey);
+      };
+
+      KeyanoInstrument.prototype.deactivateKeys = function() {
+        return this._reset();
       };
 
 
@@ -100,20 +113,28 @@
         });
         this._keyValidator.validateKeyMapping(keyMapping);
         keyCode = keyMapping.keyCode, pianoKey = keyMapping.pianoKey;
-        $(document).on('keydown', (function(_this) {
+        $(document).on('keydown', this._onKeyboardKeyDown(keyCode, pianoKey));
+        $(document).on('keyup', this._onKeyboardKeyUp(keyCode, pianoKey));
+      };
+
+      KeyanoInstrument.prototype._onKeyboardKeyDown = function(keyCode, pianoKey) {
+        return (function(_this) {
           return function(ev) {
             if (ev.keyCode === keyCode) {
               return _this._startPlayingPianoKeyIfNecessary(pianoKey);
             }
           };
-        })(this));
-        $(document).on('keyup', (function(_this) {
+        })(this);
+      };
+
+      KeyanoInstrument.prototype._onKeyboardKeyUp = function(keyCode, pianoKey) {
+        return (function(_this) {
           return function(ev) {
             if (ev.keyCode === keyCode) {
               return _this._stopPlayingPianoKeyIfNecessary(pianoKey);
             }
           };
-        })(this));
+        })(this);
       };
 
       KeyanoInstrument.prototype._startPlayingPianoKeyIfNecessary = function(pianoKey) {

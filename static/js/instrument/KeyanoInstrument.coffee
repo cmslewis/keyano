@@ -45,11 +45,17 @@ define [
     constructor : ->
       @_audioContext            = new (window.AudioContext || window.webkitAudioContext)
       @_impressedKeyIds         = {}
-      @_activatedKeyMappings    = {}
       @_keyValidator            = new KeyMappingValidator()
+
+      @_reset()
+      @_activatePedalKey(Config.PEDAL_KEY_CODE)
+
+    _reset : ->
+      @_activatedKeyMappings    = {}
       @_nodesForActivePianoKeys = {}
 
-      @_activatePedalKey(Config.PEDAL_KEY_CODE)
+      $(document).unbind 'keydown', @_onKeyboardKeyDown
+      $(document).unbind 'keyup',   @_onKeyboardKeyUp
 
 
     # Public Methods
@@ -72,8 +78,12 @@ define [
       'piano:key:did:stop:playing'  : emitted on $(document) once a piano key's pitch has stopped playing
     ###
     activateKeys : (keyMappings) ->
+      @deactivateKeys()
       _.forEach keyMappings, @_activateKey
       return
+
+    deactivateKeys : ->
+      @_reset()
 
     ###
     @return
@@ -105,10 +115,20 @@ define [
 
       { keyCode, pianoKey } = keyMapping
 
-      $(document).on 'keydown', (ev) => if ev.keyCode is keyCode then @_startPlayingPianoKeyIfNecessary(pianoKey)
-      $(document).on 'keyup',   (ev) => if ev.keyCode is keyCode then @_stopPlayingPianoKeyIfNecessary(pianoKey)
+      $(document).on 'keydown', @_onKeyboardKeyDown(keyCode, pianoKey)
+      $(document).on 'keyup',   @_onKeyboardKeyUp(keyCode, pianoKey)
 
       return
+
+    _onKeyboardKeyDown : (keyCode, pianoKey) =>
+      return (ev) =>
+        if ev.keyCode is keyCode
+          @_startPlayingPianoKeyIfNecessary(pianoKey)
+
+    _onKeyboardKeyUp : (keyCode, pianoKey) =>
+      return (ev) =>
+        if ev.keyCode is keyCode
+          @_stopPlayingPianoKeyIfNecessary(pianoKey)
 
 
     # Private Methods (Playback)

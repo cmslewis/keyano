@@ -3,9 +3,10 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   require(['static/js/data/KeyCodes', 'static/js/data/PianoKeys', 'static/js/instrument/KeyanoInstrument', 'static/js/listeners/KeyanoDomElementHighlighter', 'static/js/listeners/KeyanoKeyCombinationNameReporter'], function(KeyCodes, PianoKeys, KeyanoInstrument, KeyanoDomElementHighlighter, KeyanoKeyCombinationNameReporter) {
-    var $ui, KEYBOARD_KEYS_FOR_ALL_PIANO_KEYS, KEYBOARD_KEYS_FOR_BLACK_PIANO_KEY_WRAPPERS, KEYBOARD_KEYS_FOR_WHITE_PIANO_KEYS, LOWEST_KEY_OF_DEFAULT_KEYANO_INSTRUMENT, VALID_KEY_NAMES, cachedKeyMappingsForInstrumentWithLowestKey, isLeftKeyPressed, isRightKeyPressed, lowestKeyOfCurrentInstrument, _generateKeyMappingsForInstrumentWithLowestKey, _getDomElementForInstrument, _getDomElementsForBlackKeyWrappersInInstrument, _getDomElementsForWhiteKeysInInstrument, _getOrderedPianoKeyIdsFromInstrumentDomElement, _populateKeyLabelsInDom, _showDomElementForKeyanoInstrumentWithLowestKey, _zipKeys;
+    var $ui, KEYBOARD_KEYS_FOR_ALL_PIANO_KEYS, KEYBOARD_KEYS_FOR_BLACK_PIANO_KEY_WRAPPERS, KEYBOARD_KEYS_FOR_WHITE_PIANO_KEYS, KEYBOARD_SHIFT_THROTTLE_LIMIT_IN_MILLIS, LOWEST_KEY_OF_DEFAULT_KEYBOARD_RANGE, VALID_KEY_NAMES, cachedKeyMappingsForInstrumentWithLowestKey, isLeftKeyPressed, isRightKeyPressed, lowestKeyOfCurrentKeyboardRange, _generateKeyMappingsForInstrumentWithLowestKey, _getDomElementForInstrument, _getDomElementsForBlackKeyWrappersInInstrument, _getDomElementsForWhiteKeysInInstrument, _getNextWhiteKeyName, _getOrderedPianoKeyIdsFromInstrumentDomElement, _getPreviousWhiteKeyName, _populateKeyLabelsInDom, _shiftKeyboardDownward, _shiftKeyboardToHaveLowestKey, _shiftKeyboardUpward, _showDomElementForKeyanoInstrumentWithLowestKey, _zipKeys;
     VALID_KEY_NAMES = 'ABCDEFG'.split('');
-    LOWEST_KEY_OF_DEFAULT_KEYANO_INSTRUMENT = 'B';
+    KEYBOARD_SHIFT_THROTTLE_LIMIT_IN_MILLIS = 500;
+    LOWEST_KEY_OF_DEFAULT_KEYBOARD_RANGE = 'C';
     KEYBOARD_KEYS_FOR_WHITE_PIANO_KEYS = [
       {
         keyCode: KeyCodes.Q,
@@ -103,6 +104,9 @@
       }
       return zippedKeys;
     };
+    isLeftKeyPressed = false;
+    isRightKeyPressed = false;
+    lowestKeyOfCurrentKeyboardRange = null;
     cachedKeyMappingsForInstrumentWithLowestKey = {};
     $ui = {
       keyanoInstruments: $('.KeyanoInstrument')
@@ -138,6 +142,30 @@
         }
       }
       return pianoKeyIdsInOrder;
+    };
+    _getNextWhiteKeyName = function(keyName) {
+      var higherKeyIndex, _ref;
+      if (_ref = !keyName, __indexOf.call(VALID_KEY_NAMES, _ref) >= 0) {
+        throw new Error("Invalid keyName " + keyName);
+      }
+      if (keyName === _.last(VALID_KEY_NAMES)) {
+        higherKeyIndex = 0;
+      } else {
+        higherKeyIndex = VALID_KEY_NAMES.indexOf(keyName) + 1;
+      }
+      return VALID_KEY_NAMES[higherKeyIndex];
+    };
+    _getPreviousWhiteKeyName = function(keyName) {
+      var lowerKeyIndex, _ref;
+      if (_ref = !keyName, __indexOf.call(VALID_KEY_NAMES, _ref) >= 0) {
+        throw new Error("Invalid keyName " + keyName);
+      }
+      if (keyName === _.first(VALID_KEY_NAMES)) {
+        lowerKeyIndex = VALID_KEY_NAMES.length - 1;
+      } else {
+        lowerKeyIndex = VALID_KEY_NAMES.indexOf(keyName) - 1;
+      }
+      return VALID_KEY_NAMES[lowerKeyIndex];
     };
     _generateKeyMappingsForInstrumentWithLowestKey = function(lowestKeyName) {
       var $instrument, cachedKeyMappings, keyMappings, pianoKeyIdsInOrder;
@@ -192,51 +220,43 @@
         });
       });
     };
-    isLeftKeyPressed = false;
-    isRightKeyPressed = false;
-    lowestKeyOfCurrentInstrument = null;
+    _shiftKeyboardToHaveLowestKey = function(instrument, lowestKeyName) {
+      lowestKeyOfCurrentKeyboardRange = lowestKeyName;
+      return _showDomElementForKeyanoInstrumentWithLowestKey(lowestKeyName);
+    };
+    _shiftKeyboardDownward = function(instrument) {
+      var previousKeyName;
+      previousKeyName = _getPreviousWhiteKeyName(lowestKeyOfCurrentKeyboardRange);
+      return _shiftKeyboardToHaveLowestKey(instrument, previousKeyName);
+    };
+    _shiftKeyboardUpward = function(instrument) {
+      var nextKeyName;
+      nextKeyName = _getNextWhiteKeyName(lowestKeyOfCurrentKeyboardRange);
+      return _shiftKeyboardToHaveLowestKey(instrument, nextKeyName);
+    };
     return $(document).ready(function() {
-      var instrument, keyMappings;
+      var instrument;
       KEYBOARD_KEYS_FOR_ALL_PIANO_KEYS = _zipKeys({
         whiteKeys: KEYBOARD_KEYS_FOR_WHITE_PIANO_KEYS,
         blackKeys: KEYBOARD_KEYS_FOR_BLACK_PIANO_KEY_WRAPPERS
       });
-      lowestKeyOfCurrentInstrument = LOWEST_KEY_OF_DEFAULT_KEYANO_INSTRUMENT;
-      _populateKeyLabelsInDom();
-      _showDomElementForKeyanoInstrumentWithLowestKey(lowestKeyOfCurrentInstrument);
-      keyMappings = _generateKeyMappingsForInstrumentWithLowestKey(lowestKeyOfCurrentInstrument);
-      $(document).on('keydown', function(ev) {
-        if (isLeftKeyPressed || isRightKeyPressed) {
-          return;
-        }
-        switch (ev.keyCode) {
-          case KeyCodes.LEFT_ARROW:
-            return isLeftKeyPressed = true;
-          case KeyCodes.RIGHT_ARROW:
-            return isRightKeyPressed = true;
-        }
-      });
-      $(document).on('keyup', function(ev) {
-        switch (ev.keyCode) {
-          case KeyCodes.LEFT_ARROW:
-            if (isLeftKeyPressed) {
-              return isLeftKeyPressed = false;
-            }
-            break;
-          case KeyCodes.RIGHT_ARROW:
-            if (isRightKeyPressed) {
-              return isRightKeyPressed = false;
-            }
-        }
-      });
       instrument = new KeyanoInstrument();
-      instrument.activateKeys(keyMappings);
+      $(document).on('keydown', _.throttle(function(ev) {
+        switch (ev.keyCode) {
+          case KeyCodes.LEFT_ARROW:
+            return _shiftKeyboardDownward(instrument);
+          case KeyCodes.RIGHT_ARROW:
+            return _shiftKeyboardUpward(instrument);
+        }
+      }, KEYBOARD_SHIFT_THROTTLE_LIMIT_IN_MILLIS));
       new KeyanoDomElementHighlighter({
         instrument: instrument
       }).activate();
       new KeyanoKeyCombinationNameReporter({
         instrument: instrument
       }).activate();
+      _populateKeyLabelsInDom();
+      _shiftKeyboardToHaveLowestKey(instrument, LOWEST_KEY_OF_DEFAULT_KEYBOARD_RANGE);
     });
   });
 
