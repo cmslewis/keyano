@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['static/js/listeners/AbstractKeyanoListener'], function(AbstractKeyanoListener) {
+  define(['static/js/listeners/AbstractKeyanoListener', 'static/js/data/PianoKeys'], function(AbstractKeyanoListener, PianoKeys) {
     var KeyanoDomElementHighlighter;
     KeyanoDomElementHighlighter = (function(_super) {
       __extends(KeyanoDomElementHighlighter, _super);
@@ -12,26 +12,18 @@
         return KeyanoDomElementHighlighter.__super__.constructor.apply(this, arguments);
       }
 
-      KeyanoDomElementHighlighter.prototype.DEFAULT_KEYANO_KEY_SELECTOR = '.KeyanoInstrument-key';
+      KeyanoDomElementHighlighter.prototype.KEYANO_KEY_SELECTOR = '.KeyanoInstrument-key';
 
       KeyanoDomElementHighlighter.prototype._domElementCache = null;
 
-      KeyanoDomElementHighlighter.prototype._keyanoKeySelector = null;
-
-      KeyanoDomElementHighlighter.prototype.activate = function(keyanoKeys, keyanoKeySelector) {
-        if (keyanoKeySelector == null) {
-          keyanoKeySelector = this.DEFAULT_KEYANO_KEY_SELECTOR;
-        }
-        if (!_.isObject(keyanoKeys)) {
-          throw new Error('Received a missing or invalid keyanoKeys object parameter');
-        }
-        if (!_.isString(keyanoKeySelector)) {
-          throw new Error('Received a non-string keyanoKeySelector parameter');
-        }
+      KeyanoDomElementHighlighter.prototype.activate = function() {
+        var listOfPianoKeysInOrder;
         KeyanoDomElementHighlighter.__super__.activate.apply(this, arguments);
         this._domElementCache = {};
-        this._keyanoKeySelector = keyanoKeySelector;
-        this._fillCacheOfKeyanoKeyDomElements(keyanoKeys);
+        listOfPianoKeysInOrder = _.map(_.pairs(PianoKeys), function(pair) {
+          return pair[1];
+        });
+        this._fillCacheOfKeyanoKeyDomElements(listOfPianoKeysInOrder);
       };
 
       KeyanoDomElementHighlighter.prototype.onPianoKeyStartedPlaying = function(ev, pianoKeyId) {
@@ -48,12 +40,12 @@
         }
       };
 
-      KeyanoDomElementHighlighter.prototype._fillCacheOfKeyanoKeyDomElements = function(keyanoKeys) {
-        _.chain(keyanoKeys).pluck('pianoKey').forEach((function(_this) {
+      KeyanoDomElementHighlighter.prototype._fillCacheOfKeyanoKeyDomElements = function(pianoKeys) {
+        _.forEach(pianoKeys, (function(_this) {
           return function(pianoKey) {
-            var $elem;
-            $elem = $("" + _this._keyanoKeySelector + "[data-piano-key-id='" + pianoKey.id + "']");
-            return _this._domElementCache[pianoKey.id] = $elem;
+            var $elemsWithKeyId;
+            $elemsWithKeyId = $("" + _this.KEYANO_KEY_SELECTOR + "[data-piano-key-id='" + pianoKey.id + "']");
+            return _this._domElementCache[pianoKey.id] = $elemsWithKeyId;
           };
         })(this));
       };

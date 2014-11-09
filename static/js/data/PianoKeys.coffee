@@ -224,6 +224,13 @@ define [], ->
       frequency : 659.255
       index     : 56
 
+    F5 :
+      id        : 'F5'
+      name      : 'F'
+      octave    : 5
+      frequency : 698.456
+      index     : 57
+
   }
 
   return PianoKeys

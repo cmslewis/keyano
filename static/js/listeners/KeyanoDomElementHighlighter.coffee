@@ -1,7 +1,9 @@
 define [
   'static/js/listeners/AbstractKeyanoListener'
+  'static/js/data/PianoKeys'
 ], (
   AbstractKeyanoListener
+  PianoKeys
 ) ->
 
   #
@@ -16,31 +18,25 @@ define [
     # Private Constants
     # -----------------
 
-    DEFAULT_KEYANO_KEY_SELECTOR : '.KeyanoInstrument-key'
+    KEYANO_KEY_SELECTOR : '.KeyanoInstrument-key'
 
 
     # Instance Variables
     # ------------------
 
-    _domElementCache   : null
-    _keyanoKeySelector : null
+    _domElementCache : null
 
 
     # Overridden Methods
     # ------------------
 
-    activate : (keyanoKeys, keyanoKeySelector = @DEFAULT_KEYANO_KEY_SELECTOR) ->
-      if not _.isObject(keyanoKeys)
-        throw new Error 'Received a missing or invalid keyanoKeys object parameter'
-      if not _.isString(keyanoKeySelector)
-        throw new Error 'Received a non-string keyanoKeySelector parameter'
-
+    activate : ->
       super
 
-      @_domElementCache   = {}
-      @_keyanoKeySelector = keyanoKeySelector
+      @_domElementCache = {}
 
-      @_fillCacheOfKeyanoKeyDomElements(keyanoKeys)
+      listOfPianoKeysInOrder = _.map _.pairs(PianoKeys), (pair) -> pair[1]
+      @_fillCacheOfKeyanoKeyDomElements(listOfPianoKeysInOrder)
 
       return
 
@@ -56,12 +52,10 @@ define [
     # Private Methods
     # ---------------
 
-    _fillCacheOfKeyanoKeyDomElements : (keyanoKeys) ->
-      _.chain(keyanoKeys)
-        .pluck('pianoKey')
-        .forEach (pianoKey) =>
-          $elem = $("#{@_keyanoKeySelector}[data-piano-key-id='#{pianoKey.id}']")
-          @_domElementCache[pianoKey.id] = $elem
+    _fillCacheOfKeyanoKeyDomElements : (pianoKeys) ->
+      _.forEach pianoKeys, (pianoKey) =>
+        $elemsWithKeyId = $("#{@KEYANO_KEY_SELECTOR}[data-piano-key-id='#{pianoKey.id}']")
+        @_domElementCache[pianoKey.id] = $elemsWithKeyId
       return
 
 

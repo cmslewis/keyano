@@ -12,7 +12,10 @@ define [], () ->
     @params
       instrument : (KeyanoInstrument) the keyano instrument firing the events
     ###
-    constructor : ({ instrument }) ->
+    constructor : ({ instrument } = {}) ->
+      if not instrument?
+        throw new Error 'No instrument provided to AbstractKeyanoListener'
+
       @instrument = instrument
 
     activate : ->

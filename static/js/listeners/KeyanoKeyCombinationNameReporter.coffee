@@ -21,22 +21,23 @@ define [
   class KeyanoKeyCombinationNameReporter extends AbstractKeyanoListener
 
 
-    # Instance Variables
-    # ------------------
+    # Private Constants
+    # -----------------
 
-    keyanoKeys : null
+    NAME_LABEL_SELECTOR : '.KeyCombinationNameLabel'
 
 
     # Overridden Methods
     # ------------------
 
-    activate : (keyanoKeys, $outputElem) ->
+    activate : ->
+      $outputElem = $(@NAME_LABEL_SELECTOR)
+
       unless $outputElem?.size() > 0
-        throw new Error 'Provided an $outputElem in KeyanoKeyCombinationNameReporter that does not exist in the DOM'
+        throw new Error 'Specified an $outputElem in KeyanoKeyCombinationNameReporter that does not exist in the DOM'
 
       super
 
-      @keyanoKeys  = keyanoKeys
       @$outputElem = $outputElem
 
       return

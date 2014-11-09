@@ -37,16 +37,6 @@ body {
   vertical-align: middle;
   width: 96px !important;
 }
-.fb-like.fb_iframe_widget {
-  margin-right: 5px;
-}
-.fb-like.fb_iframe_widget span {
-  vertical-align: middle !important;
-}
-.twitter-share-button {
-  vertical-align: middle;
-  width: 96px !important;
-}
 .Header {
   position: fixed;
   top: 0;
@@ -123,30 +113,30 @@ body {
 .KeyanoInstrument:after {
   clear: both;
 }
-.KeyanoInstrument-octaveGroup {
+.KeyanoInstrument-keyboard {
   float: left;
   position: relative;
 }
-.KeyanoInstrument-octaveGroup:before,
-.KeyanoInstrument-octaveGroup:after {
+.KeyanoInstrument-keyboard:before,
+.KeyanoInstrument-keyboard:after {
   content: " ";
   display: table;
 }
-.KeyanoInstrument-octaveGroup:after {
+.KeyanoInstrument-keyboard:after {
   clear: both;
 }
-.KeyanoInstrument-octaveGroupWhiteKeys {
+.KeyanoInstrument-whiteKeys {
   z-index: 1;
 }
-.KeyanoInstrument-octaveGroupWhiteKeys:before,
-.KeyanoInstrument-octaveGroupWhiteKeys:after {
+.KeyanoInstrument-whiteKeys:before,
+.KeyanoInstrument-whiteKeys:after {
   content: " ";
   display: table;
 }
-.KeyanoInstrument-octaveGroupWhiteKeys:after {
+.KeyanoInstrument-whiteKeys:after {
   clear: both;
 }
-.KeyanoInstrument-octaveGroupBlackKeys {
+.KeyanoInstrument-blackKeys {
   position: absolute;
   top: 0;
   right: 0;

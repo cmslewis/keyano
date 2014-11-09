@@ -12,14 +12,15 @@
         return KeyanoKeyCombinationNameReporter.__super__.constructor.apply(this, arguments);
       }
 
-      KeyanoKeyCombinationNameReporter.prototype.keyanoKeys = null;
+      KeyanoKeyCombinationNameReporter.prototype.NAME_LABEL_SELECTOR = '.KeyCombinationNameLabel';
 
-      KeyanoKeyCombinationNameReporter.prototype.activate = function(keyanoKeys, $outputElem) {
+      KeyanoKeyCombinationNameReporter.prototype.activate = function() {
+        var $outputElem;
+        $outputElem = $(this.NAME_LABEL_SELECTOR);
         if (!(($outputElem != null ? $outputElem.size() : void 0) > 0)) {
-          throw new Error('Provided an $outputElem in KeyanoKeyCombinationNameReporter that does not exist in the DOM');
+          throw new Error('Specified an $outputElem in KeyanoKeyCombinationNameReporter that does not exist in the DOM');
         }
         KeyanoKeyCombinationNameReporter.__super__.activate.apply(this, arguments);
-        this.keyanoKeys = keyanoKeys;
         this.$outputElem = $outputElem;
       };
 

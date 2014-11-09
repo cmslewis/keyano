@@ -10,7 +10,10 @@
        */
       function AbstractKeyanoListener(_arg) {
         var instrument;
-        instrument = _arg.instrument;
+        instrument = (_arg != null ? _arg : {}).instrument;
+        if (instrument == null) {
+          throw new Error('No instrument provided to AbstractKeyanoListener');
+        }
         this.instrument = instrument;
       }
 
