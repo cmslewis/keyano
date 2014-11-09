@@ -89,6 +89,7 @@ body {
 }
 .Footer-bottomText {
   float: right;
+  white-space: nowrap;
 }
 .Footer-dotSeparator {
   margin: 0 3px;
