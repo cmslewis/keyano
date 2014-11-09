@@ -38,8 +38,8 @@
       }
 
       KeyanoInstrument.prototype._resetKeyMappings = function() {
+        this._stopPlayingAllActivePianoKeysImmediately();
         this._activatedKeyMappings = {};
-        this._nodesForActivePianoKeys = {};
         _.forEach(this._onKeydownFns, function(onKeydownFn) {
           return $(document).unbind('keydown', onKeydownFn);
         });
@@ -136,6 +136,22 @@
         $(document).on('keyup', onKeyupFn);
       };
 
+      KeyanoInstrument.prototype._stopPlayingAllActivePianoKeysImmediately = function() {
+        _.forEach(this._nodesForActivePianoKeys, (function(_this) {
+          return function(nodesForPianoKey, pianoKeyId) {
+            var gainNode, pitchNode;
+            if (!_.isObject(nodesForPianoKey)) {
+              return;
+            }
+            pitchNode = nodesForPianoKey.pitchNode, gainNode = nodesForPianoKey.gainNode;
+            _this._stopPitchNodeImmediately(pitchNode, gainNode);
+            return $(document).trigger('piano:key:did:stop:playing', pianoKeyId);
+          };
+        })(this));
+        this._nodesForActivePianoKeys = {};
+        return $(document).trigger('did:stop:all:piano:keys:immediately');
+      };
+
       KeyanoInstrument.prototype._startPlayingPianoKeyIfNecessary = function(pianoKey) {
         var gainNode, pitchNode, _base, _name, _ref;
         if (this._isPianoKeyPlaying(pianoKey)) {
@@ -211,8 +227,11 @@
 
       KeyanoInstrument.prototype._stopPitchNodeOverTime = function(pitchNode, gainNode, duration) {
         var pedalInterval, reductionPerInterval;
+        if (duration <= 0) {
+          throw new Error('Duration must be a positive number');
+        }
         reductionPerInterval = this.TIMEOUT / duration;
-        return pedalInterval = setInterval((function(_this) {
+        pedalInterval = setInterval((function(_this) {
           return function() {
             if (!_this._isPedalPressed) {
               clearInterval(pedalInterval);
@@ -221,10 +240,21 @@
             gainNode.gain.value -= reductionPerInterval;
             if (gainNode.gain.value <= 0) {
               clearInterval(pedalInterval);
-              return pitchNode.stop();
+              return _this._stopPitchNodeImmediately(pitchNode, gainNode);
             }
           };
         })(this), this.TIMEOUT);
+        return $(document).on('did:stop:all:piano:keys:immediately', (function(_this) {
+          return function() {
+            clearInterval(pedalInterval);
+            return _this._stopPitchNodeImmediately(pitchNode, gainNode);
+          };
+        })(this));
+      };
+
+      KeyanoInstrument.prototype._stopPitchNodeImmediately = function(pitchNode, gainNode) {
+        gainNode.gain.value = 0;
+        return pitchNode.stop();
       };
 
       KeyanoInstrument.prototype._isPianoKeyPlaying = function(pianoKey) {

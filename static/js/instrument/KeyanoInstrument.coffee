@@ -59,10 +59,11 @@ define [
       @_activatePedalKey(Config.PEDAL_KEY_CODE)
 
     _resetKeyMappings : ->
-      # Clear existing mappings and any active pitch nodes.
+      @_stopPlayingAllActivePianoKeysImmediately()
 
-      @_activatedKeyMappings    = {}
-      @_nodesForActivePianoKeys = {}
+      # Clear existing key mappings.
+
+      @_activatedKeyMappings = {}
 
       # Unbind all key events for the existing key mappings.
 
@@ -140,6 +141,20 @@ define [
       return
 
 
+    # Private Methods (Teardown)
+    # --------------------------
+
+    _stopPlayingAllActivePianoKeysImmediately : ->
+      _.forEach @_nodesForActivePianoKeys, (nodesForPianoKey, pianoKeyId) =>
+        if not _.isObject(nodesForPianoKey)
+          return
+        { pitchNode, gainNode } = nodesForPianoKey
+        @_stopPitchNodeImmediately(pitchNode, gainNode)
+        $(document).trigger('piano:key:did:stop:playing', pianoKeyId)
+      @_nodesForActivePianoKeys = {}
+      $(document).trigger('did:stop:all:piano:keys:immediately')
+
+
     # Private Methods (Playback)
     # --------------------------
 
@@ -203,6 +218,9 @@ define [
       @_stopPitchNodeOverTime(pitchNode, gainNode, @DURATION_WITH_PEDAL)
 
     _stopPitchNodeOverTime : (pitchNode, gainNode, duration) ->
+      if duration <= 0
+        throw new Error 'Duration must be a positive number'
+
       reductionPerInterval = @TIMEOUT / duration
 
       pedalInterval = setInterval =>
@@ -212,8 +230,16 @@ define [
         gainNode.gain.value -= reductionPerInterval
         if gainNode.gain.value <= 0
           clearInterval(pedalInterval)
-          pitchNode.stop()
+          @_stopPitchNodeImmediately(pitchNode, gainNode)
       , @TIMEOUT
+
+      $(document).on 'did:stop:all:piano:keys:immediately', =>
+        clearInterval(pedalInterval)
+        @_stopPitchNodeImmediately(pitchNode, gainNode)
+
+    _stopPitchNodeImmediately : (pitchNode, gainNode) ->
+      gainNode.gain.value = 0
+      pitchNode.stop()
 
     _isPianoKeyPlaying : (pianoKey) ->
       pitchNode = @_getActivePianoKey(pianoKey)
