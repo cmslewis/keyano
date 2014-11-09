@@ -221,8 +221,11 @@
       });
     };
     _shiftKeyboardToHaveLowestKey = function(instrument, lowestKeyName) {
+      var keyMappings;
       lowestKeyOfCurrentKeyboardRange = lowestKeyName;
-      return _showDomElementForKeyanoInstrumentWithLowestKey(lowestKeyName);
+      _showDomElementForKeyanoInstrumentWithLowestKey(lowestKeyName);
+      keyMappings = _generateKeyMappingsForInstrumentWithLowestKey(lowestKeyName);
+      return instrument.activateKeys(keyMappings);
     };
     _shiftKeyboardDownward = function(instrument) {
       var previousKeyName;

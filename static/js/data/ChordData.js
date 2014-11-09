@@ -214,10 +214,6 @@
       '0-4-3-3-5': {
         quality: 'Dominant 7 Sharp 9th',
         root: 0
-      },
-      '0-7-5': {
-        quality: 'POWER CHORD!!!',
-        root: 0
       }
     };
     return ChordData;

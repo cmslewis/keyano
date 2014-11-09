@@ -37,25 +37,34 @@ define [
     _activatedKeyMappings    : null
     _keyValidator            : null
     _nodesForActivePianoKeys : null
-
+    _onKeydownFns            : null
+    _onKeyupFns              : null
 
     # Constructor
     # -----------
 
     constructor : ->
-      @_audioContext            = new (window.AudioContext || window.webkitAudioContext)
-      @_impressedKeyIds         = {}
-      @_keyValidator            = new KeyMappingValidator()
+      @_audioContext    = new (window.AudioContext || window.webkitAudioContext)
+      @_impressedKeyIds = {}
+      @_keyValidator    = new KeyMappingValidator()
+      @_onKeydownFns    = []
+      @_onKeyupFns      = []
 
       @_reset()
+
       @_activatePedalKey(Config.PEDAL_KEY_CODE)
 
     _reset : ->
       @_activatedKeyMappings    = {}
       @_nodesForActivePianoKeys = {}
 
-      $(document).unbind 'keydown', @_onKeyboardKeyDown
-      $(document).unbind 'keyup',   @_onKeyboardKeyUp
+      _.forEach @_onKeydownFns, (onKeydownFn) -> $(document).unbind 'keydown', onKeydownFn
+      _.forEach @_onKeyupFns,   (onKeyupFn)   -> $(document).unbind 'keyup',   onKeyupFn
+
+      # Clear both arrays of key-event callback functions.
+
+      @_onKeydownFns.length = 0
+      @_onKeyupFns.length   = 0
 
 
     # Public Methods
@@ -78,12 +87,9 @@ define [
       'piano:key:did:stop:playing'  : emitted on $(document) once a piano key's pitch has stopped playing
     ###
     activateKeys : (keyMappings) ->
-      @deactivateKeys()
+      @_reset()
       _.forEach keyMappings, @_activateKey
       return
-
-    deactivateKeys : ->
-      @_reset()
 
     ###
     @return
@@ -115,20 +121,18 @@ define [
 
       { keyCode, pianoKey } = keyMapping
 
-      $(document).on 'keydown', @_onKeyboardKeyDown(keyCode, pianoKey)
-      $(document).on 'keyup',   @_onKeyboardKeyUp(keyCode, pianoKey)
+      # Keep a reference to each onKeydown function and each onKeyup function, so we can properly unbind them later.
+
+      onKeydownFn = (ev) => if ev.keyCode is keyCode then @_startPlayingPianoKeyIfNecessary(pianoKey)
+      onKeyupFn   = (ev) => if ev.keyCode is keyCode then @_stopPlayingPianoKeyIfNecessary(pianoKey)
+
+      @_onKeydownFns.push(onKeydownFn)
+      @_onKeyupFns.push(onKeyupFn)
+
+      $(document).on 'keydown', onKeydownFn
+      $(document).on 'keyup',   onKeyupFn
 
       return
-
-    _onKeyboardKeyDown : (keyCode, pianoKey) =>
-      return (ev) =>
-        if ev.keyCode is keyCode
-          @_startPlayingPianoKeyIfNecessary(pianoKey)
-
-    _onKeyboardKeyUp : (keyCode, pianoKey) =>
-      return (ev) =>
-        if ev.keyCode is keyCode
-          @_stopPlayingPianoKeyIfNecessary(pianoKey)
 
 
     # Private Methods (Playback)

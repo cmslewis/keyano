@@ -259,12 +259,4 @@ define [], ->
       root    : 0
 
 
-    # Miscellaneous
-    # =============
-
-    '0-7-5' :
-      quality : 'POWER CHORD!!!'
-      root    : 0
-
-
   return ChordData

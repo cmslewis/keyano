@@ -193,8 +193,8 @@ require [
   _shiftKeyboardToHaveLowestKey = (instrument, lowestKeyName) ->
     lowestKeyOfCurrentKeyboardRange = lowestKeyName
     _showDomElementForKeyanoInstrumentWithLowestKey(lowestKeyName)
-    # keyMappings = _generateKeyMappingsForInstrumentWithLowestKey(lowestKeyName)
-    # instrument.activateKeys(keyMappings)
+    keyMappings = _generateKeyMappingsForInstrumentWithLowestKey(lowestKeyName)
+    instrument.activateKeys(keyMappings)
 
   _shiftKeyboardDownward = (instrument) ->
     previousKeyName = _getPreviousWhiteKeyName(lowestKeyOfCurrentKeyboardRange)
