@@ -16,7 +16,7 @@
   color       : #666;
   font-size   : 50px;
   font-weight : bold;
-  line-height : 57px; // Font-awesome icons have weird line-height issues.
+  line-height : 57px; // Font-awesome icons have weird line-height issues that necessitate weird line-height overrides.
   text-align  : center;
 
   // Miscellaneous
@@ -33,9 +33,13 @@
 
 
 .KeyboardShiftButton--selected {
+
+  // Style
   background   : @selected-color;
   border-color : @selected-color;
-  color        : white;
+
+  // Text
+  color : white;
 }
 
 

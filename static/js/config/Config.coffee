@@ -43,11 +43,11 @@ define [
     #
     KEYBOARD_SHIFT_DOWNWARD_KEY_CODES : [
       KeyCodes.LEFT_ARROW
-      KeyCodes.TAB # The key just to the left of the lowest keyboard key.
+      KeyCodes.TAB # The keyboard key just to the left of the lowest piano key.
     ]
     KEYBOARD_SHIFT_UPWARD_KEY_CODES : [
       KeyCodes.RIGHT_ARROW
-      KeyCodes.BACK_SLASH # The key just to the right of the highest keyboard key.
+      KeyCodes.BACK_SLASH # The keyboard key just to the right of the highest piano key.
     ]
 
     #
@@ -57,7 +57,6 @@ define [
     # above is held down by the user.
     #
     KEYBOARD_SHIFT_THROTTLE_LIMIT_IN_MILLIS : 250
-
 
     #
     # LOWEST_KEY_OF_DEFAULT_KEYBOARD_RANGE
