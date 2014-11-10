@@ -58,6 +58,15 @@ define [
     #
     KEYBOARD_SHIFT_THROTTLE_LIMIT_IN_MILLIS : 250
 
+
+    #
+    # LOWEST_KEY_OF_DEFAULT_KEYBOARD_RANGE
+    # ====================================
+    # The lowest key on the keyboard to show on page load (the user will be able to shift the keyboard up or down from
+    # here manually).
+    #
+    LOWEST_KEY_OF_DEFAULT_KEYBOARD_RANGE : 'C' # (A|B|C|D|E|F|G)
+
     #
     # LABEL_FOR_UNRECOGNIZED_CHORDS
     # -----------------------------
