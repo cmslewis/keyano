@@ -182,8 +182,8 @@ define [
 
       # Allow the user to shift the keyboard by clicking the corresponding buttons in the UI.
 
-      @ui.keyboardLeftShiftButton.on  'click', -> @_shiftKeyboardDownward(instrument)
-      @ui.keyboardRightShiftButton.on 'click', -> @_shiftKeyboardUpward(instrument)
+      @ui.keyboardLeftShiftButton.on  'click', => @_shiftKeyboardDownward(instrument)
+      @ui.keyboardRightShiftButton.on 'click', => @_shiftKeyboardUpward(instrument)
 
       # Definte this separate, unthrottled keydown listener simply to prevent default behaviors of any special keys
       # (tab, escape, etc) from firing in between throttled listens above.

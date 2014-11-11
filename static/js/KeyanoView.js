@@ -198,12 +198,16 @@
             }
           };
         })(this), Config.KEYBOARD_SHIFT_THROTTLE_LIMIT_IN_MILLIS));
-        this.ui.keyboardLeftShiftButton.on('click', function() {
-          return this._shiftKeyboardDownward(instrument);
-        });
-        this.ui.keyboardRightShiftButton.on('click', function() {
-          return this._shiftKeyboardUpward(instrument);
-        });
+        this.ui.keyboardLeftShiftButton.on('click', (function(_this) {
+          return function() {
+            return _this._shiftKeyboardDownward(instrument);
+          };
+        })(this));
+        this.ui.keyboardRightShiftButton.on('click', (function(_this) {
+          return function() {
+            return _this._shiftKeyboardUpward(instrument);
+          };
+        })(this));
         return $(document).on('keydown', function(ev) {
           var _ref1, _ref2;
           if ((_ref1 = ev.keyCode, __indexOf.call(downwardKeyCodes, _ref1) >= 0) || (_ref2 = ev.keyCode, __indexOf.call(upwardKeyCodes, _ref2) >= 0)) {

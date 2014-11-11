@@ -9,7 +9,11 @@
 
   // Style
   .border-radius(60px);
-  .transition(all @animation-duration);
+  .transition(
+    border     @animation-duration,
+    background @animation-duration,
+    color      @animation-duration
+  );
   border : 1px solid #333;
 
   // Text
