@@ -134,12 +134,8 @@
           upwardKeyCodes: Config.KEYBOARD_SHIFT_UPWARD_KEY_CODES
         });
         this._shiftKeyboardToHaveLowestKey(this._instrument, Config.LOWEST_KEY_OF_DEFAULT_KEYBOARD_RANGE);
-        return setTimeout((function(_this) {
-          return function() {
-            _this.ui.instrument.show();
-            return _this.ui.loadingSpinnerOverlay.addClass('LoadingSpinner-overlay--hidden');
-          };
-        })(this), 1000);
+        this.ui.instrument.show();
+        return this.ui.loadingSpinnerOverlay.addClass('LoadingSpinner-overlay--hidden');
       };
 
       KeyanoView.prototype._activateKeyboardShiftButtonTooltips = function() {
