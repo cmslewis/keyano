@@ -170,7 +170,9 @@ define [
 
     chordData = null
 
-    # Keep dropping the highest keys by an octave until we find a defined signature.
+    # Keep dropping the highest keys by an octave until we find a defined signature. WARNING: Since we're only dropping
+    # notes by an octave, this approach is not a general solution. In particular, it will stop working if the keyboard
+    # range is larger than 2 octaves.
     for i in [(filteredKeys.length - 1)..0] by -1
       pianoKey = filteredKeys[i]
       lowerKey = pianoKeyUtils.getSameKeyInNextLowestOctave(pianoKey)
