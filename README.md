@@ -16,44 +16,48 @@ A browser-based piano would present some interesting opportunities. First, it wo
 
 Another exciting opportunity with this project idea was the chance to make an online piano that was actually usable. Most online pianos I had used before were flash-based and clunky, and I had never seen one that was easily playable from a computer keyboard. Moreover, I had never seen a piano online or otherwise that could effectively identify chords as you played them. This could be a killer feature if done well.
 
-The result of
 
 ## The Sound
 
 The entire Keyano app began with a few simple lines that leveraged the Web Audio API's OscillatorNode. For instance, the following Javascript snippet will play A440 as a sine wave in the browser:
 
-    var audioContext   = new (window.AudioContext || window.webkitAudioContext);
-    var oscillatorNode = audioContext.createOscillator();
-    
-    oscillatorNode.frequency.value = 440;
-    oscillatorNode.connect(audioContext.destination);
-    
-    oscillatorNode.start();
+```javascript
+var audioContext   = new (window.AudioContext || window.webkitAudioContext);
+var oscillatorNode = audioContext.createOscillator();
+
+oscillatorNode.frequency.value = 440;
+oscillatorNode.connect(audioContext.destination);
+
+oscillatorNode.start();
+```
 
 We can then stop the pitch with the following snippet:
 
-    oscillatorNode.stop();
+```javascript
+oscillatorNode.stop();
+```
 
 We can now easily trigger a particular pitch when a particular keyboard key is pressed:
 
-    var audioContext = new (window.AudioContext || window.webkitAudioContext);
-    var oscillatorNode;
-    
-    $(document).on('keydown', function(ev) {
-      if (ev.keyCode === 32) { // The space bar
-        oscillatorNode = audioContext.createOscillator();
-        oscillatorNode.frequency.value = 440;
-        oscillatorNode.connect(audioContext.destination);
-        oscillatorNode.start();
-      }
-    });
-    
-    $(document).on('keyup', function(ev) {
-      if (ev.keyCode === 32) { // The space bar
-        oscillatorNode.stop();
-      }
-    });
+```javascript
+var audioContext = new (window.AudioContext || window.webkitAudioContext);
+var oscillatorNode;
 
+$(document).on('keydown', function(ev) {
+  if (ev.keyCode === 32) { // The space bar
+    oscillatorNode = audioContext.createOscillator();
+    oscillatorNode.frequency.value = 440;
+    oscillatorNode.connect(audioContext.destination);
+    oscillatorNode.start();
+  }
+});
+
+$(document).on('keyup', function(ev) {
+  if (ev.keyCode === 32) { // The space bar
+    oscillatorNode.stop();
+  }
+});
+```
 
 This is exactly how piano pitch playback works in Keyano. Refer to [`KeyanoInstrument.coffee`](https://github.com/cmslewis/keyano/blob/master/static/js/instrument/KeyanoInstrument.coffee) to see the complete implementation.
 
@@ -79,21 +83,23 @@ A better option is to encode not the absolute pitches that comprise the chord, b
 
 Once we identify the signature of a particular key combination, we still need to determine which inversion the chord is in and what the chord is called. These properties are encoded explicitly for each chord in giant mapping from chord signature to chord data, in [`ChordData.coffee`](https://github.com/cmslewis/keyano/blob/master/static/js/data/ChordData.coffee). To save you a round trip to that file and back, the file looks like this:
 
-    ChordData =
-    
-      # Major Triad
-    
-      '0-4-3' :
-        name : 'Major'
-        root : 0
-      '0-3-5' :
-        name : 'Major (First Inversion)'
-        root : 2
-      '0-5-4' :
-        name : 'Major (Second Inversion)'
-        root : 1
-    
-      ...
+```javascript
+ChordData =
+
+  # Major Triad
+
+  '0-4-3' :
+    name : 'Major'
+    root : 0
+  '0-3-5' :
+    name : 'Major (First Inversion)'
+    root : 2
+  '0-5-4' :
+    name : 'Major (Second Inversion)'
+    root : 1
+
+  ...
+```
 
 Note that the inversion varies with the 'root' property, which encodes which of the three pitches in the chord is the root (counting from the lowest pitch upward).
 
