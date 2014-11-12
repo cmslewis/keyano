@@ -9,6 +9,7 @@ define [
   # ==================
   # Exposes validation methods for keyboard key => piano key mappings.
   #
+
   class KeyMappingValidator
 
 

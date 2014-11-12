@@ -16,8 +16,9 @@ define [
   #
   # - the name of a single key (if one key is playing)
   # - the name of an interval (if two keys are playing)
-  # - the nameof a chord (if three or more keys are playing)
+  # - the name of a chord (if three or more keys are playing)
   #
+
   class KeyanoKeyCombinationNameReporter extends AbstractKeyanoListener
 
 

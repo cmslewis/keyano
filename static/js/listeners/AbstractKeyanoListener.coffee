@@ -6,6 +6,7 @@ define [], () ->
   # An abstract class that listens for key-started-playing and key-stopped-playing events and fires two respective
   # callbacks that subclasses should override.
   #
+
   class AbstractKeyanoListener
 
     ###

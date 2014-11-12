@@ -9,6 +9,7 @@ define [
   # ======
   # A utility class for logging statements when Config.DEBUG_MODE is enabled.
   #
+
   class Logger
 
     ###
