@@ -108,10 +108,8 @@ define [
       })
       @_shiftKeyboardToHaveLowestKey(@_instrument, Config.LOWEST_KEY_OF_DEFAULT_KEYBOARD_RANGE)
 
-      setTimeout =>
-        @ui.instrument.show()
-        @ui.loadingSpinnerOverlay.addClass('LoadingSpinner-overlay--hidden')
-      , 1000
+      @ui.instrument.show()
+      @ui.loadingSpinnerOverlay.addClass('LoadingSpinner-overlay--hidden')
 
 
     # Private Methods (Activation)
