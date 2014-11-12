@@ -1,0 +1,173 @@
+
+
+@LoadingSpinner-distance     : 20px;
+@LoadingSpinner-dotSize      : 10px;
+@LoadingSpinner-loopDuration : 5s;   // Can't really change this, unfortunately.
+
+
+// Animation Keyframe Mixins
+// =========================
+
+.dotOneKeyframes() {
+  0%             { top : 0;                        left : 0;                        }
+  8.3333333333%  { top : @LoadingSpinner-distance; left : 0;                        }
+  16.6666666666% {} // No movement
+  25%            { top : @LoadingSpinner-distance; left : 0;                        }
+  33.3333333333% { top : @LoadingSpinner-distance; left : @LoadingSpinner-distance; }
+  41.6666666666% {} // No movement
+  50%            { top : @LoadingSpinner-distance; left : @LoadingSpinner-distance; }
+  58.3333333333% { top : 0;                        left : @LoadingSpinner-distance; }
+  66.6666666666% {} // No movement
+  75%            { top : 0;                        left : @LoadingSpinner-distance; }
+  83.3333333333% { top : 0;                        left : 0;                        }
+  91.6666666666% {} // No movement
+  100%           {} // No movement
+}
+
+.dotTwoKeyframes() {
+  0%             { top : 0;                        left : @LoadingSpinner-distance; }
+  8.3333333333%  { top : 0;                        left : 0;                        }
+  16.6666666666% {} // No movement
+  25%            { top : 0;                        left : 0;                        }
+  33.3333333333% { top : @LoadingSpinner-distance; left : 0;                        }
+  41.6666666666% {} // No movement
+  50%            { top : @LoadingSpinner-distance; left : 0;                        }
+  58.3333333333% { top : @LoadingSpinner-distance; left : @LoadingSpinner-distance; }
+  66.6666666666% {} // No movement
+  75%            { top : @LoadingSpinner-distance; left : @LoadingSpinner-distance; }
+  83.3333333333% { top : 0;                        left : @LoadingSpinner-distance; }
+  91.6666666666% {} // No movement
+  100%           {} // No movement
+}
+
+.dotThreeKeyframes() {
+  0%             { top : @LoadingSpinner-distance; left : @LoadingSpinner-distance; }
+  8.3333333333%  { top : 0;                        left : @LoadingSpinner-distance; }
+  16.6666666666% {} // No movement
+  25%            { top : 0;                        left : @LoadingSpinner-distance; }
+  33.3333333333% { top : 0;                        left : 0;                        }
+  41.6666666666% {} // No movement
+  50%            { top : 0;                        left : 0;                        }
+  58.3333333333% { top : @LoadingSpinner-distance; left : 0;                        }
+  66.6666666666% {} // No movement
+  75%            { top : @LoadingSpinner-distance; left : 0;                        }
+  83.3333333333% { top : @LoadingSpinner-distance; left : @LoadingSpinner-distance; }
+  91.6666666666% {} // No movement
+  100%           {} // No movement
+}
+
+
+// Animation Keyframes
+// ===================
+
+@-webkit-keyframes dotOneKeyframes   { .dotOneKeyframes();   }
+@-webkit-keyframes dotTwoKeyframes   { .dotTwoKeyframes();   }
+@-webkit-keyframes dotThreeKeyframes { .dotThreeKeyframes(); }
+
+@-moz-keyframes dotOneKeyframes   { .dotOneKeyframes();   }
+@-moz-keyframes dotTwoKeyframes   { .dotTwoKeyframes();   }
+@-moz-keyframes dotThreeKeyframes { .dotThreeKeyframes(); }
+
+@keyframes dotOneKeyframes   { .dotOneKeyframes();   }
+@keyframes dotTwoKeyframes   { .dotTwoKeyframes();   }
+@keyframes dotThreeKeyframes { .dotThreeKeyframes(); }
+
+@-webkit-keyframes fadeUpKeyframes {
+  0%   { margin-top : 25px; opacity : 0; }
+  100% { margin-top : 0;    opacity : 1; }
+}
+
+
+// Styles
+// ======
+
+.LoadingSpinner {
+
+  // Position
+  .transform(translateX(-50%) translateY(-50%));
+  position : absolute;
+  top      : 50%;
+  left     : 50%;
+
+  // Miscellaneous
+  .animation(fadeUpKeyframes 0.5s ease);
+}
+
+
+.LoadingSpinner-overlay {
+
+  // Position
+  .absolute-fill();
+  z-index : @z-index-of-loading-spinner;
+
+  // Style
+  background : @body-background-color;
+  opacity    : 1;
+  visibility : visible;
+}
+
+
+.LoadingSpinner-overlay--hidden {
+
+  // Position
+  margin-top : 25px;
+
+  // Style
+  opacity    : 0;
+  visibiltiy : hidden;
+
+  // Miscellaneous
+  .transition(
+    margin     0.5s 0s   ease,
+    opacity    0.5s 0s   ease,
+    visibility 0    0.5s
+  );
+}
+
+
+.LoadingSpinner-dot {
+
+  // Box Model
+  height : @LoadingSpinner-dotSize;
+  width  : @LoadingSpinner-dotSize;
+
+  // Style
+  .border-radius(100%);
+  background : fade(white, 50%);
+}
+
+
+.LoadingSpinner-dotOne {
+
+  // Position
+  position : absolute;
+  top      : 0;
+  left     : 0;
+
+  // Miscellaneous
+  .animation(dotOneKeyframes @LoadingSpinner-loopDuration ease infinite);
+}
+
+
+.LoadingSpinner-dotTwo {
+
+  // Position
+  position : absolute;
+  top      : 0;
+  left     : @LoadingSpinner-distance;
+
+  // Miscellaneous
+  .animation(dotTwoKeyframes @LoadingSpinner-loopDuration ease 0.4166666666666s infinite);
+}
+
+
+.LoadingSpinner-dotThree {
+
+  // Position
+  position : absolute;
+  top      : @LoadingSpinner-distance;
+  left     : @LoadingSpinner-distance;
+
+  // Miscellaneous
+  .animation(dotThreeKeyframes @LoadingSpinner-loopDuration ease 0.83333333333s infinite);
+}

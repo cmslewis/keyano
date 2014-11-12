@@ -102,6 +102,8 @@
       KeyanoView.prototype._instrument = null;
 
       KeyanoView.prototype.ui = {
+        loadingSpinnerOverlay: $('.LoadingSpinner-overlay'),
+        instrument: $('.KeyanoInstrument'),
         keyboards: $('.KeyanoInstrument-keyboard'),
         keyboardLeftShiftButton: $('.KeyboardShiftButton-leftButton'),
         keyboardRightShiftButton: $('.KeyboardShiftButton-rightButton')
@@ -131,7 +133,13 @@
           downwardKeyCodes: Config.KEYBOARD_SHIFT_DOWNWARD_KEY_CODES,
           upwardKeyCodes: Config.KEYBOARD_SHIFT_UPWARD_KEY_CODES
         });
-        return this._shiftKeyboardToHaveLowestKey(this._instrument, Config.LOWEST_KEY_OF_DEFAULT_KEYBOARD_RANGE);
+        this._shiftKeyboardToHaveLowestKey(this._instrument, Config.LOWEST_KEY_OF_DEFAULT_KEYBOARD_RANGE);
+        return setTimeout((function(_this) {
+          return function() {
+            _this.ui.instrument.show();
+            return _this.ui.loadingSpinnerOverlay.addClass('LoadingSpinner-overlay--hidden');
+          };
+        })(this), 1000);
       };
 
       KeyanoView.prototype._activateKeyboardShiftButtonTooltips = function() {

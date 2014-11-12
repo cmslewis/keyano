@@ -75,6 +75,8 @@ define [
     # ------------------
 
     ui :
+      loadingSpinnerOverlay    : $('.LoadingSpinner-overlay')
+      instrument               : $('.KeyanoInstrument')
       keyboards                : $('.KeyanoInstrument-keyboard')
       keyboardLeftShiftButton  : $('.KeyboardShiftButton-leftButton')
       keyboardRightShiftButton : $('.KeyboardShiftButton-rightButton')
@@ -105,6 +107,11 @@ define [
         upwardKeyCodes   : Config.KEYBOARD_SHIFT_UPWARD_KEY_CODES
       })
       @_shiftKeyboardToHaveLowestKey(@_instrument, Config.LOWEST_KEY_OF_DEFAULT_KEYBOARD_RANGE)
+
+      setTimeout =>
+        @ui.instrument.show()
+        @ui.loadingSpinnerOverlay.addClass('LoadingSpinner-overlay--hidden')
+      , 1000
 
 
     # Private Methods (Activation)
