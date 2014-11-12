@@ -65,7 +65,7 @@ Recent web design trends are favoring flatness and minimalism over photo-realism
 
 ## The Chords
 
-Once the piano was functional, the next feature idea to emerge was the ability to automatically recognize pitches, intervals, and even chords - all in real time. The KeyanoInstrument class did its part here by exposing a new method [getImpressedPianoKeys] that returned all currently active piano keys. The work of naming the combination of active keys is outsourced to the [KeyanoKeyCombinationNameReporter](https://github.com/cmslewis/keyano/blob/master/static/js/listeners/KeyanoKeyCombinationNameReporter.coffee) class, which simply invokes [getImpressedPianoKeys] on piano-press events, determines the name through a series of utility methods, then outputs the name to the DOM.
+Once the piano was functional, the next feature idea to emerge was the ability to automatically recognize pitches, intervals, and even chords - all in real time. The KeyanoInstrument class did its part here by exposing a new method [getImpressedPianoKeys] that returned all currently active piano keys. The work of naming the combination of active keys is outsourced to the [`KeyanoKeyCombinationNameReporter`](https://github.com/cmslewis/keyano/blob/master/static/js/listeners/KeyanoKeyCombinationNameReporter.coffee) class, which simply invokes [getImpressedPianoKeys] on piano-press events, determines the name through a series of utility methods, then outputs the name to the DOM.
 
 ### Naming Pitches and Intervals
 
@@ -108,10 +108,10 @@ The approach works as follows:
 1. Get all currently active pitches.
 2. Keep only the lowest instance of each pitch; disregard all higher instances.
 3. For each note in the chord from highest to lowest pitch:
-  3.1. Drop the highest pitch to the lowest instance that is still above the base pitch in the chord.
-  3.2. If such an instance does not exist, we can stop, as we have an unrecognized chord.
-  3.2. Otherwise, recompute the signature of this new chord.
-  3.3. If that signature is appears in `ChordData`, we're done.
+3.1 Drop the highest pitch to the lowest instance that is still above the base pitch in the chord.
+3.2 If such an instance does not exist, we can stop, as we have an unrecognized chord.
+3.3 Otherwise, recompute the signature of this new chord.
+3.4 If that signature is appears in `ChordData`, we're done.
 
 As this functionality does not depend on any external state, it has been pulled out into the `identifyPianoKeyCombination` function in [`pianoKeyUtils.coffee`](https://github.com/cmslewis/keyano/blob/master/static/js/utils/pianoKeyUtils.coffee).
 
