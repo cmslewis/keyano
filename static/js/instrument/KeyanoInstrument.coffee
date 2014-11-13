@@ -12,7 +12,6 @@ define [
   pianoKeyUtils
 ) ->
 
-
   #
   # KeyanoInstrument
   # ================
@@ -21,6 +20,7 @@ define [
   # 'piano:key:did:start:playing' : emitted on $(document) once a piano key's pitch has started playing
   # 'piano:key:did:stop:playing'  : emitted on $(document) once a piano key's pitch has stopped playing
   #
+
   class KeyanoInstrument
 
 

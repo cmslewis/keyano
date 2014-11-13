@@ -12,12 +12,14 @@ define [
 
   VALID_WHITE_KEY_NAMES = 'ABCDEFG'.split('')
 
+
   #
   # PianoKeyOctaveIndices
   # =====================
   # This key=>index mapping gives us O(1) lookup of a key's index within a single octave, dramatically speed up the
   # sort operation. Note that we follow the convention of an octave starting with C and ending with B.
   #
+
   PianoKeyOctaveIndices = {
     C  : 0
     Db : 1
@@ -39,6 +41,7 @@ define [
   # ============
   # A mapping from interval size (in half steps) to interval name.
   #
+
   IntervalName =
     1  : 'Minor 2nd'
     2  : 'Major 2nd'

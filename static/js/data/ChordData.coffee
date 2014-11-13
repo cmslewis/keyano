@@ -5,13 +5,13 @@ define [], ->
   # =========
   # This is a giant object mapping closed chord signatures ('0-x-y...') to chord data. A chord signature is a string
   # encoding of a particular ordered key combination. As a convention, the first number should always be 0 (indicating
-  # that the lowest key is effectively in unison with itself), while each successive numbers should indicate how many
+  # that the lowest key is effectively in unison with itself), while each successive number should indicate how many
   # half-steps there are between that key and the one immediately previous.
   #
   # For example: The encoding for a C Major triad (consisting of C, E, and G) would be '0-4-3'; because E is 4
   # half-steps above C, and G is 3 half-steps above E.
   #
-  # Each chord's data should contain the name/name of the chord, and which key in the ordering is the root.
+  # Each chord's data should contain the name of the chord, and which key in the ordering is the root.
   #
   # For example: A Major triad in first inversion might reasonably be named 'Major Triad (First Inversion)'. In the
   # case of a C Major Triad in first inversion (consisting of E, G, and the high C), the C is the root and is at index
