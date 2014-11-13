@@ -670,6 +670,7 @@ body {
   -moz-transition: margin 0.5s 0s ease, opacity 0.5s 0s ease, visibility 0 0.5s;
   -o-transition: margin 0.5s 0s ease, opacity 0.5s 0s ease, visibility 0 0.5s;
   transition: margin 0.5s 0s ease, opacity 0.5s 0s ease, visibility 0 0.5s;
+  pointer-events: none;
 }
 .LoadingSpinner-dot {
   height: 10px;
