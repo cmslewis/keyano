@@ -13,9 +13,9 @@ define [], ->
   #
   # Each chord's data should contain the name of the chord, and which key in the ordering is the root.
   #
-  # For example: A Major triad in first inversion might reasonably be named 'Major Triad (First Inversion)'. In the
+  # For example: a major triad in first inversion might reasonably be named 'Major Triad (First Inversion)'. In the
   # case of a C Major Triad in first inversion (consisting of E, G, and the high C), the C is the root and is at index
-  # 2 in the key ordering; thus, we note that 'root' should in fact be 2 for Major triads in first inversion.
+  # 2 in the key ordering. Thus, we note that 'root' should in fact be 2 for major triads in first inversion.
   #
 
   ChordData =
@@ -234,11 +234,28 @@ define [], ->
       name : 'Major 9th'
       root : 0
 
+    '0-7-4-3' :
+      name : 'Major 9th (Missing 3rd)'
+      root : 0
+
+    '0-4-7-3' :
+      name : 'Major 9th (Missing 5th)'
+      root : 0
+
     # Dominant Ninths
 
     '0-4-3-3-4' :
       name : 'Dominant 9th'
       root : 0
+
+    '0-7-3-4' :
+      name : 'Dominant 9th (Missing 3rd)'
+      root : 0
+
+    '0-4-6-4' :
+      name : 'Dominant 9th (Missing 5th)'
+      root : 0
+
 
     # Dominant Minor Ninths
 
@@ -246,10 +263,22 @@ define [], ->
       name : 'Dominant Minor 9th'
       root : 0
 
+    '0-7-3-3' :
+      name : 'Dominant Minor 9th (Missing 3rd)'
+      root : 0
+
+    '0-4-6-3' :
+      name : 'Dominant Minor 9th (Missing 5th)'
+      root : 0
+
     # Minor Ninths
 
     '0-3-4-3-3' :
       name : 'Minor 9th'
+      root : 0
+
+    '0-3-7-3' :
+      name : 'Minor 9th (Missing 5th)'
       root : 0
 
     # Dominant 7 Sharp 9th

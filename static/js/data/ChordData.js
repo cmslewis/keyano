@@ -199,16 +199,44 @@
         name: 'Major 9th',
         root: 0
       },
+      '0-7-4-3': {
+        name: 'Major 9th (Missing 3rd)',
+        root: 0
+      },
+      '0-4-7-3': {
+        name: 'Major 9th (Missing 5th)',
+        root: 0
+      },
       '0-4-3-3-4': {
         name: 'Dominant 9th',
+        root: 0
+      },
+      '0-7-3-4': {
+        name: 'Dominant 9th (Missing 3rd)',
+        root: 0
+      },
+      '0-4-6-4': {
+        name: 'Dominant 9th (Missing 5th)',
         root: 0
       },
       '0-4-3-3-3': {
         name: 'Dominant Minor 9th',
         root: 0
       },
+      '0-7-3-3': {
+        name: 'Dominant Minor 9th (Missing 3rd)',
+        root: 0
+      },
+      '0-4-6-3': {
+        name: 'Dominant Minor 9th (Missing 5th)',
+        root: 0
+      },
       '0-3-4-3-3': {
         name: 'Minor 9th',
+        root: 0
+      },
+      '0-3-7-3': {
+        name: 'Minor 9th (Missing 5th)',
         root: 0
       },
       '0-4-3-3-5': {

@@ -113,7 +113,7 @@
       if (chordData != null) {
         chordName = "" + rootKey.name + " " + chordData.name;
       } else {
-        chordName = Config.LABEL_FOR_UNRECOGNIZED_CHORDS;
+        chordName = signature;
       }
       return chordName;
     };
