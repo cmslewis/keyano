@@ -29,13 +29,13 @@ var oscillatorNode = audioContext.createOscillator();
 oscillatorNode.frequency.value = 440;
 oscillatorNode.connect(audioContext.destination);
 
-oscillatorNode.start();
+oscillatorNode.start(0);
 ```
 
 We can then stop the pitch with the following snippet:
 
 ```javascript
-oscillatorNode.stop();
+oscillatorNode.stop(0);
 ```
 
 We can now easily trigger a particular pitch when a particular keyboard key is pressed:
@@ -49,13 +49,13 @@ $(document).on('keydown', function(ev) {
     oscillatorNode = audioContext.createOscillator();
     oscillatorNode.frequency.value = 440;
     oscillatorNode.connect(audioContext.destination);
-    oscillatorNode.start();
+    oscillatorNode.start(0);
   }
 });
 
 $(document).on('keyup', function(ev) {
   if (ev.keyCode === 32) { // The space bar
-    oscillatorNode.stop();
+    oscillatorNode.stop(0);
   }
 });
 ```
