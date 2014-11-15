@@ -208,7 +208,7 @@ define [
       gainNode  = @_createVolumeNode()
       pitchNode.connect(gainNode)
       gainNode.connect(@_audioContext.destination)
-      pitchNode.start()
+      pitchNode.start(0)
 
       return { pitchNode, gainNode }
 
@@ -221,6 +221,10 @@ define [
     _stopPitchNodeOverTime : (pitchNode, gainNode, duration) ->
       if duration <= 0
         throw new Error 'Duration must be a positive number'
+
+      # This if statement is cruscial to prevent infinite loops after the gain has already reached 0.
+      if gainNode.gain.value <= 0
+        return
 
       reductionPerInterval = @TIMEOUT / duration
 
@@ -240,7 +244,10 @@ define [
 
     _stopPitchNodeImmediately : (pitchNode, gainNode) ->
       gainNode.gain.value = 0
-      pitchNode.stop()
+      try
+        pitchNode.stop(0)
+      catch error
+        Logger.debug('Attempted to stop a pitchNode that was already stopped', error)
 
     _isPianoKeyPlaying : (pianoKey) ->
       pitchNode = @_getActivePianoKey(pianoKey)

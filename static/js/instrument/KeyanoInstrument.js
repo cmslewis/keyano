@@ -211,7 +211,7 @@
         gainNode = this._createVolumeNode();
         pitchNode.connect(gainNode);
         gainNode.connect(this._audioContext.destination);
-        pitchNode.start();
+        pitchNode.start(0);
         return {
           pitchNode: pitchNode,
           gainNode: gainNode
@@ -230,6 +230,9 @@
         var pedalInterval, reductionPerInterval;
         if (duration <= 0) {
           throw new Error('Duration must be a positive number');
+        }
+        if (gainNode.gain.value <= 0) {
+          return;
         }
         reductionPerInterval = this.TIMEOUT / duration;
         pedalInterval = setInterval((function(_this) {
@@ -254,8 +257,14 @@
       };
 
       KeyanoInstrument.prototype._stopPitchNodeImmediately = function(pitchNode, gainNode) {
+        var error;
         gainNode.gain.value = 0;
-        return pitchNode.stop();
+        try {
+          return pitchNode.stop(0);
+        } catch (_error) {
+          error = _error;
+          return Logger.debug('Attempted to stop a pitchNode that was already stopped', error);
+        }
       };
 
       KeyanoInstrument.prototype._isPianoKeyPlaying = function(pianoKey) {
