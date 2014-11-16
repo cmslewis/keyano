@@ -710,3 +710,41 @@ body {
   -o-animation: dotThreeKeyframes 5s ease 0.83333333333s infinite;
   animation: dotThreeKeyframes 5s ease 0.83333333333s infinite;
 }
+.FailureMessage {
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -o-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 28px;
+  text-align: center;
+  white-space: nowrap;
+  -webkit-animation: fadeUpKeyframes 0.5s ease;
+  -moz-animation: fadeUpKeyframes 0.5s ease;
+  -o-animation: fadeUpKeyframes 0.5s ease;
+  animation: fadeUpKeyframes 0.5s ease;
+}
+.FailureMessage-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: none;
+  z-index: 2;
+  background: #1a1b1f;
+  opacity: 1;
+  visibility: visible;
+}
+.FailureMessage-primary {
+  color: white;
+}
+.FailureMessage-secondary {
+  margin-top: 10px;
+  font-size: 24px;
+  font-weight: 300;
+}
