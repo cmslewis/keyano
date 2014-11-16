@@ -16,3 +16,55 @@
 @import 'components/KeyCombinationNameLabel';
 @import 'components/KeyboardShiftButton';
 @import 'components/LoadingSpinner';
+
+
+.FailureMessage {
+
+
+  // Position
+  .transform(translateX(-50%) translateY(-50%));
+  position : absolute;
+  top      : 50%;
+  left     : 50%;
+
+  // Text
+  color       : fade(white, 50%);
+  font-size   : 28px;
+  text-align  : center;
+  white-space : nowrap;
+
+  // Miscellaneous
+  .animation(fadeUpKeyframes 0.5s ease);
+}
+
+
+.FailureMessage-overlay {
+
+  // Position
+  .absolute-fill();
+  display : none;
+  z-index : @z-index-of-loading-spinner;
+
+  // Style
+  background : @body-background-color;
+  opacity    : 1;
+  visibility : visible;
+}
+
+
+.FailureMessage-primary {
+
+  // Text
+  color : white;
+}
+
+
+.FailureMessage-secondary {
+
+  // Box Model
+  margin-top : 10px;
+
+  // Text
+  font-size   : 24px;
+  font-weight : 300;
+}

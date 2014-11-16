@@ -10,6 +10,17 @@ define [
   KeyanoView
 ) ->
 
+  class KeyanoFailureView
+
+    ui :
+      loadingSpinnerOverlay : $('.LoadingSpinner-overlay')
+      failureMessageOverlay : $('.FailureMessage-overlay')
+
+    activate : ->
+      @ui.loadingSpinnerOverlay.hide()
+      @ui.failureMessageOverlay.show()
+
+
   #
   # KeyanoApplication
   # =================
@@ -18,6 +29,10 @@ define [
   class KeyanoApplication
 
     start : ->
+
+      if not AudioContext? and not webkitAudioContext?
+        new KeyanoFailureView().activate()
+        return
 
       # Instrument
 
