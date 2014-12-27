@@ -39,6 +39,7 @@ define [
     _audioContext            : null
     _impressedPianoKeyIds    : null
     _keyValidator            : null
+    _masterGainNode          : null
     _nodesForActivePianoKeys : null
     _onKeydownFns            : null
     _onKeyupFns              : null
@@ -55,8 +56,11 @@ define [
       @_onKeyupFns           = []
 
       @_resetKeyMappings()
+      @_resetMasterGainNode()
 
       @_activatePedalKey(Config.PEDAL_KEY_CODE)
+
+      window.setVolume = _.bind @setVolume, this
 
     _resetKeyMappings : ->
       @_stopPlayingAllActivePianoKeysImmediately()
@@ -74,6 +78,11 @@ define [
 
       @_onKeydownFns.length = 0
       @_onKeyupFns.length   = 0
+
+    _resetMasterGainNode : ->
+      # Create a single, master gain node that will control the volume for the whole instrument's playback.
+      @_masterGainNode = @_createVolumeNode()
+      @_masterGainNode.connect(@_audioContext.destination)
 
 
     # Public Methods
@@ -105,6 +114,20 @@ define [
       pianoKeyIds = _.keys(@_impressedPianoKeyIds)
       sortedPianoKeyIds = pianoKeyUtils.getSortedPianoKeyIds(pianoKeyIds)
       return _.map sortedPianoKeyIds, (pianoKeyId) -> _.cloneDeep PianoKeys[pianoKeyId]
+
+    ###
+    @params
+      volume : (float) a value between 0 (mute) and 1 (max volume)
+    ###
+    setVolume : (volume) ->
+      if not _.isNumber(volume) and _.isFinite(volume)
+        throw new Error 'volume parameter should be of type <float>'
+
+      if volume < 0 then volume = 0
+      if volume > 1 then volume = 1
+
+      @_masterGainNode.gain.value = volume
+      Logger.debug '@_masterGainNode.gain.value', @_masterGainNode.gain.value
 
 
     # Private Methods (Setup)
@@ -207,7 +230,7 @@ define [
       pitchNode = @_createPitchNodeForPianoKey(pianoKey)
       gainNode  = @_createVolumeNode()
       pitchNode.connect(gainNode)
-      gainNode.connect(@_audioContext.destination)
+      gainNode.connect(@_masterGainNode)
       pitchNode.start(0)
 
       return { pitchNode, gainNode }

@@ -22,9 +22,11 @@
 
   <!-- Stylesheets -->
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato:300,400,700" >
-  <link rel="stylesheet" type="text/css" href="static/css/all.css">
-  <link rel="stylesheet" type="text/css" href="static/vendor/qtip.css">
-  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="static/vendor/qtip.css" >
+  <link rel="stylesheet" type="text/css" href="static/vendor/bootstrap-slider.css" >
+  <link rel="stylesheet" type="text/css" href="static/vendor/bootstrap/css/bootstrap.css" >
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" >
+  <link rel="stylesheet" type="text/css" href="static/css/all.css" >
 
   <!-- Favicon -->
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -59,8 +61,26 @@
   <!-- ============ -->
 
   <div class="Header">
-    <div class="Header-title" title="Explore each map independently. The zoom level will stay consistent between the two.">Keyano</div>
-    <div class="Header-tagline">Play the piano and identify chords on your keyboard!</div>
+    <div class="Container">
+      <div class="Header-dropdown">
+        <a class="Header-dropdownTrigger" >
+          <span class="fa fa-volume-up"></span>
+          <span class="Header-dropdownTriggerCaret"></span>
+        </a>
+        <div class="Header-dropdownMenu">
+          <div class="Header-dropdownMenuLabel">
+            <span class="fa fa-volume-up"></span>
+          </div>
+          <input type="text" class="KeyanoInstrument-masterVolumeSlider" />
+          <div class="Header-dropdownMenuLabel">
+            <span class="fa fa-volume-off"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="Header-title" title="Explore each map independently. The zoom level will stay consistent between the two.">Keyano</div>
+      <div class="Header-tagline">Play the piano and identify chords on your keyboard!</div>
+    </div>
   </div>
 
   <div class="Container">
@@ -1134,6 +1154,8 @@
   <script type="text/javascript" src="static/vendor/jquery.js"></script>
   <script type="text/javascript" src="static/vendor/lodash.js"></script>
   <script type="text/javascript" src="static/vendor/qtip.js"></script>
+  <script type="text/javascript" src="static/vendor/bootstrap-slider.js"></script>
+  <script type="text/javascript" src="static/vendor/bootstrap/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="static/vendor/require.js"></script>
   <script type="text/javascript" src="static/js/main.js"></script>
 

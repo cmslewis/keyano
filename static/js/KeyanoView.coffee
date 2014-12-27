@@ -62,6 +62,24 @@ define [
         classes : 'KeyboardShiftButton-tooltip'
     }
 
+    DEFAULT_SLIDER_OPTIONS : {
+      # Options used by the bootstrap-slider plugin.
+      min         : 0
+      max         : 100
+      step        : 1
+      value       : 100
+      orientation : 'vertical'
+      reversed    : true
+      tooltip     : 'hide'
+
+      # Options used only internally.
+      nLogSteps : 3
+    }
+
+    VOLUME_VALUE_LOCAL_STORAGE_KEY : 'keyano-volume-value'
+
+    SLIDER_VALUE_LOCAL_STORAGE_KEY : 'keyano-volume-slider-value'
+
 
     # Instance Variables
     # ------------------
@@ -75,11 +93,14 @@ define [
     # ------------------
 
     ui :
-      loadingSpinnerOverlay    : $('.LoadingSpinner-overlay')
-      instrument               : $('.KeyanoInstrument')
-      keyboards                : $('.KeyanoInstrument-keyboard')
-      keyboardLeftShiftButton  : $('.KeyboardShiftButton-leftButton')
-      keyboardRightShiftButton : $('.KeyboardShiftButton-rightButton')
+      loadingSpinnerOverlay       : $('.LoadingSpinner-overlay')
+      instrument                  : $('.KeyanoInstrument')
+      keyboards                   : $('.KeyanoInstrument-keyboard')
+      keyboardLeftShiftButton     : $('.KeyboardShiftButton-leftButton')
+      keyboardRightShiftButton    : $('.KeyboardShiftButton-rightButton')
+      masterVolumeSlider          : $('.KeyanoInstrument-masterVolumeSlider')
+      masterVolumeDropdownTrigger : $('.Header-dropdownTrigger')
+      masterVolumeDropdownWrapper : $('.Header-dropdown')
 
 
     # Public Methods
@@ -100,6 +121,7 @@ define [
 
     activate : ->
       @_populatePianoKeyLabelsInDom()
+      @_activateMasterVolumeSlider()
       @_activateKeyboardShiftButtonTooltips()
       @_activateKeyboardShiftTriggers({
         instrument       : @_instrument
@@ -114,6 +136,67 @@ define [
 
     # Private Methods (Activation)
     # ----------------------------
+
+    _activateMasterVolumeSlider : ->
+      @ui.masterVolumeDropdownTrigger.on 'click', =>
+        @ui.masterVolumeDropdownWrapper.toggleClass('open')
+
+      $(document).on 'click', (ev) =>
+        isDropdownOpen               = @ui.masterVolumeDropdownWrapper.hasClass('open')
+        isClickWithinDropdownWrapper = $(ev.target).closest('.Header-dropdown').size() > 0
+
+        if isDropdownOpen and not isClickWithinDropdownWrapper
+          @ui.masterVolumeDropdownWrapper.removeClass('open')
+
+      sliderOptions = @DEFAULT_SLIDER_OPTIONS
+
+      # Try to use the volume value from this user's previous visit.
+
+      savedVolumeValue = @_getSavedVolumeValue()
+      if _.isNumber(savedVolumeValue) and _.isFinite(savedVolumeValue)
+        sliderOptions = _.defaults({
+          value : @_getSavedVolumeSliderValue()
+        }, sliderOptions)
+        @_instrument.setVolume(savedVolumeValue)
+
+      # Initialize the slider, saving both raw slider and computed volume values in localStorage on every change.
+
+      @ui.masterVolumeSlider.slider(sliderOptions)
+        .on('change', (ev) =>
+          newSliderValue = ev.value.newValue
+          newVolume      = @_mapSliderValueToVolumeValue(ev.value.newValue)
+
+          @_setSavedVolumeSliderValue(newSliderValue)
+          @_setSavedVolumeValue(newVolume)
+
+          @_instrument.setVolume(newVolume)
+        )
+
+    _mapSliderValueToVolumeValue : (newSliderValue) ->
+
+      # The slider will be logarithmic, mapping slider values to volume values as follows:
+      #
+      #   volume = 10 ^ (-1 * (nLogSteps - ((sliderValue / 100) * nLogSteps)))
+      #
+      # where
+      #   - volume is the final volume value in [0, 1]
+      #   - sliderValue is the raw slider value in [0, 100]
+      #   - nOrdersOfMagnitude is the number of order-of-magnitude jumps to fit evenly between 0 and 100.
+      #     For instance,
+      #        if nLogSteps = 2, then 100 => 10^0, and 50 => 10^(-1)
+      #        if nLogSteps = 3, then 100 => 10^0, 66 => 10^(-1), and 33 => 10^(-2)
+      #        if nLogSteps = 4, then 100 => 10^0, 75 => 10^(-1), 50 => 10^(-2), and 25 => 10^(-3)
+      #     and so on.
+      #
+      # As a special case, 0 will always map to 0.
+
+      if newSliderValue is 0
+        return 0
+      else
+        maxValue  = @DEFAULT_SLIDER_OPTIONS.max
+        nLogSteps = @DEFAULT_SLIDER_OPTIONS.nLogSteps
+        exponent  = -1 * (nLogSteps - ((newSliderValue / maxValue) * nLogSteps))
+        return Math.pow(10, exponent)
 
     _activateKeyboardShiftButtonTooltips : ->
       # Activate the left-side keyboard-shift button.
@@ -319,6 +402,18 @@ define [
 
     # Private Methods (Other)
     # -----------------------
+
+    _getSavedVolumeValue : ->
+      return parseFloat(window.localStorage[@VOLUME_VALUE_LOCAL_STORAGE_KEY])
+
+    _setSavedVolumeValue : (volumeValue) ->
+      window.localStorage[@VOLUME_VALUE_LOCAL_STORAGE_KEY] = volumeValue
+
+    _getSavedVolumeSliderValue : ->
+      return parseFloat(window.localStorage[@SLIDER_VALUE_LOCAL_STORAGE_KEY])
+
+    _setSavedVolumeSliderValue : (sliderValue) ->
+      window.localStorage[@SLIDER_VALUE_LOCAL_STORAGE_KEY] = sliderValue
 
     _zipKeyMappingArrays : ({ whiteKeys, blackKeys } = {}) ->
       if not whiteKeys?
