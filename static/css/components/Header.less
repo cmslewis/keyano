@@ -1,16 +1,16 @@
 
+@header-top-padding : 14px;
 
 .Header {
 
   // Position
   .fixed-to-top();
-  overflow : hidden;
   z-index  : @z-index-of-header;
 
   // Box Model
   .height-with-vertically-centered-text(@header-primary-height);
   min-width : @container-width-on-desktop;
-  padding   : 14px @component-lr-padding 0;
+  padding   : @header-top-padding @component-lr-padding 0;
 
   // Style
   .box-shadow(0, 1px, 2px, fade(black, 75%));
@@ -24,6 +24,16 @@
   text-align     : center;
 }
 
+
+.Header .Container {
+
+  // Position
+  position : relative;
+
+  // Display & Box Model
+  margin-top    : 0;
+  margin-bottom : 0;
+}
 
 .Header-title {
 
@@ -41,4 +51,96 @@
   font-size   : @brand-font-size-2;
   font-weight : 300;
   line-height : 1.2;
+}
+
+
+.Header-dropdown {
+
+  // Position
+  position : absolute;
+  left     : 0;
+  top      : 0;
+  z-index  : 2; // Above other Header text.
+
+  // Display & Box Model
+  margin-top : -@header-top-padding;
+
+  // Text
+  text-align : center;
+}
+
+
+.Header-dropdownTrigger {
+
+  // Display & Box Model
+  display       : block;
+  height        : @header-primary-height;
+  padding-left  : 5px; // Have the caret take up less space.
+  width         : 80px;
+
+  // Text
+  line-height : @header-primary-height;
+  text-align  : center;
+  white-space : nowrap;
+
+  // Other
+  cursor : pointer;
+
+  &:hover {
+    background : fade(white, 10%);
+  }
+}
+
+
+.open > .Header-dropdownTrigger {
+  background : fade(white, 20%);
+}
+
+
+.Header-dropdownTriggerCaret {
+  // Source: bootstrap.css (http://www.getbootstrap.com)
+  display        : inline-block;
+  width          : 0;
+  height         : 0;
+  margin-left    : 2px;
+  vertical-align : middle;
+  border-top     : 4px solid;
+  border-right   : 4px solid transparent;
+  border-left    : 4px solid transparent;
+
+  opacity : 0.6;
+}
+
+
+.Header-dropdownMenu {
+  display : none;
+}
+
+
+.open > .Header-dropdownMenu {
+
+  // Display & Box Model
+  display    : block;
+  margin-top : 1px;
+  padding    : 15px;
+
+  // Style
+  .border-radius(0 0 3px 3px);
+  .box-shadow(0 1px 3px fade(black, 25%));
+  background : fade(white, 90%);
+}
+
+
+.Header-dropdownMenuLabel {
+
+  // Text
+  color          : #80858A;
+  font-size      : @brand-font-size-4;
+  line-height    : 1;
+  text-transform : uppercase;
+}
+
+
+.Header-dropdownMenu > .slider {
+  margin : 20px 0;
 }

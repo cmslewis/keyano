@@ -64,10 +64,13 @@ define [
 
     DEFAULT_SLIDER_OPTIONS : {
       # Options used by the bootstrap-slider plugin.
-      min       : 0
-      max       : 100
-      step      : 1
-      value     : 100
+      min         : 0
+      max         : 100
+      step        : 1
+      value       : 100
+      orientation : 'vertical'
+      reversed    : true
+      tooltip     : 'hide'
 
       # Options used only internally.
       nLogSteps : 3
@@ -86,12 +89,14 @@ define [
     # ------------------
 
     ui :
-      loadingSpinnerOverlay    : $('.LoadingSpinner-overlay')
-      instrument               : $('.KeyanoInstrument')
-      keyboards                : $('.KeyanoInstrument-keyboard')
-      keyboardLeftShiftButton  : $('.KeyboardShiftButton-leftButton')
-      keyboardRightShiftButton : $('.KeyboardShiftButton-rightButton')
-      masterVolumeSlider       : $('#ex1')
+      loadingSpinnerOverlay       : $('.LoadingSpinner-overlay')
+      instrument                  : $('.KeyanoInstrument')
+      keyboards                   : $('.KeyanoInstrument-keyboard')
+      keyboardLeftShiftButton     : $('.KeyboardShiftButton-leftButton')
+      keyboardRightShiftButton    : $('.KeyboardShiftButton-rightButton')
+      masterVolumeSlider          : $('.KeyanoInstrument-masterVolumeSlider')
+      masterVolumeDropdownTrigger : $('.Header-dropdownTrigger')
+      masterVolumeDropdownWrapper : $('.Header-dropdown')
 
 
     # Public Methods
@@ -129,6 +134,16 @@ define [
     # ----------------------------
 
     _activateMasterVolumeSlider : ->
+      @ui.masterVolumeDropdownTrigger.on 'click', =>
+        @ui.masterVolumeDropdownWrapper.toggleClass('open')
+
+      $(document).on 'click', (ev) =>
+        isDropdownOpen               = @ui.masterVolumeDropdownWrapper.hasClass('open')
+        isClickWithinDropdownWrapper = $(ev.target).closest('.Header-dropdown').size() > 0
+
+        if isDropdownOpen and not isClickWithinDropdownWrapper
+          @ui.masterVolumeDropdownWrapper.removeClass('open')
+
       @ui.masterVolumeSlider.slider(@DEFAULT_SLIDER_OPTIONS)
         .on('change', (ev) =>
           newVolume = @_mapSliderValueToVolumeValue(ev.value.newValue)
