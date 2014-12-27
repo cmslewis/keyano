@@ -76,6 +76,10 @@ define [
       nLogSteps : 3
     }
 
+    VOLUME_VALUE_LOCAL_STORAGE_KEY : 'keyano-volume-value'
+
+    SLIDER_VALUE_LOCAL_STORAGE_KEY : 'keyano-volume-slider-value'
+
 
     # Instance Variables
     # ------------------
@@ -144,9 +148,27 @@ define [
         if isDropdownOpen and not isClickWithinDropdownWrapper
           @ui.masterVolumeDropdownWrapper.removeClass('open')
 
-      @ui.masterVolumeSlider.slider(@DEFAULT_SLIDER_OPTIONS)
+      sliderOptions = @DEFAULT_SLIDER_OPTIONS
+
+      # Try to use the volume value from this user's previous visit.
+
+      savedVolumeValue = @_getSavedVolumeValue()
+      if _.isNumber(savedVolumeValue) and _.isFinite(savedVolumeValue)
+        sliderOptions = _.defaults({
+          value : @_getSavedVolumeSliderValue()
+        }, sliderOptions)
+        @_instrument.setVolume(savedVolumeValue)
+
+      # Initialize the slider, saving both raw slider and computed volume values in localStorage on every change.
+
+      @ui.masterVolumeSlider.slider(sliderOptions)
         .on('change', (ev) =>
-          newVolume = @_mapSliderValueToVolumeValue(ev.value.newValue)
+          newSliderValue = ev.value.newValue
+          newVolume      = @_mapSliderValueToVolumeValue(ev.value.newValue)
+
+          @_setSavedVolumeSliderValue(newSliderValue)
+          @_setSavedVolumeValue(newVolume)
+
           @_instrument.setVolume(newVolume)
         )
 
@@ -380,6 +402,18 @@ define [
 
     # Private Methods (Other)
     # -----------------------
+
+    _getSavedVolumeValue : ->
+      return parseFloat(window.localStorage[@VOLUME_VALUE_LOCAL_STORAGE_KEY])
+
+    _setSavedVolumeValue : (volumeValue) ->
+      window.localStorage[@VOLUME_VALUE_LOCAL_STORAGE_KEY] = volumeValue
+
+    _getSavedVolumeSliderValue : ->
+      return parseFloat(window.localStorage[@SLIDER_VALUE_LOCAL_STORAGE_KEY])
+
+    _setSavedVolumeSliderValue : (sliderValue) ->
+      window.localStorage[@SLIDER_VALUE_LOCAL_STORAGE_KEY] = sliderValue
 
     _zipKeyMappingArrays : ({ whiteKeys, blackKeys } = {}) ->
       if not whiteKeys?

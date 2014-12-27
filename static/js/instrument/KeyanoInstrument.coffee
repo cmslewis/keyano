@@ -122,10 +122,12 @@ define [
     setVolume : (volume) ->
       if not _.isNumber(volume) and _.isFinite(volume)
         throw new Error 'volume parameter should be of type <float>'
-      if volume < 0 or volume > 1
-        throw new Error 'volume parameter should be between 0 and 1 (inclusive)'
+
+      if volume < 0 then volume = 0
+      if volume > 1 then volume = 1
+
       @_masterGainNode.gain.value = volume
-      console.log '@_masterGainNode.gain.value', @_masterGainNode.gain.value = volume
+      Logger.debug '@_masterGainNode.gain.value', @_masterGainNode.gain.value
 
 
     # Private Methods (Setup)
