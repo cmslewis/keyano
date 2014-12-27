@@ -62,6 +62,17 @@ define [
         classes : 'KeyboardShiftButton-tooltip'
     }
 
+    DEFAULT_SLIDER_OPTIONS : {
+      # Options used by the bootstrap-slider plugin.
+      min       : 0
+      max       : 100
+      step      : 1
+      value     : 100
+
+      # Options used only internally.
+      nLogSteps : 3
+    }
+
 
     # Instance Variables
     # ------------------
@@ -80,6 +91,7 @@ define [
       keyboards                : $('.KeyanoInstrument-keyboard')
       keyboardLeftShiftButton  : $('.KeyboardShiftButton-leftButton')
       keyboardRightShiftButton : $('.KeyboardShiftButton-rightButton')
+      masterVolumeSlider       : $('#ex1')
 
 
     # Public Methods
@@ -100,6 +112,7 @@ define [
 
     activate : ->
       @_populatePianoKeyLabelsInDom()
+      @_activateMasterVolumeSlider()
       @_activateKeyboardShiftButtonTooltips()
       @_activateKeyboardShiftTriggers({
         instrument       : @_instrument
@@ -114,6 +127,39 @@ define [
 
     # Private Methods (Activation)
     # ----------------------------
+
+    _activateMasterVolumeSlider : ->
+      @ui.masterVolumeSlider.slider(@DEFAULT_SLIDER_OPTIONS)
+        .on('change', (ev) =>
+          newVolume = @_mapSliderValueToVolumeValue(ev.value.newValue)
+          @_instrument.setVolume(newVolume)
+        )
+
+    _mapSliderValueToVolumeValue : (newSliderValue) ->
+
+      # The slider will be logarithmic, mapping slider values to volume values as follows:
+      #
+      #   volume = 10 ^ (-1 * (nLogSteps - ((sliderValue / 100) * nLogSteps)))
+      #
+      # where
+      #   - volume is the final volume value in [0, 1]
+      #   - sliderValue is the raw slider value in [0, 100]
+      #   - nOrdersOfMagnitude is the number of order-of-magnitude jumps to fit evenly between 0 and 100.
+      #     For instance,
+      #        if nLogSteps = 2, then 100 => 10^0, and 50 => 10^(-1)
+      #        if nLogSteps = 3, then 100 => 10^0, 66 => 10^(-1), and 33 => 10^(-2)
+      #        if nLogSteps = 4, then 100 => 10^0, 75 => 10^(-1), 50 => 10^(-2), and 25 => 10^(-3)
+      #     and so on.
+      #
+      # As a special case, 0 will always map to 0.
+
+      if newSliderValue is 0
+        return 0
+      else
+        maxValue  = @DEFAULT_SLIDER_OPTIONS.max
+        nLogSteps = @DEFAULT_SLIDER_OPTIONS.nLogSteps
+        exponent  = -1 * (nLogSteps - ((newSliderValue / maxValue) * nLogSteps))
+        return Math.pow(10, exponent)
 
     _activateKeyboardShiftButtonTooltips : ->
       # Activate the left-side keyboard-shift button.
