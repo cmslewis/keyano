@@ -153,6 +153,7 @@
           upwardKeyCodes: Config.KEYBOARD_SHIFT_UPWARD_KEY_CODES
         });
         this._shiftKeyboardToHaveLowestKey(this._instrument, Config.LOWEST_KEY_OF_DEFAULT_KEYBOARD_RANGE);
+        this._deactivateBackspaceKey();
         this.ui.instrument.show();
         return this.ui.loadingSpinnerOverlay.addClass('LoadingSpinner-overlay--hidden');
       };
@@ -408,6 +409,16 @@
 
       KeyanoView.prototype._getDomElementsForBlackKeyWrappersInKeyboard = function($keyboard) {
         return $keyboard.find('.KeyanoInstrument-blackKeyWrapper');
+      };
+
+      KeyanoView.prototype._deactivateBackspaceKey = function() {
+        return $(document).on('keydown', (function(_this) {
+          return function(ev) {
+            if (ev.keyCode === KeyCodes.BACKSPACE) {
+              return ev.preventDefault();
+            }
+          };
+        })(this));
       };
 
       KeyanoView.prototype._getSavedVolumeValue = function() {
