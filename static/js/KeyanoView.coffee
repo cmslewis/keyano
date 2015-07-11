@@ -129,6 +129,7 @@ define [
         upwardKeyCodes   : Config.KEYBOARD_SHIFT_UPWARD_KEY_CODES
       })
       @_shiftKeyboardToHaveLowestKey(@_instrument, Config.LOWEST_KEY_OF_DEFAULT_KEYBOARD_RANGE)
+      @_deactivateBackspaceKey()
 
       @ui.instrument.show()
       @ui.loadingSpinnerOverlay.addClass('LoadingSpinner-overlay--hidden')
@@ -402,6 +403,9 @@ define [
 
     # Private Methods (Other)
     # -----------------------
+
+    _deactivateBackspaceKey : ->
+      $(document).on 'keydown', (ev) => if ev.keyCode is KeyCodes.BACKSPACE then ev.preventDefault()
 
     _getSavedVolumeValue : ->
       return parseFloat(window.localStorage[@VOLUME_VALUE_LOCAL_STORAGE_KEY])
